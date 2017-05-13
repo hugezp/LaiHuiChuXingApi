@@ -1,7 +1,5 @@
 package com.lhcx.service.impl;
 
-import java.sql.Timestamp;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +9,6 @@ import com.lhcx.model.VerificationCode;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.SmsUtils;
 import com.lhcx.utils.Utils;
-import com.mysql.jdbc.Util;
 
 @Transactional(rollbackFor=Exception.class)
 @Service(value="verificationCodeService")
