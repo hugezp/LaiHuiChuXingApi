@@ -1,7 +1,10 @@
 package com.lhcx.utils;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.faces.flow.builder.ReturnBuilder;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,10 @@ public class Utils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(date);
     }
+    
+    public static Timestamp currentTimestamp() {
+    	return new Timestamp(System.currentTimeMillis());
+	}
 
     public static boolean isNullOrEmpty(String input) {
         return input == null || input.length() ==0;

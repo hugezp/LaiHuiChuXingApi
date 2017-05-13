@@ -135,6 +135,7 @@ public class VerificationCodeController {
     			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"验证码发送成功！");
 			} catch (Exception e) {
 				// TODO: handle exception
+				log.error(e.getMessage());
 				e.printStackTrace();
 				resultBean = new ResultBean<Object>(ResponseCode.getSms_times_limit(),"发送验证码失败，请校验您输入的手机号是否正确！");
 			}
@@ -145,5 +146,35 @@ public class VerificationCodeController {
         
         return Utils.resultResponseJson(resultBean,jsonpCallback);       
     }
-
+    
+    /**
+     * 获取验证码
+     * @param:
+     * mobile:手机号
+     * userType:用户类型，driver-司机端，passenger-乘客端
+     * code:手机验证码
+     * jsonpCallback：跨域参数
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/checkPhoneCode", method = RequestMethod.POST)
+    public ResponseEntity<String> checkPhoneCode(HttpServletRequest request,@RequestBody JSONObject jsonRequest) {    	
+    	 //取得参数值
+        String mobile = jsonRequest.getString("mobile");
+        String userType = jsonRequest.getString("userType");
+        String code = jsonRequest.getString("code");
+        String jsonpCallback = jsonRequest.getString("jsonpCallback");
+                
+        ResultBean<?> resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"验证失败！请检查手机号或验证码，验证码有效期30分钟！");
+        try {
+			if(verificationCodeService.checkPhoneCode(mobile, userType, code)){
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"验证成功！");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error(e.getMessage());
+			e.printStackTrace();
+		}
+        return Utils.resultResponseJson(resultBean,jsonpCallback);  
+    }
 }

@@ -24,6 +24,12 @@
     from verification_code
     where Phone = #{phone} and UserType = #{userType} and 24 > hour(TIMEDIFF(NOW(),`CreateTime`))
   </select>
+  <select id="selectLastByPhone" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from verification_code
+    where VerificationTime is null and Phone = #{phone} and UserType = #{userType} and CreateTime >= (CURRENT_TIMESTAMP - INTERVAL 30 MINUTE);
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from verification_code
     where id = #{id,jdbcType=INTEGER}

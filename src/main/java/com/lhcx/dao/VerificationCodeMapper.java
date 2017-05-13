@@ -18,4 +18,6 @@ public interface VerificationCodeMapper {
     int updateByPrimaryKey(VerificationCode record);
     
     int getCountByPhonePerDay(@Param("phone") String phone, @Param("userType") String userType);
+    
+    VerificationCode selectLastByPhone(@Param("phone") String phone, @Param("userType") String userType);
 }

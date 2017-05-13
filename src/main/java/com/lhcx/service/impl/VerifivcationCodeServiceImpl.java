@@ -2,8 +2,7 @@ package com.lhcx.service.impl;
 
 import java.sql.Timestamp;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,13 +10,22 @@ import com.lhcx.dao.VerificationCodeMapper;
 import com.lhcx.model.VerificationCode;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.SmsUtils;
+import com.lhcx.utils.Utils;
+import com.mysql.jdbc.Util;
 
 @Transactional(rollbackFor=Exception.class)
 @Service(value="verificationCodeService")
 public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
 
-    @Resource
+    @Autowired
     private VerificationCodeMapper verificationCodeMapper;
+    
+    public void test() {
+    	createSMS("13862149157","1234","pasenger");
+		createSMS(null,"1234","pasenger");
+		
+	}
+
 
     public int insert(VerificationCode record){
         return verificationCodeMapper.insert(record);
@@ -32,8 +40,8 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
         verificationCode.setPhone(phone);
         verificationCode.setCode(code);
         verificationCode.setUsertype(userType);
-        verificationCode.setCreatetime(new Timestamp(System.currentTimeMillis()));
-        
+        verificationCode.setCreatetime(Utils.currentTimestamp());
+         
         return verificationCodeMapper.insert(verificationCode);
     }
     
@@ -54,10 +62,23 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
     	}
 	}
     
-    public void test() {
-    	createSMS("13862149157","1234","pasenger");
-		createSMS(null,"1234","pasenger");
-		
+    public int updateByPrimaryKeySelective(VerificationCode record) {
+    	return verificationCodeMapper.updateByPrimaryKeySelective(record);
 	}
+    
+    public VerificationCode selectLastByPhone(String phone,String userType) {
+    	return verificationCodeMapper.selectLastByPhone(phone,userType);
+	}
+     
+    public boolean checkPhoneCode(String phone,String userType,String code) {
+    	VerificationCode verificationCode = selectLastByPhone(phone,userType);
+    	if (verificationCode != null && verificationCode.getCode().equals(code)) {
+    		verificationCode.setVerificationtime(Utils.currentTimestamp());
+        	updateByPrimaryKeySelective(verificationCode);
+        	
+        	return true;
+		}
 
+    	return false;
+	}
 }
