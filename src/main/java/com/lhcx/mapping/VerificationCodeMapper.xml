@@ -22,7 +22,7 @@
     select
     count(*)
     from verification_code
-    where Phone = #{phone} and UserType = #{userType} and 24 > hour(TIMEDIFF(NOW(),'createTime'))
+    where Phone = #{phone} and UserType = #{userType} and 24 > hour(TIMEDIFF(NOW(),`CreateTime`))
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from verification_code

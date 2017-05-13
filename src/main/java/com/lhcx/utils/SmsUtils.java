@@ -1,23 +1,17 @@
 package com.lhcx.utils;
 
 import com.alibaba.fastjson.JSONObject;
-
-import org.apache.log4j.Logger;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by lh on 2017/5/11.
  */
 public class SmsUtils {
-    private static Logger log = Logger.getLogger(SmsUtils.class);
     //配置您申请的KEY
     public static final String APPKEY ="6c871b315def3b449dbdbce28a4dc55a";
     public static final String DEF_CHATSET = "UTF-8";

@@ -1,5 +1,6 @@
 package com.lhcx.controller;
 
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -7,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IVerificationCodeService;
@@ -67,7 +71,7 @@ public class VerificationCodeController {
         //取得手机号
         String mobile = request.getParameter("mobile");
         String userType = request.getParameter("userType");
-        String callBack = request.getParameter("jsoncallback");
+        String callBack = request.getParameter("jsonpcallback");
         //从session中获取gt-server状态
         int gt_server_status_code = 2017;
         int gtResult = 2016;
@@ -105,6 +109,41 @@ public class VerificationCodeController {
             resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"验证失败！"); // 验证失败
         }
         return Utils.resultResponseJson(resultBean,callBack);
+    }
+    
+    /**
+     * 获取验证码
+     * @param:
+     * mobile:手机号
+     * userType:用户类型，driver-司机端，passenger-乘客端
+     * jsonpCallback：跨域参数
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sendPhoneCode", method = RequestMethod.POST)
+    public ResponseEntity<String> sendPhoneCode(HttpServletRequest request,@RequestBody JSONObject jsonRequest) {    	
+    	 //取得参数值
+        String mobile = jsonRequest.getString("mobile");
+        String userType = jsonRequest.getString("userType");
+        String jsonpCallback = jsonRequest.getString("jsonpCallback");
+                
+        ResultBean<?> resultBean = new ResultBean<Object>();
+        int codeTotal = verificationCodeService.getCountByPhonePerDay(mobile,userType);
+    	if(codeTotal < 5){
+    		try {
+    			verificationCodeService.sendPhoneCode(mobile, userType);
+    			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"验证码发送成功！");
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				resultBean = new ResultBean<Object>(ResponseCode.getSms_times_limit(),"发送验证码失败，请校验您输入的手机号是否正确！");
+			}
+    		 		
+    	}else{
+    		resultBean = new ResultBean<Object>(ResponseCode.getSms_times_limit(),"发送验证码过于频繁，请稍后重试！");
+    	}
+        
+        return Utils.resultResponseJson(resultBean,jsonpCallback);       
     }
 
 }

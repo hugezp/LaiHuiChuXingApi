@@ -11,4 +11,7 @@ public interface IVerificationCodeService {
     int insert(VerificationCode record);
     int getCountByPhonePerDay(String phone,String userType);
     int createSMS(String phone,String code,String userType);
+    void sendPhoneCode(String phone,String userType);
+    
+    void test();
 }
