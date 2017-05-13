@@ -38,10 +38,10 @@ public class Utils {
     //接口返回结果处理
     public static ResponseEntity<String> resultResponseJson(ResultBean<?> resultBean, String callBack){
         String resultJsonStr = "";
-        if(isNullOrEmpty(callBack) || callBack.equals(jsonpCallback)){
-            resultJsonStr = JSON.toJSONString(resultBean);
-        }else{
+        if(!isNullOrEmpty(callBack) && callBack.equals(jsonpCallback)){
             resultJsonStr = jsonpCallback + "(" + JSON.toJSONString(resultBean) + ")";
+        }else{
+            resultJsonStr = JSON.toJSONString(resultBean);
         }
         return new ResponseEntity<String>(resultJsonStr, responseHeaders(), HttpStatus.OK);
     }
