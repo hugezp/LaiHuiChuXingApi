@@ -24,7 +24,12 @@ public class TestController {
     @ResponseBody
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public void test(HttpServletRequest request) {
-    	verificationCodeService.test();
-        
+    	try {
+    		verificationCodeService.test();
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error(e.getMessage());
+		}
+
     }
 }
