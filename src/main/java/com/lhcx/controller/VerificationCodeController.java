@@ -127,11 +127,12 @@ public class VerificationCodeController {
     @RequestMapping(value = "/sendPhoneCode", method = RequestMethod.POST)
     public ResponseEntity<String> sendPhoneCode(HttpServletRequest request,@RequestBody JSONObject jsonRequest) {    	
     	 //取得参数值
-        String mobile = jsonRequest.getString("mobile");
+        String mobile = jsonRequest.getString("phone");
         String userType = jsonRequest.getString("userType");
         String jsonpCallback = jsonRequest.getString("jsonpCallback");
                 
         ResultBean<?> resultBean = new ResultBean<Object>();
+
         int codeTotal = verificationCodeService.getCountByPhonePerDay(mobile,userType);
     	if(codeTotal < 5){
     		try {
@@ -164,7 +165,7 @@ public class VerificationCodeController {
     @RequestMapping(value = "/checkPhoneCode", method = RequestMethod.POST)
     public ResponseEntity<String> checkPhoneCode(HttpServletRequest request,@RequestBody JSONObject jsonRequest) {    	
     	 //取得参数值
-        String mobile = jsonRequest.getString("mobile");
+        String mobile = jsonRequest.getString("phone");
         String userType = jsonRequest.getString("userType");
         String code = jsonRequest.getString("code");
         String jsonpCallback = jsonRequest.getString("jsonpCallback");

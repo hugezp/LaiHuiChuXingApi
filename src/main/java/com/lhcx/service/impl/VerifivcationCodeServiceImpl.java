@@ -11,7 +11,7 @@ import com.lhcx.utils.SmsUtils;
 import com.lhcx.utils.Utils;
 
 @Transactional(rollbackFor=Exception.class)
-@Service(value="verificationCodeService")
+@Service
 public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
 
     @Autowired

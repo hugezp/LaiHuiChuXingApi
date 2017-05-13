@@ -15,6 +15,7 @@ public class ResponseCode {
     private static final int sms_send_failed = 305; //验证码发送失败
     private static final int sms_times_limit = 306; //发送验证码过于频繁
     private static final int sms_checked_failed = 307;//验证码校验失败
+    private static final int no_user = 201;//验证码校验失败
 
     private static final int departure_order_expired = 309; //司机发车单失效
     private static final int departure_order_unEnabled = 310; //司机发车单座位已满
@@ -33,6 +34,10 @@ public class ResponseCode {
     private static final int no_data = 408;
 
     public static int getSuccess(){ return  success; }
+    
+    public static int  get_no_user() {
+		return no_user;
+	}
 
     public static int getInvite_time() {
         return invite_time;

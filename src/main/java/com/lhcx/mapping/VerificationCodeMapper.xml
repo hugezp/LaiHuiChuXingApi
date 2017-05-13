@@ -28,7 +28,8 @@
     select 
     <include refid="Base_Column_List" />
     from verification_code
-    where VerificationTime is null and Phone = #{phone} and UserType = #{userType} and CreateTime >= (CURRENT_TIMESTAMP - INTERVAL 30 MINUTE);
+    where VerificationTime is null and Phone = #{phone} and UserType = #{userType} and CreateTime >= (CURRENT_TIMESTAMP - INTERVAL 30 MINUTE)
+    order by CreateTime desc limit 0,1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from verification_code

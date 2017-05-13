@@ -1,5 +1,7 @@
 package com.lhcx.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.lhcx.model.User;
 
 public interface UserMapper {
@@ -14,4 +16,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+    
+    User selectUserByPhone(@Param("phone") String phone,@Param("userType") String userType);
 }
