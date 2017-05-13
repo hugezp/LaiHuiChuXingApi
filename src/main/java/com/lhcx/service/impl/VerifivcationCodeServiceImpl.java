@@ -13,13 +13,6 @@ import com.lhcx.model.VerificationCode;
 import com.lhcx.service.IVerificationCodeService;
 
 
-/**
- * Created by lh on 2017/5/10.
- * author：william
- * desc：验证码接口实现
- */
-
-//没有指定value的话，默认是第一个字母小写的类名,可以看做是xml中的bean的id
 @Service(value="verificationCodeService")
 public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
 
@@ -43,7 +36,7 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
     public int getCountByPhonePerDay(String phone,String userType) {
         int result = 0;
         try{
-            result = 0;//verificationCodeMapper.getCountByPhonePerDay(phone,userType);
+            result = verificationCodeMapper.getCountByPhonePerDay(phone,userType);
         }catch(Exception ex){
             logger.error("Exception occured while doing getCountByPhonePerDay,the exception is "+ ex.getMessage() );
             ex.printStackTrace();

@@ -4,8 +4,8 @@ import com.lhcx.model.VerificationCode;
 
 /**
  * Created by lh on 2017/5/10.
- * author：william
- * desc：定义验证码接口
+ * author锛歸illiam
+ * description锛氶獙璇佺爜鎺ュ彛 
  */
 public interface IVerificationCodeService {
     int insert(VerificationCode record);

@@ -1,13 +1,16 @@
 package com.lhcx.utils;
 
 import com.alibaba.fastjson.JSONObject;
+
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +25,21 @@ public class SmsUtils {
     public static final int DEF_READ_TIMEOUT = 30000;
     public static String userAgent =  "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
 
-
+    public static final String ignorPhones[] = {"18330288097","17788112947","17698909223"};
+    public static final String commonCode = "0603";
+    
+    public static boolean sendCodeMessage(String mobile,String code) {    	
+    	code = "#code#=" + code;
+    	return sendSMS(mobile, "push", 0, code);
+	}
+    
+    public static boolean isContains(String[] arr, String targetValue) {
+        for(String s: arr){
+            if(s.equals(targetValue))
+                return true;
+        }
+        return false;
+    }
 
     public static String sendCodeMessage(String mobile) {
         String rand = randomNum();
@@ -76,16 +93,21 @@ public class SmsUtils {
     {
         boolean isSuccess=false;
         String result=sendSMStoServer(mobile,tpl_id,tpl_value);
-        int sms_error_code=-1;
-        String sms_reason="";
-        String sms_sid="";
+        @SuppressWarnings("unused")
+		int sms_error_code=-1;
+        @SuppressWarnings("unused")
+		String sms_reason="";
+        @SuppressWarnings("unused")
+		String sms_sid="";
         if(result!=null) {
             JSONObject object = JSONObject.parseObject(result);
             /*System.out.println("object信息：" + object);*/
             if (object.getIntValue("error_code") == 0) {
                 JSONObject jsonObject = object.getJSONObject("result");
-                int fee = jsonObject.getIntValue("fee");
-                int count = jsonObject.getIntValue("count");
+                @SuppressWarnings("unused")
+				int fee = jsonObject.getIntValue("fee");
+                @SuppressWarnings("unused")
+				int count = jsonObject.getIntValue("count");
                 sms_sid= jsonObject.getString("sid");
                 sms_reason=object.getString("reason");
                 sms_error_code=0;

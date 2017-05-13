@@ -1,5 +1,7 @@
 package com.lhcx.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.lhcx.model.VerificationCode;
 
 public interface VerificationCodeMapper {
@@ -14,4 +16,6 @@ public interface VerificationCodeMapper {
     int updateByPrimaryKeySelective(VerificationCode record);
 
     int updateByPrimaryKey(VerificationCode record);
+    
+    int getCountByPhonePerDay(@Param("phone") String phone, @Param("userType") String userType);
 }

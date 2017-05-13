@@ -18,6 +18,12 @@
     from verification_code
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="getCountByPhonePerDay" resultType="int">
+    select
+    count(*)
+    from verification_code
+    where Phone = #{phone} and UserType = #{userType} and 24 > hour(TIMEDIFF(NOW(),'createTime'))
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from verification_code
     where id = #{id,jdbcType=INTEGER}

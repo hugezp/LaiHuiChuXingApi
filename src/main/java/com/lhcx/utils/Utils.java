@@ -36,7 +36,7 @@ public class Utils {
     }
 
     //接口返回结果处理
-    public static ResponseEntity<String> resultResponseJson(ResultBean resultBean, String callBack){
+    public static ResponseEntity<String> resultResponseJson(ResultBean<?> resultBean, String callBack){
         String resultJsonStr = "";
         if(isNullOrEmpty(callBack) || callBack.equals(jsonpCallback)){
             resultJsonStr = JSON.toJSONString(resultBean);

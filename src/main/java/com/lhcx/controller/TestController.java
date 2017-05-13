@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lhcx.service.IVerificationCodeService;
 
+
 @Controller
 @ResponseBody
 @RequestMapping(value = "/api")
