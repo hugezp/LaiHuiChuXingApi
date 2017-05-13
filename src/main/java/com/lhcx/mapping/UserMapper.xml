@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="UserPhone" property="userphone" jdbcType="INTEGER" />
+    <result column="UserType" property="usertype" jdbcType="VARCHAR" />
+    <result column="Token" property="token" jdbcType="VARCHAR" />
+    <result column="LoginIp" property="loginip" jdbcType="VARCHAR" />
+    <result column="LoginTime" property="logintime" jdbcType="TIMESTAMP" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UpateTime" property="upatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from users
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lhcx.model.User" >
+    insert into users (id, UserPhone, UserType, 
+      Token, LoginIp, LoginTime, 
+      CreateTime, UpateTime)
+    values (#{id,jdbcType=INTEGER}, #{userphone,jdbcType=INTEGER}, #{usertype,jdbcType=VARCHAR}, 
+      #{token,jdbcType=VARCHAR}, #{loginip,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{upatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lhcx.model.User" >
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userphone != null" >
+        UserPhone,
+      </if>
+      <if test="usertype != null" >
+        UserType,
+      </if>
+      <if test="token != null" >
+        Token,
+      </if>
+      <if test="loginip != null" >
+        LoginIp,
+      </if>
+      <if test="logintime != null" >
+        LoginTime,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="upatetime != null" >
+        UpateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userphone != null" >
+        #{userphone,jdbcType=INTEGER},
+      </if>
+      <if test="usertype != null" >
+        #{usertype,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="loginip != null" >
+        #{loginip,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="upatetime != null" >
+        #{upatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.User" >
+    update users
+    <set >
+      <if test="userphone != null" >
+        UserPhone = #{userphone,jdbcType=INTEGER},
+      </if>
+      <if test="usertype != null" >
+        UserType = #{usertype,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        Token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="loginip != null" >
+        LoginIp = #{loginip,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null" >
+        LoginTime = #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="upatetime != null" >
+        UpateTime = #{upatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.User" >
+    update users
+    set UserPhone = #{userphone,jdbcType=INTEGER},
+      UserType = #{usertype,jdbcType=VARCHAR},
+      Token = #{token,jdbcType=VARCHAR},
+      LoginIp = #{loginip,jdbcType=VARCHAR},
+      LoginTime = #{logintime,jdbcType=TIMESTAMP},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      UpateTime = #{upatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

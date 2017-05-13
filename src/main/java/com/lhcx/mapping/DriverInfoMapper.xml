@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.DriverInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.DriverInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="CompanyId" property="companyid" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="INTEGER" />
+    <result column="DriverName" property="drivername" jdbcType="VARCHAR" />
+    <result column="DriverGender" property="drivergender" jdbcType="VARCHAR" />
+    <result column="DriverBirthday" property="driverbirthday" jdbcType="TIMESTAMP" />
+    <result column="DriverNationality" property="drivernationality" jdbcType="VARCHAR" />
+    <result column="DriverNation" property="drivernation" jdbcType="VARCHAR" />
+    <result column="DriverMaritalStatus" property="drivermaritalstatus" jdbcType="VARCHAR" />
+    <result column="DriverLanguageLevel" property="driverlanguagelevel" jdbcType="VARCHAR" />
+    <result column="DriveEducation" property="driveeducation" jdbcType="VARCHAR" />
+    <result column="DriverCensus" property="drivercensus" jdbcType="VARCHAR" />
+    <result column="DriverAddress" property="driveraddress" jdbcType="VARCHAR" />
+    <result column="DriverContactAddress" property="drivercontactaddress" jdbcType="VARCHAR" />
+    <result column="Photo" property="photo" jdbcType="VARCHAR" />
+    <result column="LicenseId" property="licenseid" jdbcType="VARCHAR" />
+    <result column="LicensePhoto" property="licensephoto" jdbcType="VARCHAR" />
+    <result column="DriverType" property="drivertype" jdbcType="VARCHAR" />
+    <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
+    <result column="GetDriverLicenseDate" property="getdriverlicensedate" jdbcType="TIMESTAMP" />
+    <result column="DriverLicenseOn" property="driverlicenseon" jdbcType="TIMESTAMP" />
+    <result column="DriverLicenseOff" property="driverlicenseoff" jdbcType="TIMESTAMP" />
+    <result column="TaxiDriver" property="taxidriver" jdbcType="INTEGER" />
+    <result column="CertificateNo" property="certificateno" jdbcType="VARCHAR" />
+    <result column="NetworkCarIssusOrganization" property="networkcarissusorganization" jdbcType="VARCHAR" />
+    <result column="NetworkCarIssusDate" property="networkcarissusdate" jdbcType="TIMESTAMP" />
+    <result column="GetNetworkProofDate" property="getnetworkproofdate" jdbcType="TIMESTAMP" />
+    <result column="NetworkCarProofOn" property="networkcarproofon" jdbcType="TIMESTAMP" />
+    <result column="NetworkCarProofOff" property="networkcarproofoff" jdbcType="TIMESTAMP" />
+    <result column="RegisterDate" property="registerdate" jdbcType="TIMESTAMP" />
+    <result column="FullTimeDriver" property="fulltimedriver" jdbcType="INTEGER" />
+    <result column="CommercialType" property="commercialtype" jdbcType="INTEGER" />
+    <result column="InDriverBlackList" property="indriverblacklist" jdbcType="INTEGER" />
+    <result column="ContractCompany" property="contractcompany" jdbcType="VARCHAR" />
+    <result column="ContractOn" property="contracton" jdbcType="TIMESTAMP" />
+    <result column="ContractOff" property="contractoff" jdbcType="TIMESTAMP" />
+    <result column="EmergencyContact" property="emergencycontact" jdbcType="VARCHAR" />
+    <result column="EmergencyContactPhone" property="emergencycontactphone" jdbcType="VARCHAR" />
+    <result column="EmergencyContactAddress" property="emergencycontactaddress" jdbcType="VARCHAR" />
+    <result column="State" property="state" jdbcType="INTEGER" />
+    <result column="Flag" property="flag" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, CompanyId, Address, DriverName, DriverGender, DriverBirthday, DriverNationality, 
+    DriverNation, DriverMaritalStatus, DriverLanguageLevel, DriveEducation, DriverCensus, 
+    DriverAddress, DriverContactAddress, Photo, LicenseId, LicensePhoto, DriverType, 
+    DriverPhone, GetDriverLicenseDate, DriverLicenseOn, DriverLicenseOff, TaxiDriver, 
+    CertificateNo, NetworkCarIssusOrganization, NetworkCarIssusDate, GetNetworkProofDate, 
+    NetworkCarProofOn, NetworkCarProofOff, RegisterDate, FullTimeDriver, CommercialType, 
+    InDriverBlackList, ContractCompany, ContractOn, ContractOff, EmergencyContact, EmergencyContactPhone, 
+    EmergencyContactAddress, State, Flag, CreateTime, UpdateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from driver_infos
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from driver_infos
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lhcx.model.DriverInfo" >
+    insert into driver_infos (id, CompanyId, Address, 
+      DriverName, DriverGender, DriverBirthday, 
+      DriverNationality, DriverNation, DriverMaritalStatus, 
+      DriverLanguageLevel, DriveEducation, DriverCensus, 
+      DriverAddress, DriverContactAddress, Photo, 
+      LicenseId, LicensePhoto, DriverType, 
+      DriverPhone, GetDriverLicenseDate, DriverLicenseOn, 
+      DriverLicenseOff, TaxiDriver, CertificateNo, 
+      NetworkCarIssusOrganization, NetworkCarIssusDate, 
+      GetNetworkProofDate, NetworkCarProofOn, 
+      NetworkCarProofOff, RegisterDate, FullTimeDriver, 
+      CommercialType, InDriverBlackList, ContractCompany, 
+      ContractOn, ContractOff, EmergencyContact, 
+      EmergencyContactPhone, EmergencyContactAddress, 
+      State, Flag, CreateTime, 
+      UpdateTime)
+    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, 
+      #{drivername,jdbcType=VARCHAR}, #{drivergender,jdbcType=VARCHAR}, #{driverbirthday,jdbcType=TIMESTAMP}, 
+      #{drivernationality,jdbcType=VARCHAR}, #{drivernation,jdbcType=VARCHAR}, #{drivermaritalstatus,jdbcType=VARCHAR}, 
+      #{driverlanguagelevel,jdbcType=VARCHAR}, #{driveeducation,jdbcType=VARCHAR}, #{drivercensus,jdbcType=VARCHAR}, 
+      #{driveraddress,jdbcType=VARCHAR}, #{drivercontactaddress,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, 
+      #{licenseid,jdbcType=VARCHAR}, #{licensephoto,jdbcType=VARCHAR}, #{drivertype,jdbcType=VARCHAR}, 
+      #{driverphone,jdbcType=VARCHAR}, #{getdriverlicensedate,jdbcType=TIMESTAMP}, #{driverlicenseon,jdbcType=TIMESTAMP}, 
+      #{driverlicenseoff,jdbcType=TIMESTAMP}, #{taxidriver,jdbcType=INTEGER}, #{certificateno,jdbcType=VARCHAR}, 
+      #{networkcarissusorganization,jdbcType=VARCHAR}, #{networkcarissusdate,jdbcType=TIMESTAMP}, 
+      #{getnetworkproofdate,jdbcType=TIMESTAMP}, #{networkcarproofon,jdbcType=TIMESTAMP}, 
+      #{networkcarproofoff,jdbcType=TIMESTAMP}, #{registerdate,jdbcType=TIMESTAMP}, #{fulltimedriver,jdbcType=INTEGER}, 
+      #{commercialtype,jdbcType=INTEGER}, #{indriverblacklist,jdbcType=INTEGER}, #{contractcompany,jdbcType=VARCHAR}, 
+      #{contracton,jdbcType=TIMESTAMP}, #{contractoff,jdbcType=TIMESTAMP}, #{emergencycontact,jdbcType=VARCHAR}, 
+      #{emergencycontactphone,jdbcType=VARCHAR}, #{emergencycontactaddress,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lhcx.model.DriverInfo" >
+    insert into driver_infos
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyid != null" >
+        CompanyId,
+      </if>
+      <if test="address != null" >
+        Address,
+      </if>
+      <if test="drivername != null" >
+        DriverName,
+      </if>
+      <if test="drivergender != null" >
+        DriverGender,
+      </if>
+      <if test="driverbirthday != null" >
+        DriverBirthday,
+      </if>
+      <if test="drivernationality != null" >
+        DriverNationality,
+      </if>
+      <if test="drivernation != null" >
+        DriverNation,
+      </if>
+      <if test="drivermaritalstatus != null" >
+        DriverMaritalStatus,
+      </if>
+      <if test="driverlanguagelevel != null" >
+        DriverLanguageLevel,
+      </if>
+      <if test="driveeducation != null" >
+        DriveEducation,
+      </if>
+      <if test="drivercensus != null" >
+        DriverCensus,
+      </if>
+      <if test="driveraddress != null" >
+        DriverAddress,
+      </if>
+      <if test="drivercontactaddress != null" >
+        DriverContactAddress,
+      </if>
+      <if test="photo != null" >
+        Photo,
+      </if>
+      <if test="licenseid != null" >
+        LicenseId,
+      </if>
+      <if test="licensephoto != null" >
+        LicensePhoto,
+      </if>
+      <if test="drivertype != null" >
+        DriverType,
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone,
+      </if>
+      <if test="getdriverlicensedate != null" >
+        GetDriverLicenseDate,
+      </if>
+      <if test="driverlicenseon != null" >
+        DriverLicenseOn,
+      </if>
+      <if test="driverlicenseoff != null" >
+        DriverLicenseOff,
+      </if>
+      <if test="taxidriver != null" >
+        TaxiDriver,
+      </if>
+      <if test="certificateno != null" >
+        CertificateNo,
+      </if>
+      <if test="networkcarissusorganization != null" >
+        NetworkCarIssusOrganization,
+      </if>
+      <if test="networkcarissusdate != null" >
+        NetworkCarIssusDate,
+      </if>
+      <if test="getnetworkproofdate != null" >
+        GetNetworkProofDate,
+      </if>
+      <if test="networkcarproofon != null" >
+        NetworkCarProofOn,
+      </if>
+      <if test="networkcarproofoff != null" >
+        NetworkCarProofOff,
+      </if>
+      <if test="registerdate != null" >
+        RegisterDate,
+      </if>
+      <if test="fulltimedriver != null" >
+        FullTimeDriver,
+      </if>
+      <if test="commercialtype != null" >
+        CommercialType,
+      </if>
+      <if test="indriverblacklist != null" >
+        InDriverBlackList,
+      </if>
+      <if test="contractcompany != null" >
+        ContractCompany,
+      </if>
+      <if test="contracton != null" >
+        ContractOn,
+      </if>
+      <if test="contractoff != null" >
+        ContractOff,
+      </if>
+      <if test="emergencycontact != null" >
+        EmergencyContact,
+      </if>
+      <if test="emergencycontactphone != null" >
+        EmergencyContactPhone,
+      </if>
+      <if test="emergencycontactaddress != null" >
+        EmergencyContactAddress,
+      </if>
+      <if test="state != null" >
+        State,
+      </if>
+      <if test="flag != null" >
+        Flag,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=INTEGER},
+      </if>
+      <if test="drivername != null" >
+        #{drivername,jdbcType=VARCHAR},
+      </if>
+      <if test="drivergender != null" >
+        #{drivergender,jdbcType=VARCHAR},
+      </if>
+      <if test="driverbirthday != null" >
+        #{driverbirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="drivernationality != null" >
+        #{drivernationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivernation != null" >
+        #{drivernation,jdbcType=VARCHAR},
+      </if>
+      <if test="drivermaritalstatus != null" >
+        #{drivermaritalstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="driverlanguagelevel != null" >
+        #{driverlanguagelevel,jdbcType=VARCHAR},
+      </if>
+      <if test="driveeducation != null" >
+        #{driveeducation,jdbcType=VARCHAR},
+      </if>
+      <if test="drivercensus != null" >
+        #{drivercensus,jdbcType=VARCHAR},
+      </if>
+      <if test="driveraddress != null" >
+        #{driveraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="drivercontactaddress != null" >
+        #{drivercontactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseid != null" >
+        #{licenseid,jdbcType=VARCHAR},
+      </if>
+      <if test="licensephoto != null" >
+        #{licensephoto,jdbcType=VARCHAR},
+      </if>
+      <if test="drivertype != null" >
+        #{drivertype,jdbcType=VARCHAR},
+      </if>
+      <if test="driverphone != null" >
+        #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="getdriverlicensedate != null" >
+        #{getdriverlicensedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="driverlicenseon != null" >
+        #{driverlicenseon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="driverlicenseoff != null" >
+        #{driverlicenseoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxidriver != null" >
+        #{taxidriver,jdbcType=INTEGER},
+      </if>
+      <if test="certificateno != null" >
+        #{certificateno,jdbcType=VARCHAR},
+      </if>
+      <if test="networkcarissusorganization != null" >
+        #{networkcarissusorganization,jdbcType=VARCHAR},
+      </if>
+      <if test="networkcarissusdate != null" >
+        #{networkcarissusdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getnetworkproofdate != null" >
+        #{getnetworkproofdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="networkcarproofon != null" >
+        #{networkcarproofon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="networkcarproofoff != null" >
+        #{networkcarproofoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerdate != null" >
+        #{registerdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fulltimedriver != null" >
+        #{fulltimedriver,jdbcType=INTEGER},
+      </if>
+      <if test="commercialtype != null" >
+        #{commercialtype,jdbcType=INTEGER},
+      </if>
+      <if test="indriverblacklist != null" >
+        #{indriverblacklist,jdbcType=INTEGER},
+      </if>
+      <if test="contractcompany != null" >
+        #{contractcompany,jdbcType=VARCHAR},
+      </if>
+      <if test="contracton != null" >
+        #{contracton,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractoff != null" >
+        #{contractoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emergencycontact != null" >
+        #{emergencycontact,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycontactphone != null" >
+        #{emergencycontactphone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycontactaddress != null" >
+        #{emergencycontactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.DriverInfo" >
+    update driver_infos
+    <set >
+      <if test="companyid != null" >
+        CompanyId = #{companyid,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        Address = #{address,jdbcType=INTEGER},
+      </if>
+      <if test="drivername != null" >
+        DriverName = #{drivername,jdbcType=VARCHAR},
+      </if>
+      <if test="drivergender != null" >
+        DriverGender = #{drivergender,jdbcType=VARCHAR},
+      </if>
+      <if test="driverbirthday != null" >
+        DriverBirthday = #{driverbirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="drivernationality != null" >
+        DriverNationality = #{drivernationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivernation != null" >
+        DriverNation = #{drivernation,jdbcType=VARCHAR},
+      </if>
+      <if test="drivermaritalstatus != null" >
+        DriverMaritalStatus = #{drivermaritalstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="driverlanguagelevel != null" >
+        DriverLanguageLevel = #{driverlanguagelevel,jdbcType=VARCHAR},
+      </if>
+      <if test="driveeducation != null" >
+        DriveEducation = #{driveeducation,jdbcType=VARCHAR},
+      </if>
+      <if test="drivercensus != null" >
+        DriverCensus = #{drivercensus,jdbcType=VARCHAR},
+      </if>
+      <if test="driveraddress != null" >
+        DriverAddress = #{driveraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="drivercontactaddress != null" >
+        DriverContactAddress = #{drivercontactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        Photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseid != null" >
+        LicenseId = #{licenseid,jdbcType=VARCHAR},
+      </if>
+      <if test="licensephoto != null" >
+        LicensePhoto = #{licensephoto,jdbcType=VARCHAR},
+      </if>
+      <if test="drivertype != null" >
+        DriverType = #{drivertype,jdbcType=VARCHAR},
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="getdriverlicensedate != null" >
+        GetDriverLicenseDate = #{getdriverlicensedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="driverlicenseon != null" >
+        DriverLicenseOn = #{driverlicenseon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="driverlicenseoff != null" >
+        DriverLicenseOff = #{driverlicenseoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxidriver != null" >
+        TaxiDriver = #{taxidriver,jdbcType=INTEGER},
+      </if>
+      <if test="certificateno != null" >
+        CertificateNo = #{certificateno,jdbcType=VARCHAR},
+      </if>
+      <if test="networkcarissusorganization != null" >
+        NetworkCarIssusOrganization = #{networkcarissusorganization,jdbcType=VARCHAR},
+      </if>
+      <if test="networkcarissusdate != null" >
+        NetworkCarIssusDate = #{networkcarissusdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getnetworkproofdate != null" >
+        GetNetworkProofDate = #{getnetworkproofdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="networkcarproofon != null" >
+        NetworkCarProofOn = #{networkcarproofon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="networkcarproofoff != null" >
+        NetworkCarProofOff = #{networkcarproofoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerdate != null" >
+        RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fulltimedriver != null" >
+        FullTimeDriver = #{fulltimedriver,jdbcType=INTEGER},
+      </if>
+      <if test="commercialtype != null" >
+        CommercialType = #{commercialtype,jdbcType=INTEGER},
+      </if>
+      <if test="indriverblacklist != null" >
+        InDriverBlackList = #{indriverblacklist,jdbcType=INTEGER},
+      </if>
+      <if test="contractcompany != null" >
+        ContractCompany = #{contractcompany,jdbcType=VARCHAR},
+      </if>
+      <if test="contracton != null" >
+        ContractOn = #{contracton,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractoff != null" >
+        ContractOff = #{contractoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emergencycontact != null" >
+        EmergencyContact = #{emergencycontact,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycontactphone != null" >
+        EmergencyContactPhone = #{emergencycontactphone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycontactaddress != null" >
+        EmergencyContactAddress = #{emergencycontactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        State = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        Flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.DriverInfo" >
+    update driver_infos
+    set CompanyId = #{companyid,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=INTEGER},
+      DriverName = #{drivername,jdbcType=VARCHAR},
+      DriverGender = #{drivergender,jdbcType=VARCHAR},
+      DriverBirthday = #{driverbirthday,jdbcType=TIMESTAMP},
+      DriverNationality = #{drivernationality,jdbcType=VARCHAR},
+      DriverNation = #{drivernation,jdbcType=VARCHAR},
+      DriverMaritalStatus = #{drivermaritalstatus,jdbcType=VARCHAR},
+      DriverLanguageLevel = #{driverlanguagelevel,jdbcType=VARCHAR},
+      DriveEducation = #{driveeducation,jdbcType=VARCHAR},
+      DriverCensus = #{drivercensus,jdbcType=VARCHAR},
+      DriverAddress = #{driveraddress,jdbcType=VARCHAR},
+      DriverContactAddress = #{drivercontactaddress,jdbcType=VARCHAR},
+      Photo = #{photo,jdbcType=VARCHAR},
+      LicenseId = #{licenseid,jdbcType=VARCHAR},
+      LicensePhoto = #{licensephoto,jdbcType=VARCHAR},
+      DriverType = #{drivertype,jdbcType=VARCHAR},
+      DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      GetDriverLicenseDate = #{getdriverlicensedate,jdbcType=TIMESTAMP},
+      DriverLicenseOn = #{driverlicenseon,jdbcType=TIMESTAMP},
+      DriverLicenseOff = #{driverlicenseoff,jdbcType=TIMESTAMP},
+      TaxiDriver = #{taxidriver,jdbcType=INTEGER},
+      CertificateNo = #{certificateno,jdbcType=VARCHAR},
+      NetworkCarIssusOrganization = #{networkcarissusorganization,jdbcType=VARCHAR},
+      NetworkCarIssusDate = #{networkcarissusdate,jdbcType=TIMESTAMP},
+      GetNetworkProofDate = #{getnetworkproofdate,jdbcType=TIMESTAMP},
+      NetworkCarProofOn = #{networkcarproofon,jdbcType=TIMESTAMP},
+      NetworkCarProofOff = #{networkcarproofoff,jdbcType=TIMESTAMP},
+      RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
+      FullTimeDriver = #{fulltimedriver,jdbcType=INTEGER},
+      CommercialType = #{commercialtype,jdbcType=INTEGER},
+      InDriverBlackList = #{indriverblacklist,jdbcType=INTEGER},
+      ContractCompany = #{contractcompany,jdbcType=VARCHAR},
+      ContractOn = #{contracton,jdbcType=TIMESTAMP},
+      ContractOff = #{contractoff,jdbcType=TIMESTAMP},
+      EmergencyContact = #{emergencycontact,jdbcType=VARCHAR},
+      EmergencyContactPhone = #{emergencycontactphone,jdbcType=VARCHAR},
+      EmergencyContactAddress = #{emergencycontactaddress,jdbcType=VARCHAR},
+      State = #{state,jdbcType=INTEGER},
+      Flag = #{flag,jdbcType=INTEGER},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
