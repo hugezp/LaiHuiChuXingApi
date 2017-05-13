@@ -21,10 +21,16 @@ import com.lhcx.utils.Utils;
 import com.lhcx.utils.sdk.GeetestConfig;
 import com.lhcx.utils.sdk.GeetestLib;
 
+/**
+ * 手机验证码
+ * @author william
+ *
+ */
+
 @Controller
 @RequestMapping(value = "/api")
 public class VerificationCodeController {
-	 private static Logger log = Logger.getLogger(VerificationCodeController.class);
+	private static Logger log = Logger.getLogger(VerificationCodeController.class);
     @Autowired
     private IVerificationCodeService verificationCodeService;
     //自定义userid
