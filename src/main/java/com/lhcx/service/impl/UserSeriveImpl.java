@@ -64,22 +64,43 @@ public class UserSeriveImpl implements IUserService{
 	
 	public ResultBean<?> login(HttpServletRequest request,JSONObject jsonRequest) {	
 		ResultBean<?> resultBean = null;
-		
 		//取得参数值
 		String phone = jsonRequest.getString("phone");
         String userType = jsonRequest.getString("userType");
         String code = jsonRequest.getString("code");
         
-        //1、校验用户是否存在
+        //1、司机端校验用户是否存在
         //2、如果用户存在，校验验证码        
-		User user = selectUserByPhone(phone, userType);
-		if(user != null && (user.getDriverInfo() != null || user.getPassengerInfo() != null)){
+		User user = null;		
+		if (userType.equals(UserType.DRIVER.value())) {
+			user = selectUserByPhone(phone, userType);
+		}
+		boolean driverBoolean = user != null && userType.equals(UserType.DRIVER.value()) && user.getDriverInfo() != null ;
+		//乘客端不需要注册即可登录 
+		boolean passengerBoolean = userType.equals(UserType.PASSENGER.value());
+		
+		if( driverBoolean || passengerBoolean){
 			if(verificationCodeService.checkPhoneCode(phone, userType, code)){
 				//验证成功后保存登录信息
-				user.setLogintime(Utils.currentTimestamp());
-				user.setUpatetime(Utils.currentTimestamp());
-				user.setLoginip(Utils.getIpAddr(request));
-				updateByPrimaryKeySelective(user);
+				if (passengerBoolean && user == null) {
+					user = new User();
+					user.setUserphone(phone);
+					user.setUsertype(userType);		
+					user.setToken(MD5Kit.encode(userType+"@"+phone));
+					user.setCreatetime(Utils.currentTimestamp());
+					user.setLogintime(Utils.currentTimestamp());
+					user.setUpatetime(Utils.currentTimestamp());
+					user.setLoginip(Utils.getIpAddr(request));
+					
+					insertSelective(user);
+				}else {
+					user.setLogintime(Utils.currentTimestamp());
+					user.setUpatetime(Utils.currentTimestamp());
+					user.setLoginip(Utils.getIpAddr(request));
+					updateByPrimaryKeySelective(user);
+					user.setDriverInfo(null);
+					user.setPassengerInfo(null);
+				}
 				
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"登录成功！",user);
 			}else{
@@ -110,7 +131,7 @@ public class UserSeriveImpl implements IUserService{
 			//step2:保存user信息 
 			user = new User();
 			user.setUserphone(phone);
-			user.setUsertype(userType);
+			user.setUsertype(userType);		
 			user.setToken(MD5Kit.encode(userType+"@"+phone));
 			user.setCreatetime(Utils.currentTimestamp());
 			user.setUpatetime(Utils.currentTimestamp());
