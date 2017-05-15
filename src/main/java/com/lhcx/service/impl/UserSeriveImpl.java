@@ -8,9 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.dao.UserMapper;
+import com.lhcx.model.DriverInfo;
+import com.lhcx.model.PassengerInfo;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
+import com.lhcx.model.UserType;
+import com.lhcx.service.IDriverInfoService;
+import com.lhcx.service.IPassengerInfoService;
 import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.Utils;
@@ -22,9 +27,30 @@ public class UserSeriveImpl implements IUserService{
 	private UserMapper userMapper;
 	@Autowired
 	private IVerificationCodeService verificationCodeService;
-
+	@Autowired
+	private IDriverInfoService driverInfoService;
+	@Autowired
+	private IPassengerInfoService passengerInfoService;
+	
 	public User selectUserByPhone(String phone,String userType) {
-		return userMapper.selectUserByPhone(phone, userType);
+		User user= userMapper.selectUserByPhone(phone, userType);
+		DriverInfo driverInfo = null;
+        PassengerInfo passengerInfo = null;
+        if(user != null){
+        	 if (userType.equals(UserType.DRIVER.value())) {
+             	driverInfo = driverInfoService.selectByPhone(phone);
+             	user.setDriverInfo(driverInfo);
+     		}else if (userType.equals(UserType.PASSENGER.value())) {
+     			passengerInfo = passengerInfoService.selectByPhone(phone);
+     			user.setPassengerInfo(passengerInfo);
+     		}
+        }
+       
+		return user;
+	}
+	
+	public int insert(User record){
+		return userMapper.insert(record);
 	}
 	
 	public int updateByPrimaryKeySelective(User record){
@@ -41,10 +67,11 @@ public class UserSeriveImpl implements IUserService{
         
         //1、校验用户是否存在
         //2、如果用户存在，校验验证码
+        
 		User user = selectUserByPhone(phone, userType);
-		if(user != null){
+		if(user != null && (user.getDriverInfo() != null || user.getPassengerInfo() != null)){
 			if(verificationCodeService.checkPhoneCode(phone, userType, code)){
-				//验证成功
+				//验证成功后保存登录信息
 				user.setLogintime(Utils.currentTimestamp());
 				user.setUpatetime(Utils.currentTimestamp());
 				user.setLoginip(Utils.getIpAddr(request));

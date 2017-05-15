@@ -28,6 +28,9 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <listener>
+	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+ </listener>
+  <listener>
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
   </listener>
   <servlet>
@@ -47,5 +50,9 @@
   <welcome-file-list>
     <welcome-file>/index.jsp</welcome-file>
   </welcome-file-list>
-  <session-config/>
+  
+  <!-- session配置 -->
+  <session-config>
+	<session-timeout>30</session-timeout>
+  </session-config>
 </web-app>

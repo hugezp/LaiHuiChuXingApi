@@ -23,7 +23,13 @@
     from passenger_infos
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <select id="selectByPhone" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from passenger_infos
+    where PassengerPhone = #{phone,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPhone" parameterType="java.lang.Integer" >
     delete from passenger_infos
     where id = #{id,jdbcType=INTEGER}
   </delete>

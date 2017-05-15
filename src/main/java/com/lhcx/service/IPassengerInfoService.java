@@ -1,0 +1,7 @@
+package com.lhcx.service;
+
+import com.lhcx.model.PassengerInfo;
+
+public interface IPassengerInfoService {
+	 PassengerInfo selectByPhone(String phone);
+}

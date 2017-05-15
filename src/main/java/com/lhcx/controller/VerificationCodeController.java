@@ -131,10 +131,10 @@ public class VerificationCodeController {
         String userType = jsonRequest.getString("userType");
         String jsonpCallback = jsonRequest.getString("jsonpCallback");
                 
-        ResultBean<?> resultBean = new ResultBean<Object>();
+        ResultBean<?> resultBean = new ResultBean<Object>();       
 
-        int codeTotal = verificationCodeService.getCountByPhonePerDay(mobile,userType);
-    	if(codeTotal < 5){
+        int codeTotal = verificationCodeService.getCountByPhonePerDay(mobile,userType);        
+    	if(SmsUtils.isContains(SmsUtils.ignorPhones,mobile) || codeTotal < 5 ){
     		try {
     			verificationCodeService.sendPhoneCode(mobile, userType);
     			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"验证码发送成功！");
@@ -172,7 +172,7 @@ public class VerificationCodeController {
                 
         ResultBean<?> resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"验证失败！请检查手机号或验证码，验证码有效期30分钟！");
         try {
-			if(verificationCodeService.checkPhoneCode(mobile, userType, code)){
+			if( verificationCodeService.checkPhoneCode(mobile, userType, code)){
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"验证成功！");
 			}
 		} catch (Exception e) {

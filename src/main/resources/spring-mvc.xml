@@ -11,8 +11,8 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
     <!-- ①：对web包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
     <context:component-scan base-package="com.lhcx" >
-    <context:exclude-filter type ="annotation" expression= "org.springframework.stereotype.Service" />
-	</context:component-scan >
+    	<context:exclude-filter type ="annotation" expression= "org.springframework.stereotype.Service" />
+	</context:component-scan > 
 
     <!-- ②：启动Spring MVC的注解功能 -->
     <mvc:annotation-driven />
@@ -56,6 +56,18 @@
         <property name="maxUploadSize" value="32505856"/>
         <!-- 内存中的最大值 -->
         <property name="maxInMemorySize" value="4096"/>
+    </bean>
+    
+      <!--oss-->
+    <bean id="ossConfigure" class="com.lhcx.utils.OssConfigure">
+        <property name="accessKeyId" value="LTAIBylxOP12jqp2"/>
+        <property name="accessKeySecret" value="mkjn9cKyGx8mxG0tvMUyO7ceRTIw61"/>
+        <property name="accessUrl" value="http://wgc.oss-cn-qingdao.aliyuncs.com/"/>
+        <property name="bucketName" value="wgc"/>
+        <property name="endpoint" value="http://oss-cn-qingdao.aliyuncs.com"/>
+    </bean>
+    <bean id="ossUtil" class="com.lhcx.utils.OssUtil">
+        <property name="ossConfigure" ref="ossConfigure"/>
     </bean>
 
 </beans>

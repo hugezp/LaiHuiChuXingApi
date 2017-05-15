@@ -1,5 +1,7 @@
 package com.lhcx.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.lhcx.model.PassengerInfo;
 
 public interface PassengerInfoMapper {
@@ -14,4 +16,6 @@ public interface PassengerInfoMapper {
     int updateByPrimaryKeySelective(PassengerInfo record);
 
     int updateByPrimaryKey(PassengerInfo record);
+    
+    PassengerInfo selectByPhone(@Param("phone") String phone);
 }

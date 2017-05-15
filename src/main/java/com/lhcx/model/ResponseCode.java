@@ -8,6 +8,7 @@ public class ResponseCode {
      * 成功代码
      */
     private static final int success = 200; //请求成功
+    private static final int error = 300; //请求失败
     /**
      * 登陆模块错误代码
      */
@@ -34,6 +35,8 @@ public class ResponseCode {
     private static final int no_data = 408;
 
     public static int getSuccess(){ return  success; }
+    
+    public static int getError(){ return  error; }
     
     public static int  get_no_user() {
 		return no_user;

@@ -17,6 +17,8 @@ public interface IUserService {
 	
 	int updateByPrimaryKeySelective(User record);
 	
+	int insert(User record);
+	
 	/*
 	 * content-type:application/json
      * @param:

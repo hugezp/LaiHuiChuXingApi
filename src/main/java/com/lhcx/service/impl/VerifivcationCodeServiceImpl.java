@@ -1,4 +1,6 @@
 package com.lhcx.service.impl;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,11 @@ import com.lhcx.utils.Utils;
 public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
 
     @Autowired
-    private VerificationCodeMapper verificationCodeMapper;
+    private VerificationCodeMapper verificationCodeMapper; 
+    @Autowired  
+    private HttpSession session;  
+    @Autowired  
+    private HttpServletRequest request;
     
     public void test() {
     	createSMS("13862149157","1234","pasenger");
@@ -67,15 +73,19 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
     	return verificationCodeMapper.selectLastByPhone(phone,userType);
 	}
      
+    /**
+     * 验证码有效期30分钟
+     */
     public boolean checkPhoneCode(String phone,String userType,String code) {
+    	boolean result = false;
     	VerificationCode verificationCode = selectLastByPhone(phone,userType);
     	if (verificationCode != null && verificationCode.getCode().equals(code)) {
     		verificationCode.setVerificationtime(Utils.currentTimestamp());
         	updateByPrimaryKeySelective(verificationCode);
-        	
-        	return true;
+        	session.setAttribute(Utils.REGISTER_PHONE_SESSION, phone);
+        	result = true;
 		}
 
-    	return false;
+    	return result;
 	}
 }

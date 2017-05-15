@@ -1,5 +1,7 @@
 package com.lhcx.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.lhcx.model.DriverInfo;
 
 public interface DriverInfoMapper {
@@ -14,4 +16,6 @@ public interface DriverInfoMapper {
     int updateByPrimaryKeySelective(DriverInfo record);
 
     int updateByPrimaryKey(DriverInfo record);
+    
+    DriverInfo selectByPhone(@Param("phone") String phone);
 }

@@ -62,6 +62,12 @@
     from driver_infos
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from driver_infos
+    where DriverPhone = #{phone,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from driver_infos
     where id = #{id,jdbcType=INTEGER}

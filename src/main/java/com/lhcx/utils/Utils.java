@@ -22,7 +22,10 @@ import com.lhcx.model.ResultBean;
  */
 @Component
 public class Utils {
-    public static final String jsonpCallback = "lhcxCallBack@2017";
+	public static final String REGISTER_PHONE_SESSION = "lhcx@phone";
+    public static final String JSON_CALL_BACK = "lhcxCallBack@2017";
+    public static final String FILE_UPLOAD_PATH = "lhcxUpload";
+    
     public static HttpHeaders responseHeaders(){
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Content-Type", "application/json;charset=UTF-8");
@@ -87,8 +90,8 @@ public class Utils {
     //接口返回结果处理
     public static ResponseEntity<String> resultResponseJson(ResultBean<?> resultBean, String callBack){
         String resultJsonStr = "";
-        if(!isNullOrEmpty(callBack) && callBack.equals(jsonpCallback)){
-            resultJsonStr = jsonpCallback + "(" + JSON.toJSONString(resultBean) + ")";
+        if(!isNullOrEmpty(callBack) && callBack.equals(JSON_CALL_BACK)){
+            resultJsonStr = JSON_CALL_BACK + "(" + JSON.toJSONString(resultBean) + ")";
         }else{
             resultJsonStr = JSON.toJSONString(resultBean);
         }

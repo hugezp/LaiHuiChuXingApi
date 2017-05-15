@@ -5,7 +5,7 @@ import java.util.Date;
 public class User {
     private Integer id;
 
-    private Integer userphone;
+    private String userphone;
 
     private String usertype;
 
@@ -18,6 +18,10 @@ public class User {
     private Date createtime;
 
     private Date upatetime;
+    
+    private DriverInfo driverInfo;
+    
+    private PassengerInfo passengerInfo;
 
     public Integer getId() {
         return id;
@@ -27,11 +31,11 @@ public class User {
         this.id = id;
     }
 
-    public Integer getUserphone() {
+    public String getUserphone() {
         return userphone;
     }
 
-    public void setUserphone(Integer userphone) {
+    public void setUserphone(String userphone) {
         this.userphone = userphone;
     }
 
@@ -82,4 +86,20 @@ public class User {
     public void setUpatetime(Date upatetime) {
         this.upatetime = upatetime;
     }
+
+	public DriverInfo getDriverInfo() {
+		return driverInfo;
+	}
+
+	public void setDriverInfo(DriverInfo driverInfo) {
+		this.driverInfo = driverInfo;
+	}
+
+	public PassengerInfo getPassengerInfo() {
+		return passengerInfo;
+	}
+
+	public void setPassengerInfo(PassengerInfo passengerInfo) {
+		this.passengerInfo = passengerInfo;
+	}
 }
