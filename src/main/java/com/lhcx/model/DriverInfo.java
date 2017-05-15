@@ -2,6 +2,8 @@ package com.lhcx.model;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class DriverInfo {
     private Integer id;
 
@@ -432,4 +434,26 @@ public class DriverInfo {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+    
+    public DriverInfo(JSONObject jsonRequest) {
+		// TODO Auto-generated constructor stub
+    	if (jsonRequest != null) {
+    		//基本信息
+			this.driverphone = jsonRequest.getString("phone");
+			this.photo = jsonRequest.getString("photo");
+			this.drivername = jsonRequest.getString("driverName");
+			this.licenseid = jsonRequest.getString("licenseId");
+			this.drivernation = jsonRequest.getString("driverNation");
+			this.drivernationality = jsonRequest.getString("driverNationality");
+			this.address = jsonRequest.getInteger("address");
+			
+			//证件信息
+			this.licensephoto = jsonRequest.getString("licensePhoto");
+			this.getdriverlicensedate = jsonRequest.getDate("getDriverLicenseDate");
+			this.driverlicenseon = jsonRequest.getDate("driverLicenseOn");
+			this.driverlicenseoff = jsonRequest.getDate("driverLicenseOff");
+			this.fulltimedriver = jsonRequest.getInteger("fullTimeDriver");
+			
+		}
+	}
 }

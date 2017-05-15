@@ -18,4 +18,8 @@ public interface DriverInfoMapper {
     int updateByPrimaryKey(DriverInfo record);
     
     DriverInfo selectByPhone(@Param("phone") String phone);
+    
+    int updateByPhone(DriverInfo record);
+    
+    int updateByPhoneSelective(DriverInfo record);
 }

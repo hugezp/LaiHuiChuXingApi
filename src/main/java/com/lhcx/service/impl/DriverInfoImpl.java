@@ -18,5 +18,21 @@ public class DriverInfoImpl implements IDriverInfoService {
 	public DriverInfo selectByPhone(String phone) {
 		return driverInfoMapper.selectByPhone(phone);
 	}
+	
+	public int updateByPrimaryKey(DriverInfo record){
+		return driverInfoMapper.updateByPrimaryKey(record);
+	}
+	
+	public int insert(DriverInfo record) {
+		return driverInfoMapper.insert(record);
+	}
+	
+	public int updateByPhone(DriverInfo record){
+		return driverInfoMapper.updateByPhone(record);
+	}
+	
+	public int updateByPhoneSelective(DriverInfo record) {
+		return driverInfoMapper.updateByPhoneSelective(record);
+	}
 
 }

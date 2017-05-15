@@ -503,6 +503,138 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateByPhoneSelective" parameterType="com.lhcx.model.DriverInfo" >
+    update driver_infos
+    <set >
+      <if test="companyid != null" >
+        CompanyId = #{companyid,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        Address = #{address,jdbcType=INTEGER},
+      </if>
+      <if test="drivername != null" >
+        DriverName = #{drivername,jdbcType=VARCHAR},
+      </if>
+      <if test="drivergender != null" >
+        DriverGender = #{drivergender,jdbcType=VARCHAR},
+      </if>
+      <if test="driverbirthday != null" >
+        DriverBirthday = #{driverbirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="drivernationality != null" >
+        DriverNationality = #{drivernationality,jdbcType=VARCHAR},
+      </if>
+      <if test="drivernation != null" >
+        DriverNation = #{drivernation,jdbcType=VARCHAR},
+      </if>
+      <if test="drivermaritalstatus != null" >
+        DriverMaritalStatus = #{drivermaritalstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="driverlanguagelevel != null" >
+        DriverLanguageLevel = #{driverlanguagelevel,jdbcType=VARCHAR},
+      </if>
+      <if test="driveeducation != null" >
+        DriveEducation = #{driveeducation,jdbcType=VARCHAR},
+      </if>
+      <if test="drivercensus != null" >
+        DriverCensus = #{drivercensus,jdbcType=VARCHAR},
+      </if>
+      <if test="driveraddress != null" >
+        DriverAddress = #{driveraddress,jdbcType=VARCHAR},
+      </if>
+      <if test="drivercontactaddress != null" >
+        DriverContactAddress = #{drivercontactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        Photo = #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseid != null" >
+        LicenseId = #{licenseid,jdbcType=VARCHAR},
+      </if>
+      <if test="licensephoto != null" >
+        LicensePhoto = #{licensephoto,jdbcType=VARCHAR},
+      </if>
+      <if test="drivertype != null" >
+        DriverType = #{drivertype,jdbcType=VARCHAR},
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="getdriverlicensedate != null" >
+        GetDriverLicenseDate = #{getdriverlicensedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="driverlicenseon != null" >
+        DriverLicenseOn = #{driverlicenseon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="driverlicenseoff != null" >
+        DriverLicenseOff = #{driverlicenseoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxidriver != null" >
+        TaxiDriver = #{taxidriver,jdbcType=INTEGER},
+      </if>
+      <if test="certificateno != null" >
+        CertificateNo = #{certificateno,jdbcType=VARCHAR},
+      </if>
+      <if test="networkcarissusorganization != null" >
+        NetworkCarIssusOrganization = #{networkcarissusorganization,jdbcType=VARCHAR},
+      </if>
+      <if test="networkcarissusdate != null" >
+        NetworkCarIssusDate = #{networkcarissusdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getnetworkproofdate != null" >
+        GetNetworkProofDate = #{getnetworkproofdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="networkcarproofon != null" >
+        NetworkCarProofOn = #{networkcarproofon,jdbcType=TIMESTAMP},
+      </if>
+      <if test="networkcarproofoff != null" >
+        NetworkCarProofOff = #{networkcarproofoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registerdate != null" >
+        RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fulltimedriver != null" >
+        FullTimeDriver = #{fulltimedriver,jdbcType=INTEGER},
+      </if>
+      <if test="commercialtype != null" >
+        CommercialType = #{commercialtype,jdbcType=INTEGER},
+      </if>
+      <if test="indriverblacklist != null" >
+        InDriverBlackList = #{indriverblacklist,jdbcType=INTEGER},
+      </if>
+      <if test="contractcompany != null" >
+        ContractCompany = #{contractcompany,jdbcType=VARCHAR},
+      </if>
+      <if test="contracton != null" >
+        ContractOn = #{contracton,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractoff != null" >
+        ContractOff = #{contractoff,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emergencycontact != null" >
+        EmergencyContact = #{emergencycontact,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycontactphone != null" >
+        EmergencyContactPhone = #{emergencycontactphone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycontactaddress != null" >
+        EmergencyContactAddress = #{emergencycontactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        State = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        Flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where DriverPhone = #{driverphone,jdbcType=INTEGER}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.lhcx.model.DriverInfo" >
     update driver_infos
     set CompanyId = #{companyid,jdbcType=VARCHAR},
@@ -548,5 +680,51 @@
       CreateTime = #{createtime,jdbcType=TIMESTAMP},
       UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+   <update id="updateByPhone" parameterType="com.lhcx.model.DriverInfo" >
+    update driver_infos
+    set CompanyId = #{companyid,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=INTEGER},
+      DriverName = #{drivername,jdbcType=VARCHAR},
+      DriverGender = #{drivergender,jdbcType=VARCHAR},
+      DriverBirthday = #{driverbirthday,jdbcType=TIMESTAMP},
+      DriverNationality = #{drivernationality,jdbcType=VARCHAR},
+      DriverNation = #{drivernation,jdbcType=VARCHAR},
+      DriverMaritalStatus = #{drivermaritalstatus,jdbcType=VARCHAR},
+      DriverLanguageLevel = #{driverlanguagelevel,jdbcType=VARCHAR},
+      DriveEducation = #{driveeducation,jdbcType=VARCHAR},
+      DriverCensus = #{drivercensus,jdbcType=VARCHAR},
+      DriverAddress = #{driveraddress,jdbcType=VARCHAR},
+      DriverContactAddress = #{drivercontactaddress,jdbcType=VARCHAR},
+      Photo = #{photo,jdbcType=VARCHAR},
+      LicenseId = #{licenseid,jdbcType=VARCHAR},
+      LicensePhoto = #{licensephoto,jdbcType=VARCHAR},
+      DriverType = #{drivertype,jdbcType=VARCHAR},
+      DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      GetDriverLicenseDate = #{getdriverlicensedate,jdbcType=TIMESTAMP},
+      DriverLicenseOn = #{driverlicenseon,jdbcType=TIMESTAMP},
+      DriverLicenseOff = #{driverlicenseoff,jdbcType=TIMESTAMP},
+      TaxiDriver = #{taxidriver,jdbcType=INTEGER},
+      CertificateNo = #{certificateno,jdbcType=VARCHAR},
+      NetworkCarIssusOrganization = #{networkcarissusorganization,jdbcType=VARCHAR},
+      NetworkCarIssusDate = #{networkcarissusdate,jdbcType=TIMESTAMP},
+      GetNetworkProofDate = #{getnetworkproofdate,jdbcType=TIMESTAMP},
+      NetworkCarProofOn = #{networkcarproofon,jdbcType=TIMESTAMP},
+      NetworkCarProofOff = #{networkcarproofoff,jdbcType=TIMESTAMP},
+      RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
+      FullTimeDriver = #{fulltimedriver,jdbcType=INTEGER},
+      CommercialType = #{commercialtype,jdbcType=INTEGER},
+      InDriverBlackList = #{indriverblacklist,jdbcType=INTEGER},
+      ContractCompany = #{contractcompany,jdbcType=VARCHAR},
+      ContractOn = #{contracton,jdbcType=TIMESTAMP},
+      ContractOff = #{contractoff,jdbcType=TIMESTAMP},
+      EmergencyContact = #{emergencycontact,jdbcType=VARCHAR},
+      EmergencyContactPhone = #{emergencycontactphone,jdbcType=VARCHAR},
+      EmergencyContactAddress = #{emergencycontactaddress,jdbcType=VARCHAR},
+      State = #{state,jdbcType=INTEGER},
+      Flag = #{flag,jdbcType=INTEGER},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where DriverPhone = #{driverphone,jdbcType=INTEGER}
   </update>
 </mapper>

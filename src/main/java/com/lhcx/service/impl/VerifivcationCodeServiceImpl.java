@@ -82,7 +82,7 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
     	if (verificationCode != null && verificationCode.getCode().equals(code)) {
     		verificationCode.setVerificationtime(Utils.currentTimestamp());
         	updateByPrimaryKeySelective(verificationCode);
-        	session.setAttribute(Utils.REGISTER_PHONE_SESSION, phone);
+        	session.setAttribute(Utils.REGISTER_PHONE_SESSION, userType+"@"+phone);
         	result = true;
 		}
 

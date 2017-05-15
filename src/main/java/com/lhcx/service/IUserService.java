@@ -27,4 +27,13 @@ public interface IUserService {
      * code:验证码
 	*/
 	ResultBean<?> login(HttpServletRequest request,JSONObject jsonRequest);
+	
+	/*
+	 * content-type:application/json
+     * @param:
+     * mobile:手机号
+     * userType:用户类型，driver-司机端，passenger-乘客端
+     * code:验证码
+	*/
+	boolean registerForDriver(HttpServletRequest request,JSONObject jsonRequest); 
 }
