@@ -153,7 +153,7 @@ public class VerificationCodeController {
     }
     
     /**
-     * 获取验证码
+     * 验证手机验证码
      * @param:
      * mobile:手机号
      * userType:用户类型，driver-司机端，passenger-乘客端

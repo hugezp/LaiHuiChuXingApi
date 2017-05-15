@@ -67,7 +67,6 @@ public class FileController {
             } else {
                 throw new IOException("文件名为空!");
             }
-            result.put("state", "SUCCESS");
             result.put("url",filePath);
             result.put("title", originalFileName);
             result.put("original", originalFileName);
@@ -76,7 +75,6 @@ public class FileController {
         }catch (Exception e) {
             log.error("文件 "+fileName+" 上传失败!"+ e.getMessage());
             e.printStackTrace();
-            result.put("state", "error");
             result.put("url","");
             result.put("title", "");
             result.put("original", "");
