@@ -19,6 +19,8 @@ public interface IUserService {
 	
 	int insert(User record);
 	
+	int insertSelective(User record);
+	
 	/*
 	 * content-type:application/json
      * @param:
@@ -35,5 +37,5 @@ public interface IUserService {
      * userType:用户类型，driver-司机端，passenger-乘客端
      * code:验证码
 	*/
-	boolean registerForDriver(HttpServletRequest request,JSONObject jsonRequest); 
+	void registerForDriver(HttpServletRequest request,JSONObject jsonRequest); 
 }

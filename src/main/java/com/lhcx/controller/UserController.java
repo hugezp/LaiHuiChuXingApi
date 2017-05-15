@@ -89,9 +89,8 @@ public class UserController {
         try {
         	String checkSession = (String) session.getAttribute(Utils.REGISTER_PHONE_SESSION);
         	if(checkSession.equals(userType+"@"+phone)){
-        		if (userSerive.registerForDriver(request,jsonRequest)) {
-        			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"注册提交成功！");
-    			}
+        		userSerive.registerForDriver(request,jsonRequest);
+        		resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"注册提交成功！");
         	}else{
         		resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册验证码错误或已失效，有效期为30分钟！");
         	}

@@ -27,6 +27,10 @@ public class DriverInfoImpl implements IDriverInfoService {
 		return driverInfoMapper.insert(record);
 	}
 	
+	public int insertSelective(DriverInfo record){
+		return driverInfoMapper.insertSelective(record);
+	}
+	
 	public int updateByPhone(DriverInfo record){
 		return driverInfoMapper.updateByPhone(record);
 	}

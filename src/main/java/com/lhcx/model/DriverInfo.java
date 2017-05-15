@@ -435,6 +435,10 @@ public class DriverInfo {
         this.updatetime = updatetime;
     }
     
+    public DriverInfo() {
+		
+	}
+    
     public DriverInfo(JSONObject jsonRequest) {
 		// TODO Auto-generated constructor stub
     	if (jsonRequest != null) {

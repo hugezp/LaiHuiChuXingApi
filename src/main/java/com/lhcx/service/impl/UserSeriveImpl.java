@@ -54,6 +54,10 @@ public class UserSeriveImpl implements IUserService{
 		return userMapper.insert(record);
 	}
 	
+	public int insertSelective(User record){
+		return userMapper.insertSelective(record);
+	}
+	
 	public int updateByPrimaryKeySelective(User record){
 		return userMapper.updateByPrimaryKeySelective(record);
 	}
@@ -90,8 +94,7 @@ public class UserSeriveImpl implements IUserService{
 		return resultBean;
 	}
 	
-	public boolean registerForDriver(HttpServletRequest request,JSONObject jsonRequest) {
-		boolean result = false;
+	public void registerForDriver(HttpServletRequest request,JSONObject jsonRequest) {
 		String phone = jsonRequest.getString("phone");
 		String userType = UserType.DRIVER.value();
 		
@@ -102,7 +105,7 @@ public class UserSeriveImpl implements IUserService{
 			driverInfo = new DriverInfo(jsonRequest);
 			driverInfo.setCreatetime(Utils.currentTimestamp());
 			driverInfo.setUpdatetime(Utils.currentTimestamp());
-			driverInfoService.insert(driverInfo);
+			driverInfoService.insertSelective(driverInfo);
 			
 			//step2:保存user信息 
 			user = new User();
@@ -111,7 +114,7 @@ public class UserSeriveImpl implements IUserService{
 			user.setToken(MD5Kit.encode(userType+"@"+phone));
 			user.setCreatetime(Utils.currentTimestamp());
 			user.setUpatetime(Utils.currentTimestamp());
-			insert(user);
+			insertSelective(user);
 			
 		} else {
 			//step1：更新driver 信息
@@ -119,7 +122,5 @@ public class UserSeriveImpl implements IUserService{
 			driverInfo.setUpdatetime(Utils.currentTimestamp());
 			driverInfoService.updateByPhoneSelective(driverInfo);
 		}
-		
-		return result;
 	}
 }
