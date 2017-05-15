@@ -71,10 +71,8 @@ public class UserSeriveImpl implements IUserService{
         
         //1、司机端校验用户是否存在
         //2、如果用户存在，校验验证码        
-		User user = null;		
-		if (userType.equals(UserType.DRIVER.value())) {
-			user = selectUserByPhone(phone, userType);
-		}
+		User user = selectUserByPhone(phone, userType);
+
 		boolean driverBoolean = user != null && userType.equals(UserType.DRIVER.value()) && user.getDriverInfo() != null ;
 		//乘客端不需要注册即可登录 
 		boolean passengerBoolean = userType.equals(UserType.PASSENGER.value());

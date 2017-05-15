@@ -3,6 +3,7 @@ package com.lhcx.utils;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -39,6 +40,14 @@ public class Utils {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(date);
     }
+    
+    public static Date getDate(Date date) {
+	   SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	   String dateString = formatter.format(date);
+	   ParsePosition pos = new ParsePosition(8);
+	   Date currentTime_2 = formatter.parse(dateString, pos);
+	   return currentTime_2;
+	}
     
     public static Timestamp currentTimestamp() {
     	return new Timestamp(System.currentTimeMillis());

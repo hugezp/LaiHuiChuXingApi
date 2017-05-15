@@ -1,6 +1,6 @@
 package com.lhcx.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class User {
     private Integer id;
@@ -13,11 +13,11 @@ public class User {
 
     private String loginip;
 
-    private Date logintime;
+    private Timestamp logintime;
 
-    private Date createtime;
+    private Timestamp createtime;
 
-    private Date upatetime;
+    private Timestamp upatetime;
     
     private DriverInfo driverInfo;
     
@@ -63,27 +63,27 @@ public class User {
         this.loginip = loginip == null ? null : loginip.trim();
     }
 
-    public Date getLogintime() {
+    public Timestamp getLogintime() {
         return logintime;
     }
 
-    public void setLogintime(Date logintime) {
+    public void setLogintime(Timestamp logintime) {
         this.logintime = logintime;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Timestamp getCreatetime() {
+        return  createtime;
     }
 
-    public void setCreatetime(Date createtime) {
+    public void setCreatetime(Timestamp createtime) {
         this.createtime = createtime;
     }
 
-    public Date getUpatetime() {
+    public Timestamp getUpatetime() {
         return upatetime;
     }
 
-    public void setUpatetime(Date upatetime) {
+    public void setUpatetime(Timestamp upatetime) {
         this.upatetime = upatetime;
     }
 
