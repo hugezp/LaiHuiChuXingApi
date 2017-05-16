@@ -37,6 +37,11 @@ public class UserSeriveImpl implements IUserService{
 	@Autowired
 	private IPassengerInfoService passengerInfoService;
 	
+	public User selectByToken(String token) {
+		User user= userMapper.selectByToken(token);		
+		return user;
+	}
+	
 	public User selectUserByPhone(String phone,String userType) {
 		User user= userMapper.selectUserByPhone(phone, userType);
 		DriverInfo driverInfo = null;

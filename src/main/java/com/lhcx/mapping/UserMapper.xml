@@ -10,15 +10,22 @@
     <result column="LoginTime" property="logintime" jdbcType="TIMESTAMP" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpateTime" property="upatetime" jdbcType="TIMESTAMP" />
+    <result column="Flag" property="flag" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime
+    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime,Flag
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from users
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByToken" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where Token = #{token}
   </select>
   <select id="selectUserByPhone" resultMap="BaseResultMap" >
     select 
@@ -27,7 +34,7 @@
     where UserPhone = #{phone} and UserType = #{userType}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from users
+    update users set Flag = 1 
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lhcx.model.User" >

@@ -34,7 +34,7 @@ public class OrderController {
 		//取得参数值
         String jsonpCallback = jsonRequest.getString("jsonpCallback");
         ResultBean<?> resultBean = null; 
-        try {
+        try {  
         	if (orderService.create(jsonRequest)) {
         		resultBean = new ResultBean<Object>(ResponseCode.getError(),"发布订单成功！");
 			} else {

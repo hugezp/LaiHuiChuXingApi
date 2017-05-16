@@ -19,6 +19,8 @@ public class User {
 
     private Timestamp upatetime;
     
+    private Integer flag;
+    
     private DriverInfo driverInfo;
     
     private PassengerInfo passengerInfo;
@@ -29,6 +31,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 
     public String getUserphone() {

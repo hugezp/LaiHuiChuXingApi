@@ -3,7 +3,6 @@ package com.lhcx.service;
 import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
-
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
@@ -16,6 +15,8 @@ import com.lhcx.model.User;
 public interface IUserService {
 	
 	User selectUserByPhone(String phone,String userType);
+	
+	User selectByToken(String token);
 	
 	int updateByPrimaryKeySelective(User record);
 	

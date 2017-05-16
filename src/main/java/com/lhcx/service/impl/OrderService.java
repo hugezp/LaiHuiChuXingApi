@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lhcx.dao.OrderMapper;
 import com.lhcx.model.Order;
 import com.lhcx.service.IOrderService;
+import com.lhcx.utils.MD5Kit;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -30,6 +31,11 @@ public class OrderService implements IOrderService {
 	
 	public boolean create(JSONObject jsonRequest) {
 		boolean result = false;
+		Order order = new Order(jsonRequest);
+		order.setOrderid(MD5Kit.encode(String.valueOf(System.currentTimeMillis()) ));
+		if (insertSelective(order) > 0) {
+			result = true;
+		}
 		
 		return result;
 	}

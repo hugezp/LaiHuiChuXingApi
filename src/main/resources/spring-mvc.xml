@@ -69,5 +69,13 @@
     <bean id="ossUtil" class="com.lhcx.utils.OssUtil">
         <property name="ossConfigure" ref="ossConfigure"/>
     </bean>
+    
+     <!-- 自定义登录拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/api/order/**"/>
+            <bean class="com.lhcx.controller.LoginInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>

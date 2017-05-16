@@ -2,6 +2,8 @@ package com.lhcx.model;
 
 import java.math.BigDecimal;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class Order {
     private Integer id;
 
@@ -13,9 +15,9 @@ public class Order {
 
     private String passengerphone;
 
-    private Integer departtime;
+    private Long departtime;
 
-    private Integer ordertime;
+    private Long ordertime;
 
     private String passengernote;
 
@@ -47,9 +49,9 @@ public class Order {
 
     private String latitude;
 
-    private Integer distributetime;
+    private Long distributetime;
 
-    private Integer canceltime;
+    private Long canceltime;
 
     private String operator;
 
@@ -97,19 +99,19 @@ public class Order {
         this.passengerphone = passengerphone == null ? null : passengerphone.trim();
     }
 
-    public Integer getDeparttime() {
+    public Long getDeparttime() {
         return departtime;
     }
 
-    public void setDeparttime(Integer departtime) {
+    public void setDeparttime(Long departtime) {
         this.departtime = departtime;
     }
 
-    public Integer getOrdertime() {
+    public Long getOrdertime() {
         return ordertime;
     }
 
-    public void setOrdertime(Integer ordertime) {
+    public void setOrdertime(Long ordertime) {
         this.ordertime = ordertime;
     }
 
@@ -233,19 +235,19 @@ public class Order {
         this.latitude = latitude == null ? null : latitude.trim();
     }
 
-    public Integer getDistributetime() {
+    public Long getDistributetime() {
         return distributetime;
     }
 
-    public void setDistributetime(Integer distributetime) {
+    public void setDistributetime(Long distributetime) {
         this.distributetime = distributetime;
     }
 
-    public Integer getCanceltime() {
+    public Long getCanceltime() {
         return canceltime;
     }
 
-    public void setCanceltime(Integer canceltime) {
+    public void setCanceltime(Long canceltime) {
         this.canceltime = canceltime;
     }
 
@@ -271,5 +273,26 @@ public class Order {
 
     public void setCancelreason(String cancelreason) {
         this.cancelreason = cancelreason == null ? null : cancelreason.trim();
+    }
+    
+    public Order(){
+    	
+    }
+    
+    public Order(JSONObject jsonRequest){
+    	if (jsonRequest != null) {
+    		this.passengerphone = jsonRequest.getString("PassengerPhone");
+    		this.departtime = jsonRequest.getLong("DePartTime");
+			this.ordertime = jsonRequest.getLong("OrderTime");
+			this.passengernote = jsonRequest.getString("PassengerNote");
+			this.departure = jsonRequest.getString("Departure");
+			this.deplongitude = jsonRequest.getString("DepLongitude");
+			this.deplatitude = jsonRequest.getString("DepLatitude");
+			this.destination = jsonRequest.getString("Destination");
+			this.destlongitude = jsonRequest.getString("DestLongitude");
+			this.destlatitude = jsonRequest.getString("DestLatitude");
+			this.fee = jsonRequest.getBigDecimal("Fee");
+			
+		}
     }
 }

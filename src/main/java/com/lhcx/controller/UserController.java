@@ -106,4 +106,11 @@ public class UserController {
         return Utils.resultResponseJson(resultBean,jsonpCallback);
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/noLogin", method = RequestMethod.POST)
+    public ResponseEntity<String> sendPhoneCode() {    	
+    	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"未登录或登录已失效，请重新登录！");
+    	return Utils.resultResponseJson(resultBean,null);
+    }
+    
 }
