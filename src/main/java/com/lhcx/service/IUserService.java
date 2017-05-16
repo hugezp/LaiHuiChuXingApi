@@ -1,5 +1,7 @@
 package com.lhcx.service;
 
+import java.text.ParseException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
@@ -37,5 +39,5 @@ public interface IUserService {
      * userType:用户类型，driver-司机端，passenger-乘客端
      * code:验证码
 	*/
-	void registerForDriver(HttpServletRequest request,JSONObject jsonRequest); 
+	void registerForDriver(HttpServletRequest request,JSONObject jsonRequest) throws ParseException; 
 }

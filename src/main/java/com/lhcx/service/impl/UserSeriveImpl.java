@@ -1,5 +1,6 @@
 package com.lhcx.service.impl;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -118,7 +119,7 @@ public class UserSeriveImpl implements IUserService{
 		return resultBean;
 	}
 	
-	public void registerForDriver(HttpServletRequest request,JSONObject jsonRequest) {
+	public void registerForDriver(HttpServletRequest request,JSONObject jsonRequest) throws ParseException {
 		String phone = jsonRequest.getString("phone");
 		String userType = UserType.DRIVER.value();
 		
