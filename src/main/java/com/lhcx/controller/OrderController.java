@@ -36,7 +36,7 @@ public class OrderController {
         ResultBean<?> resultBean = null; 
         try {  
         	if (orderService.create(jsonRequest)) {
-        		resultBean = new ResultBean<Object>(ResponseCode.getError(),"发布订单成功！");
+        		resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"发布订单成功！");
 			} else {
 				resultBean = new ResultBean<Object>(ResponseCode.getError(),"发布订单失败！");
 			}

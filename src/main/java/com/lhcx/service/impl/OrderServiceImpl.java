@@ -1,5 +1,7 @@
 package com.lhcx.service.impl;
 
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class OrderServiceImpl implements IOrderService {
 		return orderMapper.selectByOrderId(orderId);
 	}
 	
-	public boolean create(JSONObject jsonRequest) {
+	public boolean create(JSONObject jsonRequest) throws ParseException {
 		boolean result = false;
 		Order order = new Order(jsonRequest);
 		order.setOrderid(MD5Kit.encode(String.valueOf(System.currentTimeMillis()) ));

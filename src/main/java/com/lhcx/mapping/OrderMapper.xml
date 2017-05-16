@@ -7,8 +7,8 @@
     <result column="Address" property="address" jdbcType="INTEGER" />
     <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
     <result column="PassengerPhone" property="passengerphone" jdbcType="VARCHAR" />
-    <result column="DepartTime" property="departtime" jdbcType="INTEGER" />
-    <result column="OrderTime" property="ordertime" jdbcType="INTEGER" />
+    <result column="DepartTime" property="departtime" jdbcType="TIMESTAMP" />
+    <result column="OrderTime" property="ordertime" jdbcType="TIMESTAMP" />
     <result column="PassengerNote" property="passengernote" jdbcType="VARCHAR" />
     <result column="Departure" property="departure" jdbcType="VARCHAR" />
     <result column="DepLongitude" property="deplongitude" jdbcType="VARCHAR" />
@@ -24,8 +24,8 @@
     <result column="VehicleNo" property="vehicleno" jdbcType="VARCHAR" />
     <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
-    <result column="DistributeTime" property="distributetime" jdbcType="INTEGER" />
-    <result column="CancelTime" property="canceltime" jdbcType="INTEGER" />
+    <result column="DistributeTime" property="distributetime" jdbcType="TIMESTAMP" />
+    <result column="CancelTime" property="canceltime" jdbcType="TIMESTAMP" />
     <result column="Operator" property="operator" jdbcType="VARCHAR" />
     <result column="CancelTypeCode" property="canceltypecode" jdbcType="VARCHAR" />
     <result column="CancelReason" property="cancelreason" jdbcType="VARCHAR" />
@@ -64,13 +64,13 @@
       Operator, CancelTypeCode, CancelReason
       )
     values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, 
-      #{orderid,jdbcType=VARCHAR}, #{passengerphone,jdbcType=VARCHAR}, #{departtime,jdbcType=INTEGER}, 
-      #{ordertime,jdbcType=INTEGER}, #{passengernote,jdbcType=VARCHAR}, #{departure,jdbcType=VARCHAR}, 
+      #{orderid,jdbcType=VARCHAR}, #{passengerphone,jdbcType=VARCHAR}, #{departtime,jdbcType=TIMESTAMP}, 
+      #{ordertime,jdbcType=TIMESTAMP}, #{passengernote,jdbcType=VARCHAR}, #{departure,jdbcType=VARCHAR}, 
       #{deplongitude,jdbcType=VARCHAR}, #{deplatitude,jdbcType=VARCHAR}, #{destination,jdbcType=VARCHAR}, 
       #{destlongitude,jdbcType=VARCHAR}, #{destlatitude,jdbcType=VARCHAR}, #{encrypt,jdbcType=INTEGER}, 
       #{faretype,jdbcType=VARCHAR}, #{fee,jdbcType=DECIMAL}, #{driverphone,jdbcType=VARCHAR}, 
       #{licenseid,jdbcType=VARCHAR}, #{vehicleno,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR}, #{distributetime,jdbcType=INTEGER}, #{canceltime,jdbcType=INTEGER}, 
+      #{latitude,jdbcType=VARCHAR}, #{distributetime,jdbcType=TIMESTAMP}, #{canceltime,jdbcType=TIMESTAMP}, 
       #{operator,jdbcType=VARCHAR}, #{canceltypecode,jdbcType=VARCHAR}, #{cancelreason,jdbcType=VARCHAR}
       )
   </insert>
@@ -176,10 +176,10 @@
         #{passengerphone,jdbcType=VARCHAR},
       </if>
       <if test="departtime != null" >
-        #{departtime,jdbcType=INTEGER},
+        #{departtime,jdbcType=TIMESTAMP},
       </if>
       <if test="ordertime != null" >
-        #{ordertime,jdbcType=INTEGER},
+        #{ordertime,jdbcType=TIMESTAMP},
       </if>
       <if test="passengernote != null" >
         #{passengernote,jdbcType=VARCHAR},
@@ -227,10 +227,10 @@
         #{latitude,jdbcType=VARCHAR},
       </if>
       <if test="distributetime != null" >
-        #{distributetime,jdbcType=INTEGER},
+        #{distributetime,jdbcType=TIMESTAMP},
       </if>
       <if test="canceltime != null" >
-        #{canceltime,jdbcType=INTEGER},
+        #{canceltime,jdbcType=TIMESTAMP},
       </if>
       <if test="operator != null" >
         #{operator,jdbcType=VARCHAR},
@@ -259,10 +259,10 @@
         PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
       </if>
       <if test="departtime != null" >
-        DepartTime = #{departtime,jdbcType=INTEGER},
+        DepartTime = #{departtime,jdbcType=TIMESTAMP},
       </if>
       <if test="ordertime != null" >
-        OrderTime = #{ordertime,jdbcType=INTEGER},
+        OrderTime = #{ordertime,jdbcType=TIMESTAMP},
       </if>
       <if test="passengernote != null" >
         PassengerNote = #{passengernote,jdbcType=VARCHAR},
@@ -310,10 +310,10 @@
         Latitude = #{latitude,jdbcType=VARCHAR},
       </if>
       <if test="distributetime != null" >
-        DistributeTime = #{distributetime,jdbcType=INTEGER},
+        DistributeTime = #{distributetime,jdbcType=TIMESTAMP},
       </if>
       <if test="canceltime != null" >
-        CancelTime = #{canceltime,jdbcType=INTEGER},
+        CancelTime = #{canceltime,jdbcType=TIMESTAMP},
       </if>
       <if test="operator != null" >
         Operator = #{operator,jdbcType=VARCHAR},
@@ -333,8 +333,8 @@
       Address = #{address,jdbcType=INTEGER},
       OrderId = #{orderid,jdbcType=VARCHAR},
       PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
-      DepartTime = #{departtime,jdbcType=INTEGER},
-      OrderTime = #{ordertime,jdbcType=INTEGER},
+      DepartTime = #{departtime,jdbcType=TIMESTAMP},
+      OrderTime = #{ordertime,jdbcType=TIMESTAMP},
       PassengerNote = #{passengernote,jdbcType=VARCHAR},
       Departure = #{departure,jdbcType=VARCHAR},
       DepLongitude = #{deplongitude,jdbcType=VARCHAR},
@@ -350,8 +350,8 @@
       VehicleNo = #{vehicleno,jdbcType=VARCHAR},
       Longitude = #{longitude,jdbcType=VARCHAR},
       Latitude = #{latitude,jdbcType=VARCHAR},
-      DistributeTime = #{distributetime,jdbcType=INTEGER},
-      CancelTime = #{canceltime,jdbcType=INTEGER},
+      DistributeTime = #{distributetime,jdbcType=TIMESTAMP},
+      CancelTime = #{canceltime,jdbcType=TIMESTAMP},
       Operator = #{operator,jdbcType=VARCHAR},
       CancelTypeCode = #{canceltypecode,jdbcType=VARCHAR},
       CancelReason = #{cancelreason,jdbcType=VARCHAR}

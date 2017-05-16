@@ -1,8 +1,11 @@
 package com.lhcx.model;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lhcx.utils.Utils;
 
 public class Order {
     private Integer id;
@@ -15,9 +18,9 @@ public class Order {
 
     private String passengerphone;
 
-    private Long departtime;
+    private Date departtime;
 
-    private Long ordertime;
+    private Date ordertime;
 
     private String passengernote;
 
@@ -49,9 +52,9 @@ public class Order {
 
     private String latitude;
 
-    private Long distributetime;
+    private Date distributetime;
 
-    private Long canceltime;
+    private Date canceltime;
 
     private String operator;
 
@@ -99,19 +102,19 @@ public class Order {
         this.passengerphone = passengerphone == null ? null : passengerphone.trim();
     }
 
-    public Long getDeparttime() {
+    public Date getDeparttime() {
         return departtime;
     }
 
-    public void setDeparttime(Long departtime) {
+    public void setDeparttime(Date departtime) {
         this.departtime = departtime;
     }
 
-    public Long getOrdertime() {
+    public Date getOrdertime() {
         return ordertime;
     }
 
-    public void setOrdertime(Long ordertime) {
+    public void setOrdertime(Date ordertime) {
         this.ordertime = ordertime;
     }
 
@@ -235,19 +238,19 @@ public class Order {
         this.latitude = latitude == null ? null : latitude.trim();
     }
 
-    public Long getDistributetime() {
+    public Date getDistributetime() {
         return distributetime;
     }
 
-    public void setDistributetime(Long distributetime) {
+    public void setDistributetime(Date distributetime) {
         this.distributetime = distributetime;
     }
 
-    public Long getCanceltime() {
+    public Date getCanceltime() {
         return canceltime;
     }
 
-    public void setCanceltime(Long canceltime) {
+    public void setCanceltime(Date canceltime) {
         this.canceltime = canceltime;
     }
 
@@ -279,11 +282,11 @@ public class Order {
     	
     }
     
-    public Order(JSONObject jsonRequest){
+    public Order(JSONObject jsonRequest) throws ParseException{
     	if (jsonRequest != null) {
     		this.passengerphone = jsonRequest.getString("PassengerPhone");
-    		this.departtime = jsonRequest.getLong("DePartTime");
-			this.ordertime = jsonRequest.getLong("OrderTime");
+    		this.departtime = Utils.toDateTime(jsonRequest.getLong("DePartTime")) ;
+			this.ordertime = Utils.toDateTime(jsonRequest.getLong("OrderTime"));
 			this.passengernote = jsonRequest.getString("PassengerNote");
 			this.departure = jsonRequest.getString("Departure");
 			this.deplongitude = jsonRequest.getString("DepLongitude");
