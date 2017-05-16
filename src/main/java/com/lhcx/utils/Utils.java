@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.lhcx.model.ResultBean;
 
 /**
- * Created by zhu on 2015/12/30.
+ * Created by william on 2015/12/30.
  */
 @Component
 public class Utils {
