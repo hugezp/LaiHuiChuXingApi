@@ -1,5 +1,8 @@
 package com.lhcx.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +67,7 @@ public class UserSeriveImpl implements IUserService{
 	
 	public ResultBean<?> login(HttpServletRequest request,JSONObject jsonRequest) {	
 		ResultBean<?> resultBean = null;
+		Map<String,Object> result = new HashMap<String, Object>();
 		//取得参数值
 		String phone = jsonRequest.getString("phone");
         String userType = jsonRequest.getString("userType");
@@ -96,11 +100,12 @@ public class UserSeriveImpl implements IUserService{
 					user.setUpatetime(Utils.currentTimestamp());
 					user.setLoginip(Utils.getIpAddr(request));
 					updateByPrimaryKeySelective(user);
-					user.setDriverInfo(null);
-					user.setPassengerInfo(null);
 				}
+				result.put("phone", phone);
+				result.put("userType", userType);
+				result.put("token", user.getToken());
 				
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"登录成功！",user);
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"登录成功！",result);
 			}else{
 				//验证失败
 				resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"验证失败！请检查手机号或验证码，验证码有效期30分钟！");    

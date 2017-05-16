@@ -10,6 +10,8 @@ public class DriverInfo {
     private String companyid;
 
     private Integer address;
+    
+    private String addressname;
 
     private String drivername;
 
@@ -113,6 +115,14 @@ public class DriverInfo {
 
     public void setAddress(Integer address) {
         this.address = address;
+    }
+    
+    public String getAddressname() {
+        return addressname;
+    }
+
+    public void setAddressname(String addressname) {
+        this.addressname = addressname == null ? null : addressname.trim();
     }
 
     public String getDrivername() {
@@ -445,6 +455,7 @@ public class DriverInfo {
     		//基本信息
 			this.driverphone = jsonRequest.getString("phone");
 			this.photo = jsonRequest.getString("photo");
+			this.addressname = jsonRequest.getString("addressName");
 			this.drivername = jsonRequest.getString("driverName");
 			this.licenseid = jsonRequest.getString("licenseId");
 			this.drivernation = jsonRequest.getString("driverNation");

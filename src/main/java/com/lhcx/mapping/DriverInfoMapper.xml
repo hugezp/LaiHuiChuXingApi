@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="CompanyId" property="companyid" jdbcType="VARCHAR" />
     <result column="Address" property="address" jdbcType="INTEGER" />
+    <result column="AddressName" property="addressname" jdbcType="VARCHAR" />
     <result column="DriverName" property="drivername" jdbcType="VARCHAR" />
     <result column="DriverGender" property="drivergender" jdbcType="VARCHAR" />
     <result column="DriverBirthday" property="driverbirthday" jdbcType="TIMESTAMP" />
@@ -47,7 +48,7 @@
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, CompanyId, Address, DriverName, DriverGender, DriverBirthday, DriverNationality, 
+    id, CompanyId, Address,AddressName, DriverName, DriverGender, DriverBirthday, DriverNationality, 
     DriverNation, DriverMaritalStatus, DriverLanguageLevel, DriveEducation, DriverCensus, 
     DriverAddress, DriverContactAddress, Photo, LicenseId, LicensePhoto, DriverType, 
     DriverPhone, GetDriverLicenseDate, DriverLicenseOn, DriverLicenseOff, TaxiDriver, 
@@ -73,7 +74,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lhcx.model.DriverInfo" >
-    insert into driver_infos (id, CompanyId, Address, 
+    insert into driver_infos (id, CompanyId, Address,AddressName, 
       DriverName, DriverGender, DriverBirthday, 
       DriverNationality, DriverNation, DriverMaritalStatus, 
       DriverLanguageLevel, DriveEducation, DriverCensus, 
@@ -89,7 +90,7 @@
       EmergencyContactPhone, EmergencyContactAddress, 
       State, Flag, CreateTime, 
       UpdateTime)
-    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER},#{addressname,jdbcType=VARCHAR}, 
       #{drivername,jdbcType=VARCHAR}, #{drivergender,jdbcType=VARCHAR}, #{driverbirthday,jdbcType=TIMESTAMP}, 
       #{drivernationality,jdbcType=VARCHAR}, #{drivernation,jdbcType=VARCHAR}, #{drivermaritalstatus,jdbcType=VARCHAR}, 
       #{driverlanguagelevel,jdbcType=VARCHAR}, #{driveeducation,jdbcType=VARCHAR}, #{drivercensus,jdbcType=VARCHAR}, 
@@ -117,6 +118,9 @@
       </if>
       <if test="address != null" >
         Address,
+      </if>
+      <if test="addressname != null" >
+        AddressName,
       </if>
       <if test="drivername != null" >
         DriverName,
@@ -249,6 +253,9 @@
       <if test="address != null" >
         #{address,jdbcType=INTEGER},
       </if>
+      <if test="addressname != null" >
+        #{addressname,jdbcType=VARCHAR},
+      </if>
       <if test="drivername != null" >
         #{drivername,jdbcType=VARCHAR},
       </if>
@@ -379,6 +386,9 @@
       </if>
       <if test="address != null" >
         Address = #{address,jdbcType=INTEGER},
+      </if>
+      <if test="addressname != null" >
+        AddressName = #{addressname,jdbcType=VARCHAR},
       </if>
       <if test="drivername != null" >
         DriverName = #{drivername,jdbcType=VARCHAR},
@@ -512,6 +522,9 @@
       <if test="address != null" >
         Address = #{address,jdbcType=INTEGER},
       </if>
+      <if test="addressname != null" >
+        AddressName = #{addressname,jdbcType=VARCHAR},
+      </if>
       <if test="drivername != null" >
         DriverName = #{drivername,jdbcType=VARCHAR},
       </if>
@@ -639,6 +652,7 @@
     update driver_infos
     set CompanyId = #{companyid,jdbcType=VARCHAR},
       Address = #{address,jdbcType=INTEGER},
+      AddressName = #{addressname,jdbcType=VARCHAR},
       DriverName = #{drivername,jdbcType=VARCHAR},
       DriverGender = #{drivergender,jdbcType=VARCHAR},
       DriverBirthday = #{driverbirthday,jdbcType=TIMESTAMP},
@@ -685,6 +699,7 @@
     update driver_infos
     set CompanyId = #{companyid,jdbcType=VARCHAR},
       Address = #{address,jdbcType=INTEGER},
+      AddressName = #{addressname,jdbcType=VARCHAR},
       DriverName = #{drivername,jdbcType=VARCHAR},
       DriverGender = #{drivergender,jdbcType=VARCHAR},
       DriverBirthday = #{driverbirthday,jdbcType=TIMESTAMP},
