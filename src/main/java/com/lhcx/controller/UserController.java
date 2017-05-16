@@ -88,7 +88,8 @@ public class UserController {
     	
         try {
         	String checkSession = (String) session.getAttribute(Utils.REGISTER_PHONE_SESSION);
-        	if(checkSession.equals(userType+"@"+phone)){
+        	String sessionString = userType+"@"+phone;
+        	if(sessionString.equals(checkSession)){
         		userSerive.registerForDriver(request,jsonRequest);
         		resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"注册提交成功！");
         	}else{
