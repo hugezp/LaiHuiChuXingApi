@@ -4,14 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 司机
+ * 乘客
  * @author william
  *
  */
 
 @Controller
-@RequestMapping(value = "/api/driver")
-public class DriverController {
-	
+@RequestMapping(value = "/api/passenger")
+public class PassengerController {
 
 }
