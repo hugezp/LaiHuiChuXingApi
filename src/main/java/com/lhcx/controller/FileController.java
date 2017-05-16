@@ -45,8 +45,9 @@ public class FileController {
 	 */
     @ResponseBody
     @RequestMapping(value = "/upload.do", method = RequestMethod.POST)
-    public ResponseEntity<String> upload(HttpServletRequest request,@RequestParam("file") MultipartFile myfile,
-    		@RequestParam("jsonpCallback") String jsonpCallback) {    	
+    public ResponseEntity<String> upload(HttpServletRequest request,@RequestParam("file") MultipartFile myfile) {    	
+    	//取得参数值
+        String jsonpCallback = request.getParameter("jsonpCallback");
         
     	ResultBean<?> resultBean = null;
     	Map<String,Object> result = new HashMap<String, Object>();
