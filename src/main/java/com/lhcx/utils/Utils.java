@@ -41,12 +41,10 @@ public class Utils {
         return dateFormat.format(date);
     }
     
-    public static Date getDate(Date date) {
-	   SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	   String dateString = formatter.format(date);
-	   ParsePosition pos = new ParsePosition(8);
-	   Date currentTime_2 = formatter.parse(dateString, pos);
-	   return currentTime_2;
+    public static String dateFormat(Date date) {
+	   SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	   return dateFormat.format(date);
 	}
     
     public static Timestamp currentTimestamp() {
