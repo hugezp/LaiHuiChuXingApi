@@ -12,7 +12,7 @@ import com.lhcx.utils.MD5Kit;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
-public class OrderService implements IOrderService {
+public class OrderServiceImpl implements IOrderService {
 
 	@Autowired
 	private OrderMapper orderMapper;
