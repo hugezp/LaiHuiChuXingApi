@@ -79,7 +79,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "registerForDriver", method = RequestMethod.POST)
-    public ResponseEntity<String> registerForDriver(@RequestBody JSONObject jsonRequest) {    	
+    public ResponseEntity<String> registerForDriver(HttpServletRequest request,@RequestBody JSONObject jsonRequest) {    	
     	//取得参数值
         String jsonpCallback = jsonRequest.getString("jsonpCallback");
         String phone = jsonRequest.getString("phone");
@@ -107,8 +107,15 @@ public class UserController {
     }
     
     @ResponseBody
+    @RequestMapping(value = "/noLogin", method = RequestMethod.GET)
+    public ResponseEntity<String> noLogin1() {    	
+    	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"未登录或登录已失效，请重新登录！");
+    	return Utils.resultResponseJson(resultBean,null);
+    }
+    
+    @ResponseBody
     @RequestMapping(value = "/noLogin", method = RequestMethod.POST)
-    public ResponseEntity<String> sendPhoneCode() {    	
+    public ResponseEntity<String> noLogin2() {    	
     	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"未登录或登录已失效，请重新登录！");
     	return Utils.resultResponseJson(resultBean,null);
     }

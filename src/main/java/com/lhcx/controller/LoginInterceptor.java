@@ -33,6 +33,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     	
         String token = request.getHeader("Token");
         if(Utils.isNullOrEmpty(token)){
+        	response.setContentType("application/json");
+        	response.sendRedirect("/api/user/noLogin");
         	return false;
         }
         try {
