@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.DriverLocationMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.DriverLocation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="CompanyId" property="companyid" jdbcType="VARCHAR" />
+    <result column="LicenseId" property="licenseid" jdbcType="VARCHAR" />
+    <result column="DriverRegionCode" property="driverregioncode" jdbcType="INTEGER" />
+    <result column="VehicleNo" property="vehicleno" jdbcType="VARCHAR" />
+    <result column="PositionTime" property="positiontime" jdbcType="VARCHAR" />
+    <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="Phone" property="phone" jdbcType="VARCHAR" />
+    <result column="Encrypt" property="encrypt" jdbcType="BIT" />
+    <result column="Direction" property="direction" jdbcType="INTEGER" />
+    <result column="Elevation" property="elevation" jdbcType="DOUBLE" />
+    <result column="Speed" property="speed" jdbcType="DOUBLE" />
+    <result column="BizStatus" property="bizstatus" jdbcType="BIT" />
+    <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
+    <result column="isDel" property="isdel" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, CompanyId, LicenseId, DriverRegionCode, VehicleNo, PositionTime, Longitude, Latitude, 
+    Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId, isDel
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from driver_location
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from driver_location
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lhcx.model.DriverLocation" >
+    insert into driver_location (id, CompanyId, LicenseId, 
+      DriverRegionCode, VehicleNo, PositionTime, 
+      Longitude, Latitude, Phone, 
+      Encrypt, Direction, Elevation, 
+      Speed, BizStatus, OrderId, 
+      isDel)
+    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{licenseid,jdbcType=VARCHAR}, 
+      #{driverregioncode,jdbcType=INTEGER}, #{vehicleno,jdbcType=VARCHAR}, #{positiontime,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{encrypt,jdbcType=BIT}, #{direction,jdbcType=INTEGER}, #{elevation,jdbcType=DOUBLE}, 
+      #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=BIT}, #{orderid,jdbcType=VARCHAR}, 
+      #{isdel,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lhcx.model.DriverLocation" >
+    insert into driver_location
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyid != null" >
+        CompanyId,
+      </if>
+      <if test="licenseid != null" >
+        LicenseId,
+      </if>
+      <if test="driverregioncode != null" >
+        DriverRegionCode,
+      </if>
+      <if test="vehicleno != null" >
+        VehicleNo,
+      </if>
+      <if test="positiontime != null" >
+        PositionTime,
+      </if>
+      <if test="longitude != null" >
+        Longitude,
+      </if>
+      <if test="latitude != null" >
+        Latitude,
+      </if>
+      <if test="phone != null" >
+        Phone,
+      </if>
+      <if test="encrypt != null" >
+        Encrypt,
+      </if>
+      <if test="direction != null" >
+        Direction,
+      </if>
+      <if test="elevation != null" >
+        Elevation,
+      </if>
+      <if test="speed != null" >
+        Speed,
+      </if>
+      <if test="bizstatus != null" >
+        BizStatus,
+      </if>
+      <if test="orderid != null" >
+        OrderId,
+      </if>
+      <if test="isdel != null" >
+        isDel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseid != null" >
+        #{licenseid,jdbcType=VARCHAR},
+      </if>
+      <if test="driverregioncode != null" >
+        #{driverregioncode,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleno != null" >
+        #{vehicleno,jdbcType=VARCHAR},
+      </if>
+      <if test="positiontime != null" >
+        #{positiontime,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="encrypt != null" >
+        #{encrypt,jdbcType=BIT},
+      </if>
+      <if test="direction != null" >
+        #{direction,jdbcType=INTEGER},
+      </if>
+      <if test="elevation != null" >
+        #{elevation,jdbcType=DOUBLE},
+      </if>
+      <if test="speed != null" >
+        #{speed,jdbcType=DOUBLE},
+      </if>
+      <if test="bizstatus != null" >
+        #{bizstatus,jdbcType=BIT},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.DriverLocation" >
+    update driver_location
+    <set >
+      <if test="companyid != null" >
+        CompanyId = #{companyid,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseid != null" >
+        LicenseId = #{licenseid,jdbcType=VARCHAR},
+      </if>
+      <if test="driverregioncode != null" >
+        DriverRegionCode = #{driverregioncode,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleno != null" >
+        VehicleNo = #{vehicleno,jdbcType=VARCHAR},
+      </if>
+      <if test="positiontime != null" >
+        PositionTime = #{positiontime,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        Longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        Latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="encrypt != null" >
+        Encrypt = #{encrypt,jdbcType=BIT},
+      </if>
+      <if test="direction != null" >
+        Direction = #{direction,jdbcType=INTEGER},
+      </if>
+      <if test="elevation != null" >
+        Elevation = #{elevation,jdbcType=DOUBLE},
+      </if>
+      <if test="speed != null" >
+        Speed = #{speed,jdbcType=DOUBLE},
+      </if>
+      <if test="bizstatus != null" >
+        BizStatus = #{bizstatus,jdbcType=BIT},
+      </if>
+      <if test="orderid != null" >
+        OrderId = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="isdel != null" >
+        isDel = #{isdel,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.DriverLocation" >
+    update driver_location
+    set CompanyId = #{companyid,jdbcType=VARCHAR},
+      LicenseId = #{licenseid,jdbcType=VARCHAR},
+      DriverRegionCode = #{driverregioncode,jdbcType=INTEGER},
+      VehicleNo = #{vehicleno,jdbcType=VARCHAR},
+      PositionTime = #{positiontime,jdbcType=VARCHAR},
+      Longitude = #{longitude,jdbcType=VARCHAR},
+      Latitude = #{latitude,jdbcType=VARCHAR},
+      Phone = #{phone,jdbcType=VARCHAR},
+      Encrypt = #{encrypt,jdbcType=BIT},
+      Direction = #{direction,jdbcType=INTEGER},
+      Elevation = #{elevation,jdbcType=DOUBLE},
+      Speed = #{speed,jdbcType=DOUBLE},
+      BizStatus = #{bizstatus,jdbcType=BIT},
+      OrderId = #{orderid,jdbcType=VARCHAR},
+      isDel = #{isdel,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
