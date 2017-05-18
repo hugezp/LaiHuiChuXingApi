@@ -1,5 +1,8 @@
 package com.lhcx.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +52,26 @@ public class OrderController {
 		}
         return Utils.resultResponseJson(resultBean,jsonpCallback);
 	}
+	
+	@ResponseBody
+    @RequestMapping(value = "/getFee", method = RequestMethod.POST)
+    public ResponseEntity<String> getFee(@RequestBody JSONObject jsonRequest) {
+		//取得参数值
+        String jsonpCallback = jsonRequest.getString("jsonpCallback");
+        ResultBean<?> resultBean = null; 
+        Map<String,Object> result = new HashMap<String, Object>();
+        try {  
+        	result.put("Fee", "123.50");
+        	resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"获取费用成功！",result);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("create order error by :" + e.getMessage());
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),"获取费用异常！");
+		}
+        return Utils.resultResponseJson(resultBean,jsonpCallback);
+	}
+	
+	
 }
