@@ -1,6 +1,7 @@
 package com.lhcx.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +24,8 @@ import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
+import com.lhcx.service.IDriverLocationService;
+import com.lhcx.service.IGetPhoneFromTokenService;
 import com.lhcx.utils.Utils;
 /**
  * @author dp
@@ -37,6 +40,10 @@ public class PushController {
 	PushNotificationMapper pushNotification ;
 	@Autowired
 	UserMapper userDao ;
+	@Autowired
+	private IDriverLocationService driverLocationService;
+	@Autowired
+	private IGetPhoneFromTokenService gpftService;
 	@ResponseBody
 	@RequestMapping(value = "/List", method = RequestMethod.POST)
 	public ResponseEntity<String> PushList(@RequestBody JSONObject jsonRequest,HttpServletRequest request) {	
@@ -74,20 +81,59 @@ public class PushController {
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	 }
 	
+	/**
+	 * 推送开关 
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/button", method = RequestMethod.POST)
-	public ResponseEntity<String> pushButton(@RequestBody JSONObject jsonRequest){
+	public ResponseEntity<String> pushButton(@RequestBody JSONObject jsonRequest,HttpServletRequest request){
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String token = request.getHeader("Token");
 		ResultBean<?> resultBean = null;
-		String phone = jsonRequest.getString("Phone");
 		String isDel = jsonRequest.getString("isDel");
 		try {
+			User user = gpftService.selectByToken(token);
 			DriverLocation driverLocation = new DriverLocation();
-			driverLocation.setPhone(phone);
+			driverLocation.setPhone(user.getUserphone());
 			driverLocation.setIsdel(Integer.parseInt(isDel));
+			int flag = driverLocationService.updateByPrimaryKeySelective(driverLocation);
+			if (flag > 0) {
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"设置成功！");
+			}else {
+				resultBean = new ResultBean<Object>(ResponseCode.getError(),"设置失败！");
+			}
 		} catch (Exception e) {
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),"设置失败！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	 
+	
+	/**
+	 * 实时更新经纬度
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ResponseEntity<String> update(@RequestBody JSONObject jsonRequest){
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		String longitude = jsonRequest.getString("Longitude");
+		String latitude = jsonRequest.getString("Latitude");
+		String phone = jsonRequest.getString("Phone");
+		try {
+			DriverLocation driverLocation = new DriverLocation();
+			driverLocation.setPhone(phone);
+			driverLocation.setLongitude(longitude);
+			driverLocation.setLatitude(latitude);
+			driverLocation.setPositiontime(new Date());
+			int flag = driverLocationService.updateByPrimaryKeySelective(driverLocation);
+			if (flag > 0) {
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"更新成功！");
+			}else {
+				resultBean = new ResultBean<Object>(ResponseCode.getError(),"更新失败！");
+			}
+		} catch (Exception e) {
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),"更新失败！");
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
 }

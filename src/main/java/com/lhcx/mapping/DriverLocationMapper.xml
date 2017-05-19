@@ -223,7 +223,7 @@
        	LogoutTime = #{logoutTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where Phone = #{phone,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lhcx.model.DriverLocation" >
     update driver_location
