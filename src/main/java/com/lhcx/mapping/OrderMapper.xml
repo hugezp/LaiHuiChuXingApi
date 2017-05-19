@@ -335,7 +335,7 @@
         Status = #{status,jdbcType=INTEGER}
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where OrderId = #{orderid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lhcx.model.Order" >
     update orders
