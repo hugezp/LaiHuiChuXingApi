@@ -73,7 +73,8 @@
      <!-- 自定义登录拦截器 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/api/app/**"/>
+        	<mvc:mapping path="/**"/> 
+            <mvc:exclude-mapping path="/api/**"/>
             <bean class="com.lhcx.controller.LoginInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

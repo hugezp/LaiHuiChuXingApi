@@ -36,7 +36,7 @@ import com.lhcx.utils.Utils;
  */
 
 @Controller
-@RequestMapping(value = "/api/app/order")
+@RequestMapping(value = "/order")
 public class OrderController {
 	private static Logger log = Logger.getLogger(OrderController.class);
 	@Autowired
