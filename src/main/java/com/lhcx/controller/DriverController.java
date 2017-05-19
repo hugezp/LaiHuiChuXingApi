@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lhcx.model.DriverLocation;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.utils.Utils;
 
@@ -29,6 +31,8 @@ public class DriverController {
 	private static Logger log = Logger.getLogger(DriverController.class);
 	@Autowired
 	private IOrderService orderService;
+	@Autowired
+	private IDriverLocationService driverLocationService;
 
 	@ResponseBody
 	@RequestMapping(value = "/match", method = RequestMethod.POST)
@@ -37,9 +41,16 @@ public class DriverController {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
 		try {
-			Map<String,Object> result = orderService.match(jsonRequest);
-			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
-					"接单成功！",result);
+			String driverPhone = jsonRequest.getString("DriverPhone");
+			DriverLocation driverLocation = driverLocationService.selectOnlineByPhone(driverPhone);
+			if (driverLocation != null ) {
+				Map<String,Object> result = orderService.match(jsonRequest);
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+						"接单成功！",result);
+			} else {
+				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+						"该用户没有经营上线，请经营上线后接单！");
+			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
