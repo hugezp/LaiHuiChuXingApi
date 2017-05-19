@@ -5,9 +5,9 @@ import java.util.Date;
 public class PushNotification {
     private Integer id;
 
-    private Integer pushId;
+    private String pushPhone;
 
-    private Integer receiveId;
+    private String receivePhone;
 
     private String orderId;
 
@@ -45,24 +45,25 @@ public class PushNotification {
         this.id = id;
     }
 
-    public Integer getPushId() {
-        return pushId;
-    }
 
-    public void setPushId(Integer pushId) {
-        this.pushId = pushId;
-    }
+	public String getPushPhone() {
+		return pushPhone;
+	}
 
-    public Integer getReceiveId() {
-        return receiveId;
-    }
+	public void setPushPhone(String pushPhone) {
+		this.pushPhone = pushPhone;
+	}
 
-    public void setReceiveId(Integer receiveId) {
-        this.receiveId = receiveId;
-    }
+	public String getReceivePhone() {
+		return receivePhone;
+	}
 
     
-    public String getOrderId() {
+	public void setReceivePhone(String receivePhone) {
+		this.receivePhone = receivePhone;
+	}
+
+	public String getOrderId() {
 		return orderId;
 	}
 

@@ -61,6 +61,8 @@ public class Order {
     private String canceltypecode;
 
     private String cancelreason;
+    
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -68,6 +70,14 @@ public class Order {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCompanyid() {

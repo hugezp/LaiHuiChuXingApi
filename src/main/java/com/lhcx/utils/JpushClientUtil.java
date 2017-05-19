@@ -16,9 +16,9 @@ import cn.jpush.api.push.model.notification.Notification;
 
 public class JpushClientUtil {
 
-    private final static String appKey = "a1835850adc6bff63a9bf7c6";
+    private final static String appKey = ConfigUtils.JPUSH_APP_KEY;
 
-    private final static String masterSecret = "68f13ab0dfd2e888d11522a0";
+    private final static String masterSecret = ConfigUtils.JPUSH_MASTER_SECRET;
     
     private static JPushClient jPushClient = new JPushClient(masterSecret,appKey);
 

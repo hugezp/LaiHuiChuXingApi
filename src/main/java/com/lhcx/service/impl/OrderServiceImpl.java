@@ -1,6 +1,8 @@
 package com.lhcx.service.impl;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +33,20 @@ public class OrderServiceImpl implements IOrderService {
 		return orderMapper.selectByOrderId(orderId);
 	}
 	
-	public boolean create(JSONObject jsonRequest) throws ParseException {
-		boolean result = false;
+	public String create(JSONObject jsonRequest) throws ParseException {
+		String result = "";
 		Order order = new Order(jsonRequest);
-		order.setOrderid(MD5Kit.encode(String.valueOf(System.currentTimeMillis()) ));
+		String orderId = MD5Kit.encode(String.valueOf(System.currentTimeMillis()));
+		order.setOrderid(orderId);
 		if (insertSelective(order) > 0) {
-			result = true;
+			result = orderId;
 		}
+		
+		return result;
+	}
+	
+	public Map<String,Object> match(JSONObject jsonRequest) {
+		Map<String,Object> result = new HashMap<String, Object>();
 		
 		return result;
 	}
