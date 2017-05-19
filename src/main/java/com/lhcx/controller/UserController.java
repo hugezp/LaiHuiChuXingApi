@@ -1,5 +1,8 @@
 package com.lhcx.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.model.User;
 import com.lhcx.model.UserType;
 import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
@@ -85,13 +89,21 @@ public class UserController {
         String phone = jsonRequest.getString("phone");
         String userType = UserType.DRIVER.value();
         ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册提交失败！");
-    	
+        Map<String,Object> result = new HashMap<String, Object>();
         try {
         	String checkSession = (String) session.getAttribute(Utils.REGISTER_PHONE_SESSION);
         	String sessionString = userType+"@"+phone;
         	if(sessionString.equals(checkSession)){
-        		userSerive.registerForDriver(request,jsonRequest);
-        		resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"注册提交成功！");
+        		User user =  userSerive.registerForDriver(request,jsonRequest);
+        		if(user != null){
+        			result.put("phone", phone);
+    				result.put("userType", userType);
+    				result.put("token", user.getToken());
+        			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"注册提交成功！",result);
+        		}else {
+        			resultBean = new ResultBean<Object>(ResponseCode.getError(),"用户注册失败！");
+				}
+        		
         	}else{
         		resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册验证码错误或已失效，有效期为30分钟！");
         	}

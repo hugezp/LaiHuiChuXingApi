@@ -78,6 +78,7 @@ public class UserSeriveImpl implements IUserService{
 		String phone = jsonRequest.getString("phone");
         String userType = jsonRequest.getString("userType");
         String code = jsonRequest.getString("code");
+        String token = MD5Kit.encode(userType+"@"+phone + System.currentTimeMillis());
         
         //1、司机端校验用户是否存在
         //2、如果用户存在，校验验证码        
@@ -94,7 +95,7 @@ public class UserSeriveImpl implements IUserService{
 					user = new User();
 					user.setUserphone(phone);
 					user.setUsertype(userType);		
-					user.setToken(MD5Kit.encode(userType+"@"+phone));
+					user.setToken(token);
 					user.setCreatetime(Utils.currentTimestamp());
 					user.setLogintime(Utils.currentTimestamp());
 					user.setUpatetime(Utils.currentTimestamp());
@@ -105,6 +106,7 @@ public class UserSeriveImpl implements IUserService{
 					user.setLogintime(Utils.currentTimestamp());
 					user.setUpatetime(Utils.currentTimestamp());
 					user.setLoginip(Utils.getIpAddr(request));
+					user.setToken(token);
 					updateByPrimaryKeySelective(user);
 				}
 				result.put("phone", phone);
@@ -124,9 +126,10 @@ public class UserSeriveImpl implements IUserService{
 		return resultBean;
 	}
 	
-	public void registerForDriver(HttpServletRequest request,JSONObject jsonRequest) throws ParseException {
+	public User registerForDriver(HttpServletRequest request,JSONObject jsonRequest) throws ParseException {
 		String phone = jsonRequest.getString("phone");
 		String userType = UserType.DRIVER.value();
+		String token = MD5Kit.encode(userType+"@"+phone + System.currentTimeMillis());
 		
 		User user = selectUserByPhone(phone, userType);
 		DriverInfo driverInfo = new DriverInfo(jsonRequest);
@@ -141,7 +144,7 @@ public class UserSeriveImpl implements IUserService{
 			user = new User();
 			user.setUserphone(phone);
 			user.setUsertype(userType);		
-			user.setToken(MD5Kit.encode(userType+"@"+phone));
+			user.setToken(token);
 			user.setCreatetime(Utils.currentTimestamp());
 			user.setUpatetime(Utils.currentTimestamp());
 			insertSelective(user);
@@ -151,6 +154,15 @@ public class UserSeriveImpl implements IUserService{
 			driverInfo.setFlag(2);
 			driverInfo.setUpdatetime(Utils.currentTimestamp());
 			driverInfoService.updateByPhoneSelective(driverInfo);
+			
+			//step2:更新user信息 
+			user.setLogintime(Utils.currentTimestamp());
+			user.setUpatetime(Utils.currentTimestamp());
+			user.setLoginip(Utils.getIpAddr(request));
+			user.setToken(token);
+			updateByPrimaryKeySelective(user);
 		}
+		
+		return user;
 	}
 }
