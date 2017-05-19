@@ -8,7 +8,6 @@ import com.lhcx.model.Order;
 
 public interface IOrderService {
 	int insertSelective(Order record);
-	int updateByPrimaryKeySelective(Order record);
 	Order selectByOrderId(String orderId);
 	Map<String,Object> match(JSONObject jsonRequest) throws ParseException;
 	String create(JSONObject jsonRequest) throws ParseException ;

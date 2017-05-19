@@ -16,7 +16,6 @@ import com.lhcx.model.OrderType;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.utils.MD5Kit;
-import com.lhcx.utils.Utils;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -29,10 +28,6 @@ public class OrderServiceImpl implements IOrderService {
 	
 	public int insertSelective(Order order) {
 		return orderMapper.insertSelective(order);
-	}
-	
-	public int updateByPrimaryKeySelective(Order order) {
-		return orderMapper.updateByPrimaryKeySelective(order);
 	}
 	
 	public int updateByOrderIdSelective(Order order){

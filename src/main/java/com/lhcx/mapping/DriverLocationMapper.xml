@@ -3,10 +3,6 @@
 <mapper namespace="com.lhcx.dao.DriverLocationMapper" >
   <resultMap id="BaseResultMap" type="com.lhcx.model.DriverLocation" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="CompanyId" property="companyid" jdbcType="VARCHAR" />
-    <result column="LicenseId" property="licenseid" jdbcType="VARCHAR" />
-    <result column="DriverRegionCode" property="driverregioncode" jdbcType="INTEGER" />
-    <result column="VehicleNo" property="vehicleno" jdbcType="VARCHAR" />
     <result column="PositionTime" property="positiontime" jdbcType="TIMESTAMP" />
     <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
@@ -22,15 +18,10 @@
     <result column="LogoutTime" property="logoutTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, CompanyId, LicenseId, DriverRegionCode, VehicleNo, PositionTime, Longitude, Latitude, 
+    id, PositionTime, Longitude, Latitude, 
     Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId, isDel,LoginTime,LogoutTime
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from driver_location
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+
   <select id="selectOnlineByPhone" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
@@ -43,40 +34,13 @@
     from driver_location
     where isDel = 1
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from driver_location
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.lhcx.model.DriverLocation" >
-    insert into driver_location (id, CompanyId, LicenseId, 
-      DriverRegionCode, VehicleNo, PositionTime, 
-      Longitude, Latitude, Phone, 
-      Direction, Elevation, 
-      Speed, BizStatus, OrderId)
-    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{licenseid,jdbcType=VARCHAR}, 
-      #{driverregioncode,jdbcType=INTEGER}, #{vehicleno,jdbcType=VARCHAR}, #{positiontime,jdbcType=TIMESTAMP}, 
-      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{direction,jdbcType=INTEGER}, #{elevation,jdbcType=DOUBLE}, 
-      #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR})
-  </insert>
+
   <insert id="insertSelective" parameterType="com.lhcx.model.DriverLocation" >
     insert into driver_location
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
-      </if>
-      <if test="companyid != null" >
-        CompanyId,
-      </if>
-      <if test="licenseid != null" >
-        LicenseId,
-      </if>
-      <if test="driverregioncode != null" >
-        DriverRegionCode,
-      </if>
-      <if test="vehicleno != null" >
-        VehicleNo,
-      </if>
+      </if>      
       <if test="positiontime != null" >
         PositionTime,
       </if>
@@ -120,19 +84,7 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
-      </if>
-      <if test="companyid != null" >
-        #{companyid,jdbcType=VARCHAR},
-      </if>
-      <if test="licenseid != null" >
-        #{licenseid,jdbcType=VARCHAR},
-      </if>
-      <if test="driverregioncode != null" >
-        #{driverregioncode,jdbcType=INTEGER},
-      </if>
-      <if test="vehicleno != null" >
-        #{vehicleno,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="positiontime != null" >
         #{positiontime,jdbcType=TIMESTAMP},
       </if>
@@ -174,7 +126,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.DriverLocation" >
+  <update id="updateByPhoneSelective" parameterType="com.lhcx.model.DriverLocation" >
     update driver_location
     <set >
       <if test="companyid != null" >
@@ -197,9 +149,6 @@
       </if>
       <if test="latitude != null" >
         Latitude = #{latitude,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null" >
-        Phone = #{phone,jdbcType=VARCHAR},
       </if>
       <if test="encrypt != null" >
         Encrypt = #{encrypt,jdbcType=INTEGER},
@@ -229,25 +178,7 @@
        	LogoutTime = #{logoutTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where Phone = #{phone,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.DriverLocation" >
-    update driver_location
-    set CompanyId = #{companyid,jdbcType=VARCHAR},
-      LicenseId = #{licenseid,jdbcType=VARCHAR},
-      DriverRegionCode = #{driverregioncode,jdbcType=INTEGER},
-      VehicleNo = #{vehicleno,jdbcType=VARCHAR},
-      PositionTime = #{positiontime,jdbcType=TIMESTAMP},
-      Longitude = #{longitude,jdbcType=VARCHAR},
-      Latitude = #{latitude,jdbcType=VARCHAR},
-      Phone = #{phone,jdbcType=VARCHAR},
-      Encrypt = #{encrypt,jdbcType=INTEGER},
-      Direction = #{direction,jdbcType=INTEGER},
-      Elevation = #{elevation,jdbcType=DOUBLE},
-      Speed = #{speed,jdbcType=DOUBLE},
-      BizStatus = #{bizstatus,jdbcType=INTEGER},
-      OrderId = #{orderid,jdbcType=VARCHAR},
-      isDel = #{isdel,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+  
 </mapper>

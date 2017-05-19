@@ -189,7 +189,7 @@ public class OrderController {
 		order.setCanceltime(new Date());
 		order.setCancelreason(cancelReason);
 		order.setStatus(0);
-		int flag = orderService.updateByPrimaryKeySelective(order);
+		int flag = orderService.updateByOrderIdSelective(order);
 		if (flag > 0) {
 			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
 					"撤销订单成功！");

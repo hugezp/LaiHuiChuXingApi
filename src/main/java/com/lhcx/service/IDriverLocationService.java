@@ -15,7 +15,7 @@ public interface IDriverLocationService {
 
     DriverLocation selectOnlineByPhone(String phone);
 
-	int updateByPrimaryKeySelective(DriverLocation record);
+	int updateByPhoneSelective(DriverLocation record);
 
 	
 }

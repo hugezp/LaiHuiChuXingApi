@@ -3,8 +3,6 @@
 <mapper namespace="com.lhcx.dao.OrderMapper" >
   <resultMap id="BaseResultMap" type="com.lhcx.model.Order" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="CompanyId" property="companyid" jdbcType="VARCHAR" />
-    <result column="Address" property="address" jdbcType="INTEGER" />
     <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
     <result column="PassengerPhone" property="passengerphone" jdbcType="VARCHAR" />
     <result column="DepartTime" property="departtime" jdbcType="TIMESTAMP" />
@@ -20,8 +18,6 @@
     <result column="FareType" property="faretype" jdbcType="VARCHAR" />
     <result column="Fee" property="fee" jdbcType="DECIMAL" />
     <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
-    <result column="LicenseId" property="licenseid" jdbcType="VARCHAR" />
-    <result column="VehicleNo" property="vehicleno" jdbcType="VARCHAR" />
     <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="DistributeTime" property="distributetime" jdbcType="TIMESTAMP" />
@@ -32,61 +28,23 @@
     <result column="Status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, CompanyId, Address, OrderId, PassengerPhone, DepartTime, OrderTime, PassengerNote, 
+    id,  OrderId, PassengerPhone, DepartTime, OrderTime, PassengerNote, 
     Departure, DepLongitude, DepLatitude, Destination, DestLongitude, DestLatitude, Encrypt, 
-    FareType, Fee, DriverPhone, LicenseId, VehicleNo, Longitude, Latitude, DistributeTime, 
+    FareType, Fee, DriverPhone,  Longitude, Latitude, DistributeTime, 
     CancelTime, Operator, CancelTypeCode, CancelReason,Status
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from orders
-    where id = #{id,jdbcType=INTEGER}
-  </select>
   <select id="selectByOrderId" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from orders
     where OrderId = #{orderId}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from orders
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.lhcx.model.Order" >
-    insert into orders (id, CompanyId, Address, 
-      OrderId, PassengerPhone, DepartTime, 
-      OrderTime, PassengerNote, Departure, 
-      DepLongitude, DepLatitude, Destination, 
-      DestLongitude, DestLatitude, Encrypt, 
-      FareType, Fee, DriverPhone, 
-      LicenseId, VehicleNo, Longitude, 
-      Latitude, DistributeTime, CancelTime, 
-      Operator, CancelTypeCode, CancelReason,Status
-      )
-    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, 
-      #{orderid,jdbcType=VARCHAR}, #{passengerphone,jdbcType=VARCHAR}, #{departtime,jdbcType=TIMESTAMP}, 
-      #{ordertime,jdbcType=TIMESTAMP}, #{passengernote,jdbcType=VARCHAR}, #{departure,jdbcType=VARCHAR}, 
-      #{deplongitude,jdbcType=VARCHAR}, #{deplatitude,jdbcType=VARCHAR}, #{destination,jdbcType=VARCHAR}, 
-      #{destlongitude,jdbcType=VARCHAR}, #{destlatitude,jdbcType=VARCHAR}, #{encrypt,jdbcType=INTEGER}, 
-      #{faretype,jdbcType=VARCHAR}, #{fee,jdbcType=DECIMAL}, #{driverphone,jdbcType=VARCHAR}, 
-      #{licenseid,jdbcType=VARCHAR}, #{vehicleno,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR}, #{distributetime,jdbcType=TIMESTAMP}, #{canceltime,jdbcType=TIMESTAMP}, 
-      #{operator,jdbcType=VARCHAR}, #{canceltypecode,jdbcType=VARCHAR}, #{cancelreason,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}
-      )
-  </insert>
   <insert id="insertSelective" parameterType="com.lhcx.model.Order" >
     insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
-      </if>
-      <if test="companyid != null" >
-        CompanyId,
-      </if>
-      <if test="address != null" >
-        Address,
-      </if>
+      </if>   
       <if test="orderid != null" >
         OrderId,
       </if>
@@ -131,13 +89,7 @@
       </if>
       <if test="driverphone != null" >
         DriverPhone,
-      </if>
-      <if test="licenseid != null" >
-        LicenseId,
-      </if>
-      <if test="vehicleno != null" >
-        VehicleNo,
-      </if>
+      </if>    
       <if test="longitude != null" >
         Longitude,
       </if>
@@ -166,13 +118,7 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
-      </if>
-      <if test="companyid != null" >
-        #{companyid,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        #{address,jdbcType=INTEGER},
-      </if>
+      </if>   
       <if test="orderid != null" >
         #{orderid,jdbcType=VARCHAR},
       </if>
@@ -217,13 +163,7 @@
       </if>
       <if test="driverphone != null" >
         #{driverphone,jdbcType=VARCHAR},
-      </if>
-      <if test="licenseid != null" >
-        #{licenseid,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleno != null" >
-        #{vehicleno,jdbcType=VARCHAR},
-      </if>
+      </if>    
       <if test="longitude != null" >
         #{longitude,jdbcType=VARCHAR},
       </if>
@@ -250,129 +190,9 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.Order" >
-    update orders
-    <set >
-      <if test="companyid != null" >
-        CompanyId = #{companyid,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        Address = #{address,jdbcType=INTEGER},
-      </if>
-      <if test="passengerphone != null" >
-        PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
-      </if>
-      <if test="departtime != null" >
-        DepartTime = #{departtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="ordertime != null" >
-        OrderTime = #{ordertime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="passengernote != null" >
-        PassengerNote = #{passengernote,jdbcType=VARCHAR},
-      </if>
-      <if test="departure != null" >
-        Departure = #{departure,jdbcType=VARCHAR},
-      </if>
-      <if test="deplongitude != null" >
-        DepLongitude = #{deplongitude,jdbcType=VARCHAR},
-      </if>
-      <if test="deplatitude != null" >
-        DepLatitude = #{deplatitude,jdbcType=VARCHAR},
-      </if>
-      <if test="destination != null" >
-        Destination = #{destination,jdbcType=VARCHAR},
-      </if>
-      <if test="destlongitude != null" >
-        DestLongitude = #{destlongitude,jdbcType=VARCHAR},
-      </if>
-      <if test="destlatitude != null" >
-        DestLatitude = #{destlatitude,jdbcType=VARCHAR},
-      </if>
-      <if test="encrypt != null" >
-        Encrypt = #{encrypt,jdbcType=INTEGER},
-      </if>
-      <if test="faretype != null" >
-        FareType = #{faretype,jdbcType=VARCHAR},
-      </if>
-      <if test="fee != null" >
-        Fee = #{fee,jdbcType=DECIMAL},
-      </if>
-      <if test="driverphone != null" >
-        DriverPhone = #{driverphone,jdbcType=VARCHAR},
-      </if>
-      <if test="licenseid != null" >
-        LicenseId = #{licenseid,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleno != null" >
-        VehicleNo = #{vehicleno,jdbcType=VARCHAR},
-      </if>
-      <if test="longitude != null" >
-        Longitude = #{longitude,jdbcType=VARCHAR},
-      </if>
-      <if test="latitude != null" >
-        Latitude = #{latitude,jdbcType=VARCHAR},
-      </if>
-      <if test="distributetime != null" >
-        DistributeTime = #{distributetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="canceltime != null" >
-        CancelTime = #{canceltime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="operator != null" >
-        Operator = #{operator,jdbcType=VARCHAR},
-      </if>
-      <if test="canceltypecode != null" >
-        CancelTypeCode = #{canceltypecode,jdbcType=VARCHAR},
-      </if>
-      <if test="cancelreason != null" >
-        CancelReason = #{cancelreason,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        Status = #{status,jdbcType=INTEGER}
-      </if>
-    </set>
-    where OrderId = #{orderid,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.Order" >
-    update orders
-    set CompanyId = #{companyid,jdbcType=VARCHAR},
-      Address = #{address,jdbcType=INTEGER},
-      PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
-      DepartTime = #{departtime,jdbcType=TIMESTAMP},
-      OrderTime = #{ordertime,jdbcType=TIMESTAMP},
-      PassengerNote = #{passengernote,jdbcType=VARCHAR},
-      Departure = #{departure,jdbcType=VARCHAR},
-      DepLongitude = #{deplongitude,jdbcType=VARCHAR},
-      DepLatitude = #{deplatitude,jdbcType=VARCHAR},
-      Destination = #{destination,jdbcType=VARCHAR},
-      DestLongitude = #{destlongitude,jdbcType=VARCHAR},
-      DestLatitude = #{destlatitude,jdbcType=VARCHAR},
-      Encrypt = #{encrypt,jdbcType=INTEGER},
-      FareType = #{faretype,jdbcType=VARCHAR},
-      Fee = #{fee,jdbcType=DECIMAL},
-      DriverPhone = #{driverphone,jdbcType=VARCHAR},
-      LicenseId = #{licenseid,jdbcType=VARCHAR},
-      VehicleNo = #{vehicleno,jdbcType=VARCHAR},
-      Longitude = #{longitude,jdbcType=VARCHAR},
-      Latitude = #{latitude,jdbcType=VARCHAR},
-      DistributeTime = #{distributetime,jdbcType=TIMESTAMP},
-      CancelTime = #{canceltime,jdbcType=TIMESTAMP},
-      Operator = #{operator,jdbcType=VARCHAR},
-      CancelTypeCode = #{canceltypecode,jdbcType=VARCHAR},
-      CancelReason = #{cancelreason,jdbcType=VARCHAR},
-      Status = #{status,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
   <update id="updateByOrderIdSelective" parameterType="com.lhcx.model.Order" >
     update orders
-    <set >
-      <if test="companyid != null" >
-        CompanyId = #{companyid,jdbcType=VARCHAR},
-      </if>
-      <if test="address != null" >
-        Address = #{address,jdbcType=INTEGER},
-      </if>
+    <set >     
       <if test="passengerphone != null" >
         PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
       </if>
@@ -414,13 +234,7 @@
       </if>
       <if test="driverphone != null" >
         DriverPhone = #{driverphone,jdbcType=VARCHAR},
-      </if>
-      <if test="licenseid != null" >
-        LicenseId = #{licenseid,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleno != null" >
-        VehicleNo = #{vehicleno,jdbcType=VARCHAR},
-      </if>
+      </if>   
       <if test="longitude != null" >
         Longitude = #{longitude,jdbcType=VARCHAR},
       </if>
