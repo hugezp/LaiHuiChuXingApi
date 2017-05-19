@@ -13,11 +13,17 @@ import com.lhcx.service.PushNotificationService;
 @Transactional(rollbackFor=Exception.class)
 @Service
 public class PushNotificationImpl implements PushNotificationService {
+	
 	@Autowired
 	private PushNotificationMapper pushNotificationMapper;
+	
 	@Override
 	public List<PushNotification> selectAll(String receive_phone) {
 		return pushNotificationMapper.selectAll(receive_phone);
+	}
+	
+	public int insertSelective(PushNotification record) {
+		return pushNotificationMapper.insertSelective(record);
 	}
 
 
