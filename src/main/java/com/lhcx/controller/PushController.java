@@ -39,8 +39,6 @@ public class PushController {
 	@Autowired
 	IPushNotificationService pushNotificationService ;
 	@Autowired
-	UserMapper userDao ;
-	@Autowired
 	private IDriverLocationService driverLocationService;
 	@Autowired
 	private HttpSession session;
@@ -49,14 +47,10 @@ public class PushController {
 	public ResponseEntity<String> PushList(@RequestBody JSONObject jsonRequest,HttpServletRequest request) {	
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;	
-		String token = request.getHeader("Token");
-	        if(Utils.isNullOrEmpty(token)){
-	        	resultBean = new ResultBean<Object>(ResponseCode.getError(),"非法token！");
-	    		return Utils.resultResponseJson(resultBean, jsonpCallback);
-	        }
-	    User user = userDao.selectByToken(token);
-	    String phone = user.getUserphone(); 
+	  
 		try {
+			User user = (User)session.getAttribute("CURRENT_USER");
+		    String phone = user.getUserphone(); 
 			List<PushNotification> pushs = pushNotificationService.selectAll(phone);
 			ArrayList<HashMap<String, Object>> jsonArray = new ArrayList<HashMap<String, Object>>();
 			if(pushs.size()>0){
