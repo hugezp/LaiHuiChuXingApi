@@ -10,6 +10,11 @@ import com.lhcx.model.DriverLocation;
 public interface IDriverLocationService {
 
 	List<DriverLocation> selectList(DriverLocation driverLocation);
-	int insert(DriverLocation driverLocation);
-	int updateByPrimaryKeySelective(DriverLocation driverLocation);
+	
+    DriverLocation selectOnlineByPhone(String phone);
+
+	int updateByPhoneSelective(DriverLocation record);
+	
+	int insertSelective(DriverLocation record);
+
 }

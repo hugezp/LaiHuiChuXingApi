@@ -21,7 +21,7 @@ public class DriverLocation {
 
     private String phone;
 
-    private Boolean encrypt;
+    private int encrypt;
 
     private Integer direction;
 
@@ -29,11 +29,11 @@ public class DriverLocation {
 
     private Double speed;
 
-    private Boolean bizstatus;
+    private int bizstatus;
 
     private String orderid;
 
-    private Boolean isdel;
+    private int isdel;
     
     private	Date loginTime;
     
@@ -111,11 +111,11 @@ public class DriverLocation {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public Boolean getEncrypt() {
+    public int getEncrypt() {
         return encrypt;
     }
 
-    public void setEncrypt(Boolean encrypt) {
+    public void setEncrypt(int encrypt) {
         this.encrypt = encrypt;
     }
 
@@ -143,11 +143,11 @@ public class DriverLocation {
         this.speed = speed;
     }
 
-    public Boolean getBizstatus() {
+    public int getBizstatus() {
         return bizstatus;
     }
 
-    public void setBizstatus(Boolean bizstatus) {
+    public void setBizstatus(int bizstatus) {
         this.bizstatus = bizstatus;
     }
 
@@ -159,13 +159,13 @@ public class DriverLocation {
         this.orderid = orderid == null ? null : orderid.trim();
     }
 
-    public Boolean getIsdel() {
-        return isdel;
-    }
+	public int getIsdel() {
+		return isdel;
+	}
 
-    public void setIsdel(Boolean isdel) {
-        this.isdel = isdel;
-    }
+	public void setIsdel(int isdel) {
+		this.isdel = isdel;
+	}
 
 	public Date getLoginTime() {
 		return loginTime;

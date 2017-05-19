@@ -44,7 +44,7 @@ public class DriverLacationController {
 			if(null!=latitude){
 				driverLocation.setLatitude(latitude);		
 			}
-			int i=driverLocationService.insert(driverLocation);
+			int i = driverLocationService.insertSelective(driverLocation);
 			if(i>0){
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"添加车主位置成功！");	
 			}else{

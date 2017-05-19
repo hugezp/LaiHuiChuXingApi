@@ -23,17 +23,18 @@ public class DriverLocationImpl implements IDriverLocationService {
 	public List<DriverLocation> selectList(DriverLocation driverLocation) {
 		return driverLocationMapper.selectList(driverLocation);
 	}
-
-	@Override
-	public int insert(DriverLocation driverLocation) {
-		// TODO Auto-generated method stub
-		return driverLocationMapper.insert(driverLocation);
+	
+	public DriverLocation selectOnlineByPhone(String phone) {
+		return driverLocationMapper.selectOnlineByPhone(phone);
 	}
 
-	@Override
-	public int updateByPrimaryKeySelective(DriverLocation driverLocation) {
-		// TODO Auto-generated method stub
-		return driverLocationMapper.updateByPrimaryKeySelective(driverLocation);
+	public int updateByPhoneSelective(DriverLocation record) {
+		return driverLocationMapper.updateByPhoneSelective(record);
 	}
+
+	public int insertSelective(DriverLocation record) {
+		return driverLocationMapper.insertSelective(record);
+	}
+	
 
 }
