@@ -1,6 +1,8 @@
 package com.lhcx.service.impl;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,12 @@ public class OrderServiceImpl implements IOrderService {
 		if (insertSelective(order) > 0) {
 			result = true;
 		}
+		
+		return result;
+	}
+	
+	public Map<String,Object> match(JSONObject jsonRequest) {
+		Map<String,Object> result = new HashMap<String, Object>();
 		
 		return result;
 	}
