@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
+import com.lhcx.model.Order;
+import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
+import com.lhcx.service.PushNotificationService;
 import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.PointToDistance;
@@ -44,6 +48,9 @@ public class OrderController {
 
 	@Autowired
 	private IDriverLocationService driverLocationService;
+
+	@Autowired
+	private PushNotificationService pushNotificationService;
 
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -76,23 +83,28 @@ public class OrderController {
 			if (!orderId.equals("")) {
 				result.put("OrderId", orderId);
 				// 推送内容
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+				SimpleDateFormat dateFormat = new SimpleDateFormat(
+						"yyyy-MM-dd HH:mm");
 				String content = "手机号码为" + passengerPhone + "的用户，在"
-						+ dateFormat.format(Utils.toDateTime(orderTime)) + "发布了从" + departure + "到"
-						+ destination + "的行程，出发时间为 + "
-						+ dateFormat.format(Utils.toDateTime(dePartTime)) + "费用为" + fee + "元";
+						+ dateFormat.format(Utils.toDateTime(orderTime))
+						+ "发布了从" + departure + "到" + destination
+						+ "的行程，出发时间为 + "
+						+ dateFormat.format(Utils.toDateTime(dePartTime))
+						+ "费用为" + fee + "元";
 				List<DriverLocation> dLocations = driverLocationService
 						.selectList(new DriverLocation());
 				if (dLocations.size() > 0) {
 					for (DriverLocation driverLocation : dLocations) {
 						// 车主经度
 						double longitude = "".equals(driverLocation
-								.getLongitude()) ? -1 : Double
-								.parseDouble(driverLocation.getLongitude())/1000000;
+								.getLongitude()) ? -1
+								: Double.parseDouble(driverLocation
+										.getLongitude()) / 1000000;
 						// 车主纬度
 						double latitude = "".equals(driverLocation
-								.getLatitude()) ? -1 : Double
-								.parseDouble(driverLocation.getLatitude())/1000000;
+								.getLatitude()) ? -1
+								: Double.parseDouble(driverLocation
+										.getLatitude()) / 1000000;
 						if (depLatitude != -1 && depLongitude != -1
 								&& longitude != -1 && latitude != -1) {
 							double distance = PointToDistance
@@ -100,9 +112,20 @@ public class OrderController {
 											depLongitude, latitude, longitude);
 							if (distance < ConfigUtils.PUSH_DISTANCE) {
 								String mobile = driverLocation.getPhone();
-								JpushClientUtil.getInstance()
-										.sendToRegistrationId("11", mobile, content,
-												content, content, content);
+								int flag = JpushClientUtil.getInstance()
+										.sendToRegistrationId("11", mobile,
+												content, content, content,
+												content);
+								if (flag == 1) {
+									PushNotification pushNotification = new PushNotification();
+									pushNotification
+											.setPushPhone(passengerPhone);
+									pushNotification.setReceivePhone(mobile);
+									pushNotification.setOrderId(orderId);
+									pushNotification.setAlert(content);
+									pushNotificationService
+											.insertSelective(pushNotification);
+								}
 							}
 						}
 					}
@@ -123,26 +146,58 @@ public class OrderController {
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
+
 	@ResponseBody
-    @RequestMapping(value = "/getFee", method = RequestMethod.POST)
-    public ResponseEntity<String> getFee(@RequestBody JSONObject jsonRequest) {
-		//取得参数值
-        String jsonpCallback = jsonRequest.getString("jsonpCallback");
-        ResultBean<?> resultBean = null; 
-        Map<String,Object> result = new HashMap<String, Object>();
-        try {  
-        	result.put("Fee", "123.50");
-        	resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"获取费用成功！",result);
-			
+	@RequestMapping(value = "/getFee", method = RequestMethod.POST)
+	public ResponseEntity<String> getFee(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("Fee", "123.50");
+			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+					"获取费用成功！", result);
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),"获取费用异常！");
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+					"获取费用异常！");
 		}
-        return Utils.resultResponseJson(resultBean,jsonpCallback);
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
-	
+
+	/**
+	 * 撤销订单
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
+	public ResponseEntity<String> cancel(@RequestBody JSONObject jsonRequest) {
+		// 获取参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String orderId = jsonRequest.getString("OrderId");
+		String operator = jsonRequest.getString("Operator");
+		String cancelTypeCode = jsonRequest.getString("CancelTypeCode");
+		String cancelReason = jsonRequest.getString("CancelReason");
+		ResultBean<?> resultBean = null;
+		Order order = new Order();
+		order.setOrderid(orderId);
+		order.setOperator(operator);
+		order.setCanceltypecode(cancelTypeCode);
+		order.setCanceltime(new Date());
+		order.setCancelreason(cancelReason);
+		order.setStatus(0);
+		int flag = orderService.updateByPrimaryKeySelective(order);
+		if (flag > 0) {
+			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+					"撤销订单成功！");
+		} else {
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+					"撤销订单异常！");
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+
 }
