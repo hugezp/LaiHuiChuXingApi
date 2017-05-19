@@ -9,7 +9,7 @@ public class PushNotification {
 
     private Integer receiveId;
 
-    private Integer orderId;
+    private String orderId;
 
     private Integer pushType;
 
@@ -61,15 +61,16 @@ public class PushNotification {
         this.receiveId = receiveId;
     }
 
-    public Integer getOrderId() {
-        return orderId;
-    }
+    
+    public String getOrderId() {
+		return orderId;
+	}
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
 
-    public Integer getPushType() {
+	public Integer getPushType() {
         return pushType;
     }
 

@@ -5,7 +5,7 @@
     <id column="_id" property="id" jdbcType="INTEGER" />
     <result column="push_id" property="pushId" jdbcType="INTEGER" />
     <result column="receive_id" property="receiveId" jdbcType="INTEGER" />
-    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="push_type" property="pushType" jdbcType="INTEGER" />
     <result column="alert" property="alert" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
@@ -42,7 +42,7 @@
       user_name, link_url, flag, 
       title, activity_id)
     values (#{id,jdbcType=INTEGER}, #{pushId,jdbcType=INTEGER}, #{receiveId,jdbcType=INTEGER}, 
-      #{orderId,jdbcType=INTEGER}, #{pushType,jdbcType=INTEGER}, #{alert,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{pushType,jdbcType=INTEGER}, #{alert,jdbcType=VARCHAR}, 
       #{type,jdbcType=INTEGER}, #{sound,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, 
       #{time,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{isEnable,jdbcType=INTEGER}, 
       #{userName,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, 
@@ -114,7 +114,7 @@
         #{receiveId,jdbcType=INTEGER},
       </if>
       <if test="orderId != null" >
-        #{orderId,jdbcType=INTEGER},
+        #{orderId,jdbcType=VARCHAR},
       </if>
       <if test="pushType != null" >
         #{pushType,jdbcType=INTEGER},
@@ -167,7 +167,7 @@
         receive_id = #{receiveId,jdbcType=INTEGER},
       </if>
       <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=INTEGER},
+        order_id = #{orderId,jdbcType=VARCHAR},
       </if>
       <if test="pushType != null" >
         push_type = #{pushType,jdbcType=INTEGER},
@@ -215,7 +215,7 @@
     update pc_push_notification
     set push_id = #{pushId,jdbcType=INTEGER},
       receive_id = #{receiveId,jdbcType=INTEGER},
-      order_id = #{orderId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
       push_type = #{pushType,jdbcType=INTEGER},
       alert = #{alert,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
@@ -234,6 +234,7 @@
   <select id="selectAll" parameterType="com.lhcx.model.PushNotification">
    select 
     <include refid="Base_Column_List" />
-    from pc_push_notification
+    from pc_push_notification 
+	where receive_id = #{receive_id,jdbcType=INTEGER} 
   </select>
 </mapper>
