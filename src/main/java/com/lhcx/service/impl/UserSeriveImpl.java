@@ -146,7 +146,9 @@ public class UserSeriveImpl implements IUserService{
 			user.setUsertype(userType);		
 			user.setToken(token);
 			user.setCreatetime(Utils.currentTimestamp());
+			user.setLogintime(Utils.currentTimestamp());
 			user.setUpatetime(Utils.currentTimestamp());
+			user.setLoginip(Utils.getIpAddr(request));
 			insertSelective(user);
 			
 		} else {
