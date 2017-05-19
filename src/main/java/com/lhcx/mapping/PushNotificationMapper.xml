@@ -3,9 +3,9 @@
 <mapper namespace="com.lhcx.dao.PushNotificationMapper" >
   <resultMap id="BaseResultMap" type="com.lhcx.model.PushNotification" >
     <id column="_id" property="id" jdbcType="INTEGER" />
-    <result column="push_id" property="pushId" jdbcType="INTEGER" />
-    <result column="receive_id" property="receiveId" jdbcType="INTEGER" />
-    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="push_phone" property="pushPhone" jdbcType="VARCHAR" />
+    <result column="receive_phone" property="receivePhone" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="push_type" property="pushType" jdbcType="INTEGER" />
     <result column="alert" property="alert" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
@@ -21,7 +21,7 @@
     <result column="activity_id" property="activityId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    _id, push_id, receive_id, order_id, push_type, alert, type, sound, data, time, status, 
+    _id, push_phone, receive_phone, order_id, push_type, alert, type, sound, data, time, status, 
     is_enable, user_name, link_url, flag, title, activity_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -35,14 +35,14 @@
     where _id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lhcx.model.PushNotification" >
-    insert into pc_push_notification (_id, push_id, receive_id, 
+    insert into pc_push_notification (_id, push_phone, receive_phone, 
       order_id, push_type, alert, 
       type, sound, data, 
       time, status, is_enable, 
       user_name, link_url, flag, 
       title, activity_id)
-    values (#{id,jdbcType=INTEGER}, #{pushId,jdbcType=INTEGER}, #{receiveId,jdbcType=INTEGER}, 
-      #{orderId,jdbcType=INTEGER}, #{pushType,jdbcType=INTEGER}, #{alert,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{pushPhone,jdbcType=VARCHAR}, #{receivePhone,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{pushType,jdbcType=INTEGER}, #{alert,jdbcType=VARCHAR}, 
       #{type,jdbcType=INTEGER}, #{sound,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, 
       #{time,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{isEnable,jdbcType=INTEGER}, 
       #{userName,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, 
@@ -54,11 +54,11 @@
       <if test="id != null" >
         _id,
       </if>
-      <if test="pushId != null" >
-        push_id,
+      <if test="pushPhone != null" >
+        push_phone,
       </if>
-      <if test="receiveId != null" >
-        receive_id,
+      <if test="receivePhone != null" >
+        receive_phone,
       </if>
       <if test="orderId != null" >
         order_id,
@@ -107,14 +107,14 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="pushId != null" >
-        #{pushId,jdbcType=INTEGER},
+      <if test="pushPhone != null" >
+        #{pushPhone,jdbcType=VARCHAR},
       </if>
-      <if test="receiveId != null" >
-        #{receiveId,jdbcType=INTEGER},
+      <if test="receivePhone != null" >
+        #{receivePhone,jdbcType=VARCHAR},
       </if>
       <if test="orderId != null" >
-        #{orderId,jdbcType=INTEGER},
+        #{orderId,jdbcType=VARCHAR},
       </if>
       <if test="pushType != null" >
         #{pushType,jdbcType=INTEGER},
@@ -160,14 +160,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.PushNotification" >
     update pc_push_notification
     <set >
-      <if test="pushId != null" >
-        push_id = #{pushId,jdbcType=INTEGER},
+      <if test="pushPhone != null" >
+        push_phone = #{pushPhone,jdbcType=VARCHAR},
       </if>
-      <if test="receiveId != null" >
-        receive_id = #{receiveId,jdbcType=INTEGER},
+      <if test="receivePhone != null" >
+        receive_phone = #{receivePhone,jdbcType=VARCHAR},
       </if>
       <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=INTEGER},
+        order_id = #{orderId,jdbcType=VARCHAR},
       </if>
       <if test="pushType != null" >
         push_type = #{pushType,jdbcType=INTEGER},
@@ -213,9 +213,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lhcx.model.PushNotification" >
     update pc_push_notification
-    set push_id = #{pushId,jdbcType=INTEGER},
-      receive_id = #{receiveId,jdbcType=INTEGER},
-      order_id = #{orderId,jdbcType=INTEGER},
+    set push_phone = #{pushPhone,jdbcType=VARCHAR},
+      receive_phone = #{receivePhone,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
       push_type = #{pushType,jdbcType=INTEGER},
       alert = #{alert,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},

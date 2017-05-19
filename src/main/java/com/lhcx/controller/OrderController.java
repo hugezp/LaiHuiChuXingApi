@@ -2,9 +2,12 @@ package com.lhcx.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
+import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.PointToDistance;
 import com.lhcx.utils.Utils;
@@ -67,7 +71,8 @@ public class OrderController {
 		String fee = jsonRequest.getString("Fee");
 		ResultBean<?> resultBean = null;
 		try {
-			if (orderService.create(jsonRequest)) {
+			String orderId = orderService.create(jsonRequest);
+			if (!orderId.equals("")) {
 				// 推送内容
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				String content = "手机号码为" + passengerPhone + "的用户，在"
@@ -91,8 +96,7 @@ public class OrderController {
 							double distance = PointToDistance
 									.distanceOfTwoPoints(depLatitude,
 											depLongitude, latitude, longitude);
-							if (distance < 50000) {
-
+							if (distance < ConfigUtils.PUSH_DISTANCE) {
 								String mobile = driverLocation.getPhone();
 								JpushClientUtil.getInstance()
 										.sendToRegistrationId("11", mobile, content,

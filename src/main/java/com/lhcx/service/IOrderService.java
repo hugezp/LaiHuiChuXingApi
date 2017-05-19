@@ -9,6 +9,6 @@ public interface IOrderService {
 	int insertSelective(Order record);
 	int updateByPrimaryKeySelective(Order record);
 	Order selectByOrderId(String orderId);
-	boolean create(JSONObject jsonRequest) throws ParseException ;
+	String create(JSONObject jsonRequest) throws ParseException ;
 
 }
