@@ -7,7 +7,7 @@
     <result column="LicenseId" property="licenseid" jdbcType="VARCHAR" />
     <result column="DriverRegionCode" property="driverregioncode" jdbcType="INTEGER" />
     <result column="VehicleNo" property="vehicleno" jdbcType="VARCHAR" />
-    <result column="PositionTime" property="positiontime" jdbcType="VARCHAR" />
+    <result column="PositionTime" property="positiontime" jdbcType="TIMESTAMP" />
     <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="Phone" property="phone" jdbcType="VARCHAR" />
@@ -18,10 +18,12 @@
     <result column="BizStatus" property="bizstatus" jdbcType="BIT" />
     <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
     <result column="isDel" property="isdel" jdbcType="BIT" />
+    <result column="LoginTime" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="LogoutTime" property="logoutTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, CompanyId, LicenseId, DriverRegionCode, VehicleNo, PositionTime, Longitude, Latitude, 
-    Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId, isDel
+    Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId, isDel,LoginTime,LogoutTime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -46,7 +48,7 @@
       Direction, Elevation, 
       Speed, BizStatus, OrderId)
     values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{licenseid,jdbcType=VARCHAR}, 
-      #{driverregioncode,jdbcType=INTEGER}, #{vehicleno,jdbcType=VARCHAR}, #{positiontime,jdbcType=VARCHAR}, 
+      #{driverregioncode,jdbcType=INTEGER}, #{vehicleno,jdbcType=VARCHAR}, #{positiontime,jdbcType=TIMESTAMP}, 
       #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{direction,jdbcType=INTEGER}, #{elevation,jdbcType=DOUBLE}, 
       #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=BIT}, #{orderid,jdbcType=VARCHAR})
@@ -102,6 +104,12 @@
       <if test="isdel != null" >
         isDel,
       </if>
+      <if test="loginTime != null" >
+        LoginTime,
+      </if>
+      <if test="logoutTime != null" >
+        LogoutTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -120,7 +128,7 @@
         #{vehicleno,jdbcType=VARCHAR},
       </if>
       <if test="positiontime != null" >
-        #{positiontime,jdbcType=VARCHAR},
+        #{positiontime,jdbcType=TIMESTAMP},
       </if>
       <if test="longitude != null" >
         #{longitude,jdbcType=VARCHAR},
@@ -152,6 +160,12 @@
       <if test="isdel != null" >
         #{isdel,jdbcType=BIT},
       </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logoutTime != null" >
+        #{logoutTime,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.DriverLocation" >
@@ -170,7 +184,7 @@
         VehicleNo = #{vehicleno,jdbcType=VARCHAR},
       </if>
       <if test="positiontime != null" >
-        PositionTime = #{positiontime,jdbcType=VARCHAR},
+        PositionTime = #{positiontime,jdbcType=TIMESTAMP},
       </if>
       <if test="longitude != null" >
         Longitude = #{longitude,jdbcType=VARCHAR},
@@ -202,6 +216,12 @@
       <if test="isdel != null" >
         isDel = #{isdel,jdbcType=BIT},
       </if>
+       <if test="loginTime != null" >
+       	LoginTime = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logoutTime != null" >
+       	LogoutTime = #{logoutTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -211,7 +231,7 @@
       LicenseId = #{licenseid,jdbcType=VARCHAR},
       DriverRegionCode = #{driverregioncode,jdbcType=INTEGER},
       VehicleNo = #{vehicleno,jdbcType=VARCHAR},
-      PositionTime = #{positiontime,jdbcType=VARCHAR},
+      PositionTime = #{positiontime,jdbcType=TIMESTAMP},
       Longitude = #{longitude,jdbcType=VARCHAR},
       Latitude = #{latitude,jdbcType=VARCHAR},
       Phone = #{phone,jdbcType=VARCHAR},

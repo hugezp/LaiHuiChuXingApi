@@ -17,5 +17,5 @@ public interface PushNotificationMapper {
 
     int updateByPrimaryKey(PushNotification record);
     
-    List<PushNotification> selectAll(int receive_id);
+    List<PushNotification> selectAll(String receive_phone);
 }

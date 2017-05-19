@@ -235,6 +235,6 @@
    select 
     <include refid="Base_Column_List" />
     from pc_push_notification 
-	where receive_id = #{receive_id,jdbcType=INTEGER} 
+	where receive_phone = #{receive_phone,jdbcType=VARCHAR} 
   </select>
 </mapper>

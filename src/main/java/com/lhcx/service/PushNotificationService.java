@@ -6,5 +6,5 @@ import com.lhcx.model.PushNotification;
 
 public interface PushNotificationService {
 	
-	List<PushNotification> selectAll(int receive_id);
+	List<PushNotification> selectAll(String receive_phone);
 }

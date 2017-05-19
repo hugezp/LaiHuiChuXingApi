@@ -1,5 +1,7 @@
 package com.lhcx.model;
 
+import java.util.Date;
+
 public class DriverLocation {
     private Integer id;
 
@@ -32,6 +34,10 @@ public class DriverLocation {
     private String orderid;
 
     private Boolean isdel;
+    
+    private	Date loginTime;
+    
+    private Date logoutTime;
 
     public Integer getId() {
         return id;
@@ -160,4 +166,21 @@ public class DriverLocation {
     public void setIsdel(Boolean isdel) {
         this.isdel = isdel;
     }
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public Date getLogoutTime() {
+		return logoutTime;
+	}
+
+	public void setLogoutTime(Date logoutTime) {
+		this.logoutTime = logoutTime;
+	}
+    
 }

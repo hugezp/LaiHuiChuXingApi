@@ -16,8 +16,8 @@ public class PushNotificationImpl implements PushNotificationService {
 	@Autowired
 	private PushNotificationMapper pushNotificationMapper;
 	@Override
-	public List<PushNotification> selectAll(int receive_id) {
-		return pushNotificationMapper.selectAll(receive_id);
+	public List<PushNotification> selectAll(String receive_phone) {
+		return pushNotificationMapper.selectAll(receive_phone);
 	}
 
 
