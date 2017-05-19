@@ -173,6 +173,9 @@
       <if test="address != null" >
         #{address,jdbcType=INTEGER},
       </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
       <if test="passengerphone != null" >
         #{passengerphone,jdbcType=VARCHAR},
       </if>
