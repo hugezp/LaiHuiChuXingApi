@@ -11,13 +11,13 @@
     <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
     <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
     <result column="Phone" property="phone" jdbcType="VARCHAR" />
-    <result column="Encrypt" property="encrypt" jdbcType="BIT" />
+    <result column="Encrypt" property="encrypt" jdbcType="INTEGER" />
     <result column="Direction" property="direction" jdbcType="INTEGER" />
     <result column="Elevation" property="elevation" jdbcType="DOUBLE" />
     <result column="Speed" property="speed" jdbcType="DOUBLE" />
-    <result column="BizStatus" property="bizstatus" jdbcType="BIT" />
+    <result column="BizStatus" property="bizstatus" jdbcType="INTEGER" />
     <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
-    <result column="isDel" property="isdel" jdbcType="BIT" />
+    <result column="isDel" property="isdel" jdbcType="INTEGER" />
     <result column="LoginTime" property="loginTime" jdbcType="TIMESTAMP" />
     <result column="LogoutTime" property="logoutTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -51,7 +51,7 @@
       #{driverregioncode,jdbcType=INTEGER}, #{vehicleno,jdbcType=VARCHAR}, #{positiontime,jdbcType=TIMESTAMP}, 
       #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{direction,jdbcType=INTEGER}, #{elevation,jdbcType=DOUBLE}, 
-      #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=BIT}, #{orderid,jdbcType=VARCHAR})
+      #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lhcx.model.DriverLocation" >
     insert into driver_location
@@ -140,7 +140,7 @@
         #{phone,jdbcType=VARCHAR},
       </if>
       <if test="encrypt != null" >
-        #{encrypt,jdbcType=BIT},
+        #{encrypt,jdbcType=INTEGER},
       </if>
       <if test="direction != null" >
         #{direction,jdbcType=INTEGER},
@@ -152,13 +152,13 @@
         #{speed,jdbcType=DOUBLE},
       </if>
       <if test="bizstatus != null" >
-        #{bizstatus,jdbcType=BIT},
+        #{bizstatus,jdbcType=INTEGER},
       </if>
       <if test="orderid != null" >
         #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="isdel != null" >
-        #{isdel,jdbcType=BIT},
+        #{isdel,jdbcType=INTEGER},
       </if>
       <if test="loginTime != null" >
         #{loginTime,jdbcType=TIMESTAMP},
@@ -196,7 +196,7 @@
         Phone = #{phone,jdbcType=VARCHAR},
       </if>
       <if test="encrypt != null" >
-        Encrypt = #{encrypt,jdbcType=BIT},
+        Encrypt = #{encrypt,jdbcType=INTEGER},
       </if>
       <if test="direction != null" >
         Direction = #{direction,jdbcType=INTEGER},
@@ -208,13 +208,13 @@
         Speed = #{speed,jdbcType=DOUBLE},
       </if>
       <if test="bizstatus != null" >
-        BizStatus = #{bizstatus,jdbcType=BIT},
+        BizStatus = #{bizstatus,jdbcType=INTEGER},
       </if>
       <if test="orderid != null" >
         OrderId = #{orderid,jdbcType=VARCHAR},
       </if>
       <if test="isdel != null" >
-        isDel = #{isdel,jdbcType=BIT},
+        isDel = #{isdel,jdbcType=INTEGER},
       </if>
        <if test="loginTime != null" >
        	LoginTime = #{loginTime,jdbcType=TIMESTAMP},
@@ -235,13 +235,13 @@
       Longitude = #{longitude,jdbcType=VARCHAR},
       Latitude = #{latitude,jdbcType=VARCHAR},
       Phone = #{phone,jdbcType=VARCHAR},
-      Encrypt = #{encrypt,jdbcType=BIT},
+      Encrypt = #{encrypt,jdbcType=INTEGER},
       Direction = #{direction,jdbcType=INTEGER},
       Elevation = #{elevation,jdbcType=DOUBLE},
       Speed = #{speed,jdbcType=DOUBLE},
-      BizStatus = #{bizstatus,jdbcType=BIT},
+      BizStatus = #{bizstatus,jdbcType=INTEGER},
       OrderId = #{orderid,jdbcType=VARCHAR},
-      isDel = #{isdel,jdbcType=BIT}
+      isDel = #{isdel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

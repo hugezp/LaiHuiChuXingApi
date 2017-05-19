@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.dao.PushNotificationMapper;
 import com.lhcx.dao.UserMapper;
+import com.lhcx.model.DriverLocation;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
@@ -72,5 +73,21 @@ public class PushController {
 		resultBean = new ResultBean<Object>(ResponseCode.getError(),"获取列表失败！");
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	 }
+	
+	@ResponseBody
+	@RequestMapping(value = "/button", method = RequestMethod.POST)
+	public ResponseEntity<String> pushButton(@RequestBody JSONObject jsonRequest){
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		String phone = jsonRequest.getString("Phone");
+		String isDel = jsonRequest.getString("isDel");
+		try {
+			DriverLocation driverLocation = new DriverLocation();
+			driverLocation.setPhone(phone);
+			driverLocation.setIsdel(Integer.parseInt(isDel));
+		} catch (Exception e) {
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
 	 
 }

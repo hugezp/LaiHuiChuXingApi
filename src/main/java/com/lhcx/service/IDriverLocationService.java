@@ -12,4 +12,6 @@ public interface IDriverLocationService {
 
 	List<DriverLocation> selectList(DriverLocation driverLocation);
 	
+	int updateByPrimaryKeySelective(DriverLocation record);
+	
 }
