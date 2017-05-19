@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.PushNotificationMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.PushNotification" >
+    <id column="_id" property="id" jdbcType="INTEGER" />
+    <result column="push_id" property="pushId" jdbcType="INTEGER" />
+    <result column="receive_id" property="receiveId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="push_type" property="pushType" jdbcType="INTEGER" />
+    <result column="alert" property="alert" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="sound" property="sound" jdbcType="VARCHAR" />
+    <result column="data" property="data" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_enable" property="isEnable" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    _id, push_id, receive_id, order_id, push_type, alert, type, sound, data, time, status, 
+    is_enable, user_name, link_url, flag, title, activity_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pc_push_notification
+    where _id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pc_push_notification
+    where _id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lhcx.model.PushNotification" >
+    insert into pc_push_notification (_id, push_id, receive_id, 
+      order_id, push_type, alert, 
+      type, sound, data, 
+      time, status, is_enable, 
+      user_name, link_url, flag, 
+      title, activity_id)
+    values (#{id,jdbcType=INTEGER}, #{pushId,jdbcType=INTEGER}, #{receiveId,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=INTEGER}, #{pushType,jdbcType=INTEGER}, #{alert,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{sound,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{isEnable,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{activityId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lhcx.model.PushNotification" >
+    insert into pc_push_notification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        _id,
+      </if>
+      <if test="pushId != null" >
+        push_id,
+      </if>
+      <if test="receiveId != null" >
+        receive_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="pushType != null" >
+        push_type,
+      </if>
+      <if test="alert != null" >
+        alert,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="sound != null" >
+        sound,
+      </if>
+      <if test="data != null" >
+        data,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isEnable != null" >
+        is_enable,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="linkUrl != null" >
+        link_url,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pushId != null" >
+        #{pushId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveId != null" >
+        #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="pushType != null" >
+        #{pushType,jdbcType=INTEGER},
+      </if>
+      <if test="alert != null" >
+        #{alert,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sound != null" >
+        #{sound,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null" >
+        #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null" >
+        #{isEnable,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.PushNotification" >
+    update pc_push_notification
+    <set >
+      <if test="pushId != null" >
+        push_id = #{pushId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveId != null" >
+        receive_id = #{receiveId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="pushType != null" >
+        push_type = #{pushType,jdbcType=INTEGER},
+      </if>
+      <if test="alert != null" >
+        alert = #{alert,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sound != null" >
+        sound = #{sound,jdbcType=VARCHAR},
+      </if>
+      <if test="data != null" >
+        data = #{data,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null" >
+        is_enable = #{isEnable,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where _id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.PushNotification" >
+    update pc_push_notification
+    set push_id = #{pushId,jdbcType=INTEGER},
+      receive_id = #{receiveId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      push_type = #{pushType,jdbcType=INTEGER},
+      alert = #{alert,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      sound = #{sound,jdbcType=VARCHAR},
+      data = #{data,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      is_enable = #{isEnable,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      link_url = #{linkUrl,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      activity_id = #{activityId,jdbcType=INTEGER}
+    where _id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" parameterType="com.lhcx.model.PushNotification">
+   select 
+    <include refid="Base_Column_List" />
+    from pc_push_notification
+  </select>
+</mapper>
