@@ -58,6 +58,7 @@ public class PushNotification {
 		return receivePhone;
 	}
 
+    
 	public void setReceivePhone(String receivePhone) {
 		this.receivePhone = receivePhone;
 	}

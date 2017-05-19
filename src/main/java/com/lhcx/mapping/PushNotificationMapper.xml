@@ -234,6 +234,7 @@
   <select id="selectAll" parameterType="com.lhcx.model.PushNotification">
    select 
     <include refid="Base_Column_List" />
-    from pc_push_notification
+    from pc_push_notification 
+	where receive_phone = #{receive_phone,jdbcType=VARCHAR} 
   </select>
 </mapper>
