@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
+import com.lhcx.model.Order;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
@@ -49,13 +50,19 @@ public class DriverController {
 			User user = (User)session.getAttribute("CURRENT_USER");
 			String phone = user.getUserphone();
 			DriverLocation driverLocation = driverLocationService.selectByPhone(phone);
+			Order order = orderService.selectByOrderId(jsonRequest.getString("OrderId"));
 			if (driverLocation != null && driverLocation.getIsdel() == 1) {
-				Map<String,Object> result = orderService.match(jsonRequest,phone);
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
-						"接单成功！",result);
+				if (order == null || order.getStatus() != 1) {
+					resultBean = new ResultBean<Object>(ResponseCode.getError(),
+							"该订单已失效或已被接单，如有疑问请联系售后！");
+				}else {
+					Map<String,Object> result = orderService.match(jsonRequest,phone);
+					resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+							"接单成功！",result);
+				}
 			} else {
 				resultBean = new ResultBean<Object>(ResponseCode.getError(),
-						"该用户没有经营上线，请经营上线后接单！");
+						"您没有经营上线，请经营上线后接单！");
 			}
 			
 		} catch (Exception e) {
