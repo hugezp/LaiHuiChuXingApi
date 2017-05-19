@@ -71,9 +71,9 @@ public class OrderController {
 				// 推送内容
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				String content = "手机号码为" + passengerPhone + "的用户，在"
-						+ dateFormat.format(Utils.toDate(orderTime)) + "发布了从" + departure + "到"
+						+ dateFormat.format(Utils.toDateTime(orderTime)) + "发布了从" + departure + "到"
 						+ destination + "的行程，出发时间为 + "
-						+ dateFormat.format(Utils.toDate(dePartTime)) + "费用为" + fee + "元";
+						+ dateFormat.format(Utils.toDateTime(dePartTime)) + "费用为" + fee + "元";
 				List<DriverLocation> dLocations = driverLocationService
 						.selectList(new DriverLocation());
 				if (dLocations.size() > 0) {
