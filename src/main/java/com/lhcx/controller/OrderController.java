@@ -70,9 +70,11 @@ public class OrderController {
 		// 乘客费用
 		String fee = jsonRequest.getString("Fee");
 		ResultBean<?> resultBean = null;
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String orderId = orderService.create(jsonRequest);
 			if (!orderId.equals("")) {
+				result.put("OrderId", orderId);
 				// 推送内容
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				String content = "手机号码为" + passengerPhone + "的用户，在"
@@ -106,7 +108,7 @@ public class OrderController {
 					}
 				}
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
-						"发布订单成功！");
+						"发布订单成功！",result);
 			} else {
 				resultBean = new ResultBean<Object>(ResponseCode.getError(),
 						"发布订单失败！");
