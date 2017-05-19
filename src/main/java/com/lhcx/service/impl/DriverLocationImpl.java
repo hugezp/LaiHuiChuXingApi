@@ -24,4 +24,16 @@ public class DriverLocationImpl implements IDriverLocationService {
 		return driverLocationMapper.selectList(driverLocation);
 	}
 
+	@Override
+	public int insert(DriverLocation driverLocation) {
+		// TODO Auto-generated method stub
+		return driverLocationMapper.insert(driverLocation);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(DriverLocation driverLocation) {
+		// TODO Auto-generated method stub
+		return driverLocationMapper.updateByPrimaryKeySelective(driverLocation);
+	}
+
 }

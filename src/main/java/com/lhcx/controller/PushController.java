@@ -22,6 +22,7 @@ import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
+import com.lhcx.service.PushNotificationService;
 import com.lhcx.utils.Utils;
 /**
  * @author dp
@@ -33,7 +34,7 @@ import com.lhcx.utils.Utils;
 public class PushController {
 	private static Logger log = Logger.getLogger(PushController.class);
 	@Autowired
-	PushNotificationMapper pushNotification ;
+	PushNotificationService pushNotificationService ;
 	@Autowired
 	UserMapper userDao ;
 	@ResponseBody
@@ -49,7 +50,7 @@ public class PushController {
 	    User user = userDao.selectByToken(token);
 	    String phone = user.getUserphone(); 
 		try {
-			List<PushNotification> pushs = pushNotification.selectAll(phone);
+			List<PushNotification> pushs = pushNotificationService.selectAll(phone);
 			ArrayList<HashMap<String, Object>> jsonArray = new ArrayList<HashMap<String, Object>>();
 			if(pushs.size()>0){
 				for(PushNotification push : pushs){

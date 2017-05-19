@@ -75,7 +75,17 @@ public class Utils {
     public static String randomUUID() {  
         return UUID.randomUUID().toString().replace("-", "");  
     }
-    
+    public static Date getDate(String time){    	
+    	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddhhmmss");  
+  	    Date date = new Date();
+  		try {
+  			date = (Date) sdf1.parse(time);
+  		} catch (ParseException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}  
+    	return date;		
+    }
     /** 
      * 获取当前网络ip 
      * @param request 

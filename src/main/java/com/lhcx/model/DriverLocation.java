@@ -13,7 +13,7 @@ public class DriverLocation {
 
     private String vehicleno;
 
-    private String positiontime;
+    private Date positiontime;
 
     private String longitude;
 
@@ -79,15 +79,15 @@ public class DriverLocation {
         this.vehicleno = vehicleno == null ? null : vehicleno.trim();
     }
 
-    public String getPositiontime() {
-        return positiontime;
-    }
+    public Date getPositiontime() {
+		return positiontime;
+	}
 
-    public void setPositiontime(String positiontime) {
-        this.positiontime = positiontime == null ? null : positiontime.trim();
-    }
+	public void setPositiontime(Date positiontime) {
+		this.positiontime = positiontime;
+	}
 
-    public String getLongitude() {
+	public String getLongitude() {
         return longitude;
     }
 

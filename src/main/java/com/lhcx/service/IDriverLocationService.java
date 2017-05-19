@@ -1,7 +1,6 @@
 package com.lhcx.service;
 
 import java.util.List;
-
 import com.lhcx.model.DriverLocation;
 
 
@@ -11,5 +10,6 @@ import com.lhcx.model.DriverLocation;
 public interface IDriverLocationService {
 
 	List<DriverLocation> selectList(DriverLocation driverLocation);
-	
+	int insert(DriverLocation driverLocation);
+	int updateByPrimaryKeySelective(DriverLocation driverLocation);
 }
