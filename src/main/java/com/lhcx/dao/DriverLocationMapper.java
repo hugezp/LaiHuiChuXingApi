@@ -14,6 +14,6 @@ public interface DriverLocationMapper {
 
     List<DriverLocation> selectList(DriverLocation driverLocation);
     
-    DriverLocation selectOnlineByPhone(@Param("phone") String phone);
+    DriverLocation selectByPhone(@Param("phone") String phone);
     
 }

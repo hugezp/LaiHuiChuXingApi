@@ -48,8 +48,8 @@ public class DriverController {
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
 			String phone = user.getUserphone();
-			DriverLocation driverLocation = driverLocationService.selectOnlineByPhone(phone);
-			if (driverLocation != null ) {
+			DriverLocation driverLocation = driverLocationService.selectByPhone(phone);
+			if (driverLocation != null && driverLocation.getIsdel() == 1) {
 				Map<String,Object> result = orderService.match(jsonRequest,phone);
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
 						"接单成功！",result);

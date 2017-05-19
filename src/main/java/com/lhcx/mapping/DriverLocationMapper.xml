@@ -22,11 +22,11 @@
     Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId, isDel,LoginTime,LogoutTime
   </sql>
 
-  <select id="selectOnlineByPhone" resultMap="BaseResultMap" >
+  <select id="selectByPhone" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from driver_location
-    where Phone = #{phone,jdbcType=INTEGER} and isDel = 1
+    where Phone = #{phone,jdbcType=INTEGER}
   </select>
   <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

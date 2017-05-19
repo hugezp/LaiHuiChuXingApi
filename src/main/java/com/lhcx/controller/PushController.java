@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lhcx.dao.UserMapper;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
@@ -83,19 +82,15 @@ public class PushController {
 	public ResponseEntity<String> pushButton(@RequestBody JSONObject jsonRequest,HttpServletRequest request){
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		String isDel = jsonRequest.getString("isDel");
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
-			DriverLocation driverLocation = new DriverLocation();
-			driverLocation.setPhone(user.getUserphone());
-			driverLocation.setIsdel(Integer.parseInt(isDel));
-			int flag = driverLocationService.updateByPhoneSelective(driverLocation);
-			if (flag > 0) {
+			if (driverLocationService.setButton(jsonRequest,user.getUserphone())) {
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"设置成功！");
 			}else {
 				resultBean = new ResultBean<Object>(ResponseCode.getError(),"设置失败！");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),"设置失败！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
