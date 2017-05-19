@@ -29,6 +29,12 @@
     from driver_location
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from driver_location
+    where isDel = 1
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from driver_location
     where id = #{id,jdbcType=INTEGER}
@@ -37,15 +43,13 @@
     insert into driver_location (id, CompanyId, LicenseId, 
       DriverRegionCode, VehicleNo, PositionTime, 
       Longitude, Latitude, Phone, 
-      Encrypt, Direction, Elevation, 
-      Speed, BizStatus, OrderId, 
-      isDel)
+      Direction, Elevation, 
+      Speed, BizStatus, OrderId)
     values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{licenseid,jdbcType=VARCHAR}, 
       #{driverregioncode,jdbcType=INTEGER}, #{vehicleno,jdbcType=VARCHAR}, #{positiontime,jdbcType=VARCHAR}, 
       #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{encrypt,jdbcType=BIT}, #{direction,jdbcType=INTEGER}, #{elevation,jdbcType=DOUBLE}, 
-      #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=BIT}, #{orderid,jdbcType=VARCHAR}, 
-      #{isdel,jdbcType=BIT})
+      #{direction,jdbcType=INTEGER}, #{elevation,jdbcType=DOUBLE}, 
+      #{speed,jdbcType=DOUBLE}, #{bizstatus,jdbcType=BIT}, #{orderid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lhcx.model.DriverLocation" >
     insert into driver_location

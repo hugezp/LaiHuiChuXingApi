@@ -1,5 +1,7 @@
 package com.lhcx.dao;
 
+import java.util.List;
+
 import com.lhcx.model.DriverLocation;
 
 public interface DriverLocationMapper {
@@ -14,4 +16,6 @@ public interface DriverLocationMapper {
     int updateByPrimaryKeySelective(DriverLocation record);
 
     int updateByPrimaryKey(DriverLocation record);
+    
+    List<DriverLocation> selectList(DriverLocation driverLocation);
 }
