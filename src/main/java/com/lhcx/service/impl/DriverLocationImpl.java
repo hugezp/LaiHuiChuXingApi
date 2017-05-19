@@ -28,4 +28,8 @@ public class DriverLocationImpl implements IDriverLocationService {
 		return driverLocationMapper.selectOnlineByPhone(phone);
 	}
 
+	public int updateByPrimaryKeySelective(DriverLocation record) {
+		return driverLocationMapper.updateByPrimaryKeySelective(record);
+	}
+
 }
