@@ -11,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.dao.OrderMapper;
+import com.lhcx.model.DriverInfo;
 import com.lhcx.model.Order;
 import com.lhcx.model.OrderType;
+import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.utils.MD5Kit;
+import com.lhcx.utils.Utils;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -25,6 +28,8 @@ public class OrderServiceImpl implements IOrderService {
 	private OrderMapper orderMapper;
 	@Autowired
 	private IDriverLocationService driverLocationService;
+	@Autowired
+	private IDriverInfoService driverInfoService;
 	
 	public int insertSelective(Order order) {
 		return orderMapper.insertSelective(order);
@@ -50,24 +55,30 @@ public class OrderServiceImpl implements IOrderService {
 		return result;
 	}
 	
-	public Map<String,Object> match(JSONObject jsonRequest) throws ParseException {
+	public Map<String,Object> match(JSONObject jsonRequest,String  driverPhone) throws ParseException {
 		Map<String,Object> result = new HashMap<String, Object>();
 		String orderId = jsonRequest.getString("OrderId");
-
-		String driverPhone = jsonRequest.getString("DriverPhone");
+		String longitude = jsonRequest.getString("Longitude");
+		String latitude = jsonRequest.getString("Latitude");
+		Integer encrypt = jsonRequest.getInteger("Encrypt");
 
 		Date distributeTime = new Date();
 		
 		Order order = selectByOrderId(orderId);
 		order.setDriverphone(driverPhone);
+		order.setLongitude(longitude);
+		order.setLatitude(latitude);
+		order.setEncrypt(encrypt);
 		order.setDistributetime(distributeTime);
 		order.setStatus(OrderType.Receiving.value());
 		updateByOrderIdSelective(order);
 		
+		DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
+		
 		result.put("OrderId", orderId);
 		result.put("DriverPhone", driverPhone);
-		result.put("VehicleNo", order.getVehicleno());
-		result.put("DistributeTime", distributeTime);
+		result.put("VehicleNo", driverInfo.getVehicleNo());
+		result.put("DistributeTime", Utils.dateFormat(distributeTime));
 		
 		return result;
 	}

@@ -10,6 +10,7 @@ import com.lhcx.utils.Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by Administrator on 2017/4/11.
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor implements HandlerInterceptor {
 	@Autowired
 	private IUserService userService;
+	@Autowired  
+    private HttpSession session;  
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object object, Exception arg3) throws Exception {
@@ -38,8 +41,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         	return false;
         }
         try {
-        	User user = userService.selectByToken(token);
+        	User user = (User)session.getAttribute("CURRENT_USER");
+        	if (user == null) {
+				user = userService.selectByToken(token);
+			}
         	if(user != null && user.getFlag() != 1){
+        		session.setAttribute("CURRENT_USER", user);
         		return true;
         	}
         	

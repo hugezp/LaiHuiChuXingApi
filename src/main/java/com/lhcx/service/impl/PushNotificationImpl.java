@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lhcx.dao.PushNotificationMapper;
 import com.lhcx.model.PushNotification;
-import com.lhcx.service.PushNotificationService;
+import com.lhcx.service.IPushNotificationService;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
-public class PushNotificationImpl implements PushNotificationService {
+public class PushNotificationImpl implements IPushNotificationService {
 	
 	@Autowired
 	private PushNotificationMapper pushNotificationMapper;

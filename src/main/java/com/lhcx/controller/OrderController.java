@@ -26,7 +26,7 @@ import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
-import com.lhcx.service.PushNotificationService;
+import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.PointToDistance;
@@ -50,7 +50,7 @@ public class OrderController {
 	private IDriverLocationService driverLocationService;
 
 	@Autowired
-	private PushNotificationService pushNotificationService;
+	private IPushNotificationService pushNotificationService;
 
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
