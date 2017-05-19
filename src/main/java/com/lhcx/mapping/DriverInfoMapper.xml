@@ -46,6 +46,7 @@
     <result column="Flag" property="flag" jdbcType="INTEGER" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="VehicleNo" property="vehicleNo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, CompanyId, Address,AddressName, DriverName, DriverGender, DriverBirthday, DriverNationality, 
@@ -55,7 +56,7 @@
     CertificateNo, NetworkCarIssusOrganization, NetworkCarIssusDate, GetNetworkProofDate, 
     NetworkCarProofOn, NetworkCarProofOff, RegisterDate, FullTimeDriver, CommercialType, 
     InDriverBlackList, ContractCompany, ContractOn, ContractOff, EmergencyContact, EmergencyContactPhone, 
-    EmergencyContactAddress, State, Flag, CreateTime, UpdateTime
+    EmergencyContactAddress, State, Flag, CreateTime, UpdateTime,VehicleNo
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -89,7 +90,7 @@
       ContractOn, ContractOff, EmergencyContact, 
       EmergencyContactPhone, EmergencyContactAddress, 
       State, Flag, CreateTime, 
-      UpdateTime)
+      UpdateTime,VehicleNo)
     values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER},#{addressname,jdbcType=VARCHAR}, 
       #{drivername,jdbcType=VARCHAR}, #{drivergender,jdbcType=VARCHAR}, #{driverbirthday,jdbcType=TIMESTAMP}, 
       #{drivernationality,jdbcType=VARCHAR}, #{drivernation,jdbcType=VARCHAR}, #{drivermaritalstatus,jdbcType=VARCHAR}, 
@@ -105,7 +106,7 @@
       #{contracton,jdbcType=TIMESTAMP}, #{contractoff,jdbcType=TIMESTAMP}, #{emergencycontact,jdbcType=VARCHAR}, 
       #{emergencycontactphone,jdbcType=VARCHAR}, #{emergencycontactaddress,jdbcType=VARCHAR}, 
       #{state,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP})
+      #{updatetime,jdbcType=TIMESTAMP}，#{vehicleNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lhcx.model.DriverInfo" >
     insert into driver_infos
@@ -242,6 +243,9 @@
       <if test="updatetime != null" >
         UpdateTime,
       </if>
+      <if test="vehicleNo != null" >
+        VehicleNo,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -376,6 +380,9 @@
       <if test="updatetime != null" >
         #{updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="vehicleNo != null" >
+        #{vehicleNo,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.DriverInfo" >
@@ -509,6 +516,9 @@
       </if>
       <if test="updatetime != null" >
         UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vehicleNo != null" >
+        VehicleNo = #{vehicleNo,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -645,6 +655,9 @@
       <if test="updatetime != null" >
         UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="vehicleNo != null" >
+        VehicleNo = #{vehicleNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where DriverPhone = #{driverphone,jdbcType=INTEGER}
   </update>
@@ -692,7 +705,8 @@
       State = #{state,jdbcType=INTEGER},
       Flag = #{flag,jdbcType=INTEGER},
       CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      VehicleNo = #{vehicleNo,jdbcType=VARCHAR}    
     where id = #{id,jdbcType=INTEGER}
   </update>
    <update id="updateByPhone" parameterType="com.lhcx.model.DriverInfo" >
@@ -739,7 +753,8 @@
       State = #{state,jdbcType=INTEGER},
       Flag = #{flag,jdbcType=INTEGER},
       CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      VehicleNo = #{vehicleNo,jdbcType=VARCHAR}
     where DriverPhone = #{driverphone,jdbcType=INTEGER}
   </update>
 </mapper>

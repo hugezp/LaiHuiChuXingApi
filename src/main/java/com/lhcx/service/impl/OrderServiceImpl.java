@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.dao.OrderMapper;
+import com.lhcx.model.DriverInfo;
 import com.lhcx.model.Order;
 import com.lhcx.model.OrderType;
+import com.lhcx.service.IDriverInfoService;
+import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.utils.MD5Kit;
 import com.lhcx.utils.Utils;
@@ -23,13 +26,13 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private IDriverLocationService driverLocationService;
+	@Autowired
+	private IDriverInfoService driverInfoService;
 	
 	public int insertSelective(Order order) {
 		return orderMapper.insertSelective(order);
-	}
-	
-	public int updateByPrimaryKeySelective(Order order) {
-		return orderMapper.updateByPrimaryKeySelective(order);
 	}
 	
 	public int updateByOrderIdSelective(Order order){
@@ -52,32 +55,30 @@ public class OrderServiceImpl implements IOrderService {
 		return result;
 	}
 	
-	public Map<String,Object> match(JSONObject jsonRequest) throws ParseException {
+	public Map<String,Object> match(JSONObject jsonRequest,String  driverPhone) throws ParseException {
 		Map<String,Object> result = new HashMap<String, Object>();
 		String orderId = jsonRequest.getString("OrderId");
 		String longitude = jsonRequest.getString("Longitude");
 		String latitude = jsonRequest.getString("Latitude");
 		Integer encrypt = jsonRequest.getInteger("Encrypt");
-		String licenseId = jsonRequest.getString("LicenseId"); 
-		String driverPhone = jsonRequest.getString("DriverPhone");
-		String vehicleNo = jsonRequest.getString("VehicleNo");
-		Date distributeTime = Utils.toDateTime(jsonRequest.getLong("DistributeTime"));
+
+		Date distributeTime = new Date();
 		
 		Order order = selectByOrderId(orderId);
 		order.setDriverphone(driverPhone);
 		order.setLongitude(longitude);
 		order.setLatitude(latitude);
 		order.setEncrypt(encrypt);
-		order.setLicenseid(licenseId);
-		order.setVehicleno(vehicleNo);
 		order.setDistributetime(distributeTime);
 		order.setStatus(OrderType.Receiving.value());
 		updateByOrderIdSelective(order);
 		
+		DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
+		
 		result.put("OrderId", orderId);
 		result.put("DriverPhone", driverPhone);
-		result.put("VehicleNo", vehicleNo);
-		result.put("DistributeTime", distributeTime);
+		result.put("VehicleNo", driverInfo.getVehicleNo());
+		result.put("DistributeTime", Utils.dateFormat(distributeTime));
 		
 		return result;
 	}

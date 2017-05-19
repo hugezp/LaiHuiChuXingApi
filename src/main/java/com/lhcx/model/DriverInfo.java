@@ -94,6 +94,8 @@ public class DriverInfo {
     private Date createtime;
 
     private Date updatetime;
+    
+    private String vehicleNo;
 
     public Integer getId() {
         return id;
@@ -447,6 +449,14 @@ public class DriverInfo {
         this.updatetime = updatetime;
     }
     
+    public String getVehicleNo() {
+		return vehicleNo;
+	}
+
+	public void setVehicleNo(String vehicleNo) {
+		this.vehicleNo =  vehicleNo == null ? null : vehicleNo.trim();;
+	}
+    
     public DriverInfo() {
 		
 	}  
@@ -470,6 +480,7 @@ public class DriverInfo {
 			this.driverlicenseon = Utils.toDate(jsonRequest.getLong("driverLicenseOn"));
 			this.driverlicenseoff = Utils.toDate(jsonRequest.getLong("driverLicenseOff"));
 			this.fulltimedriver = jsonRequest.getInteger("fullTimeDriver");
+			this.vehicleNo = jsonRequest.getString("VehicleNo");
 			
 		}
 	}

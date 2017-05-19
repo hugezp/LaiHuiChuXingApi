@@ -23,9 +23,13 @@ public class DriverLocationImpl implements IDriverLocationService {
 	public List<DriverLocation> selectList(DriverLocation driverLocation) {
 		return driverLocationMapper.selectList(driverLocation);
 	}
+	
+	public DriverLocation selectOnlineByPhone(String phone) {
+		return driverLocationMapper.selectOnlineByPhone(phone);
+	}
 
-	public int updateByPrimaryKeySelective(DriverLocation record) {
-		return driverLocationMapper.updateByPrimaryKeySelective(record);
+	public int updateByPhoneSelective(DriverLocation record) {
+		return driverLocationMapper.updateByPhoneSelective(record);
 	}
 
 }
