@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.service.IDriverLocationService;
-import com.lhcx.service.IGetPhoneFromTokenService;
 import com.lhcx.utils.Utils;
 /**
  * @author dp
@@ -43,7 +43,7 @@ public class PushController {
 	@Autowired
 	private IDriverLocationService driverLocationService;
 	@Autowired
-	private IGetPhoneFromTokenService gpftService;
+	private HttpSession session;
 	@ResponseBody
 	@RequestMapping(value = "/List", method = RequestMethod.POST)
 	public ResponseEntity<String> PushList(@RequestBody JSONObject jsonRequest,HttpServletRequest request) {	
@@ -88,15 +88,14 @@ public class PushController {
 	@RequestMapping(value = "/button", method = RequestMethod.POST)
 	public ResponseEntity<String> pushButton(@RequestBody JSONObject jsonRequest,HttpServletRequest request){
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		String token = request.getHeader("Token");
 		ResultBean<?> resultBean = null;
 		String isDel = jsonRequest.getString("isDel");
 		try {
-			User user = gpftService.selectByToken(token);
+			User user = (User)session.getAttribute("CURRENT_USER");
 			DriverLocation driverLocation = new DriverLocation();
 			driverLocation.setPhone(user.getUserphone());
 			driverLocation.setIsdel(Integer.parseInt(isDel));
-			int flag = driverLocationService.updateByPrimaryKeySelective(driverLocation);
+			int flag = driverLocationService.updateByPhoneSelective(driverLocation);
 			if (flag > 0) {
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"设置成功！");
 			}else {
@@ -118,14 +117,14 @@ public class PushController {
 		ResultBean<?> resultBean = null;
 		String longitude = jsonRequest.getString("Longitude");
 		String latitude = jsonRequest.getString("Latitude");
-		String phone = jsonRequest.getString("Phone");
 		try {
+			User user = (User)session.getAttribute("CURRENT_USER");
 			DriverLocation driverLocation = new DriverLocation();
-			driverLocation.setPhone(phone);
+			driverLocation.setPhone(user.getUserphone());
 			driverLocation.setLongitude(longitude);
 			driverLocation.setLatitude(latitude);
 			driverLocation.setPositiontime(new Date());
-			int flag = driverLocationService.updateByPrimaryKeySelective(driverLocation);
+			int flag = driverLocationService.updateByPhoneSelective(driverLocation);
 			if (flag > 0) {
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"更新成功！");
 			}else {
