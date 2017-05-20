@@ -139,7 +139,7 @@ public class OrderController {
 							pushNotification.setReceivePhone(mobile);
 							pushNotification.setOrderId(orderId);
 							pushNotification.setAlert(content);
-							pushNotification.setTime(new Date());
+							pushNotification.setData(extrasParam.toString());
 							pushNotificationService
 									.insertSelective(pushNotification);
 						}
