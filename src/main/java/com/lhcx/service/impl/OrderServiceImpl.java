@@ -130,6 +130,7 @@ public class OrderServiceImpl implements IOrderService {
 					pushNotification.setOrderId(orderId);
 					pushNotification.setAlert(content);
 					pushNotification.setPushType(1);
+					pushNotification.setData(extrasParam);
 					pushNotificationService.insertSelective(pushNotification);
 				}else {
 					throw new Exception();
