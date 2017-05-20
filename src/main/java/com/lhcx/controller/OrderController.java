@@ -1,13 +1,12 @@
 package com.lhcx.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,7 @@ import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.ConfigUtils;
+import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.PointToDistance;
 import com.lhcx.utils.Utils;
@@ -123,10 +123,10 @@ public class OrderController {
 						Map<String, String> extrasParam = new HashMap<String, String>();
 						extrasParam.put("mobile", passengerPhone);
 						extrasParam.put("createTime",
-								dateFormat.format(Utils.toDateTime(orderTime)));
+								dateFormat.format(DateUtils.toDateTime(orderTime)));
 						extrasParam.put("departure", departure);
 						extrasParam.put("destination", destination);
-						extrasParam.put("departureTime", dateFormat.format(Utils.toDateTime(dePartTime)));
+						extrasParam.put("departureTime", dateFormat.format(DateUtils.toDateTime(dePartTime)));
 						extrasParam.put("fee", fee);
 						extrasParam.put("distance", String.valueOf(distance));
 						extrasParam.put("totalDistance",String.valueOf(totalDistance));

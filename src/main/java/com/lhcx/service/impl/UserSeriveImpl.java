@@ -22,6 +22,7 @@ import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IPassengerInfoService;
 import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
+import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.MD5Kit;
 import com.lhcx.utils.Utils;
 
@@ -96,15 +97,15 @@ public class UserSeriveImpl implements IUserService{
 					user.setUserphone(phone);
 					user.setUsertype(userType);		
 					user.setToken(token);
-					user.setCreatetime(Utils.currentTimestamp());
-					user.setLogintime(Utils.currentTimestamp());
-					user.setUpatetime(Utils.currentTimestamp());
+					user.setCreatetime(DateUtils.currentTimestamp());
+					user.setLogintime(DateUtils.currentTimestamp());
+					user.setUpatetime(DateUtils.currentTimestamp());
 					user.setLoginip(Utils.getIpAddr(request));
 					
 					insertSelective(user);
 				}else {
-					user.setLogintime(Utils.currentTimestamp());
-					user.setUpatetime(Utils.currentTimestamp());
+					user.setLogintime(DateUtils.currentTimestamp());
+					user.setUpatetime(DateUtils.currentTimestamp());
 					user.setLoginip(Utils.getIpAddr(request));
 					user.setToken(token);
 					updateByPrimaryKeySelective(user);
@@ -136,8 +137,8 @@ public class UserSeriveImpl implements IUserService{
 		if (user == null) {
 			//step1：保存driver 信息	
 			driverInfo = new DriverInfo(jsonRequest);
-			driverInfo.setCreatetime(Utils.currentTimestamp());
-			driverInfo.setUpdatetime(Utils.currentTimestamp());
+			driverInfo.setCreatetime(DateUtils.currentTimestamp());
+			driverInfo.setUpdatetime(DateUtils.currentTimestamp());
 			driverInfoService.insertSelective(driverInfo);
 			
 			//step2:保存user信息 
@@ -145,21 +146,21 @@ public class UserSeriveImpl implements IUserService{
 			user.setUserphone(phone);
 			user.setUsertype(userType);		
 			user.setToken(token);
-			user.setCreatetime(Utils.currentTimestamp());
-			user.setLogintime(Utils.currentTimestamp());
-			user.setUpatetime(Utils.currentTimestamp());
+			user.setCreatetime(DateUtils.currentTimestamp());
+			user.setLogintime(DateUtils.currentTimestamp());
+			user.setUpatetime(DateUtils.currentTimestamp());
 			user.setLoginip(Utils.getIpAddr(request));
 			insertSelective(user);
 			
 		} else {
 			//step1：更新driver 信息
 			driverInfo.setFlag(2);
-			driverInfo.setUpdatetime(Utils.currentTimestamp());
+			driverInfo.setUpdatetime(DateUtils.currentTimestamp());
 			driverInfoService.updateByPhoneSelective(driverInfo);
 			
 			//step2:更新user信息 
-			user.setLogintime(Utils.currentTimestamp());
-			user.setUpatetime(Utils.currentTimestamp());
+			user.setLogintime(DateUtils.currentTimestamp());
+			user.setUpatetime(DateUtils.currentTimestamp());
 			user.setLoginip(Utils.getIpAddr(request));
 			user.setToken(token);
 			updateByPrimaryKeySelective(user);

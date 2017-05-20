@@ -63,7 +63,6 @@ public class UserController {
         try {
         	resultBean = userSerive.login(request,jsonRequest);			
 		} catch (Exception e) {
-			// TODO: handle exception
 			log.error(e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"登录失败！服务器繁忙，请稍后重试！");
@@ -109,7 +108,6 @@ public class UserController {
         	}
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			log.error("register error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册提交失败！");

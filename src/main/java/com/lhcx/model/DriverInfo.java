@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lhcx.utils.Utils;
+import com.lhcx.utils.DateUtils;
 
 public class DriverInfo {
     private Integer id;
@@ -476,9 +476,9 @@ public class DriverInfo {
 			
 			//证件信息
 			this.licensephoto = jsonRequest.getString("licensePhoto");
-			this.getdriverlicensedate = Utils.toDate(jsonRequest.getLong("getDriverLicenseDate"));
-			this.driverlicenseon = Utils.toDate(jsonRequest.getLong("driverLicenseOn"));
-			this.driverlicenseoff = Utils.toDate(jsonRequest.getLong("driverLicenseOff"));
+			this.getdriverlicensedate = DateUtils.toDate(jsonRequest.getLong("getDriverLicenseDate"));
+			this.driverlicenseon = DateUtils.toDate(jsonRequest.getLong("driverLicenseOn"));
+			this.driverlicenseoff = DateUtils.toDate(jsonRequest.getLong("driverLicenseOff"));
 			this.fulltimedriver = jsonRequest.getInteger("fullTimeDriver");
 			this.vehicleNo = jsonRequest.getString("VehicleNo");
 			

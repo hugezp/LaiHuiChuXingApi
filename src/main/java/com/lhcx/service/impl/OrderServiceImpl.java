@@ -28,7 +28,7 @@ import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.MD5Kit;
-import com.lhcx.utils.Utils;
+import com.lhcx.utils.DateUtils;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -101,7 +101,7 @@ public class OrderServiceImpl implements IOrderService {
 				//step2：推送给发单乘客
 				DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
 				String vehicleNo = driverInfo.getVehicleNo();
-				String distributeTimeString =  Utils.dateFormat(distributeTime);
+				String distributeTimeString =  DateUtils.dateFormat(distributeTime);
 				
 				String content = "【来回出行】您的行程订单已被接单，请查看!";
 				

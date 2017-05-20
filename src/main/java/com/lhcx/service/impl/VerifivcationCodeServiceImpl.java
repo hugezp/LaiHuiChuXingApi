@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lhcx.dao.VerificationCodeMapper;
 import com.lhcx.model.VerificationCode;
 import com.lhcx.service.IVerificationCodeService;
+import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.SmsUtils;
 import com.lhcx.utils.Utils;
 
@@ -43,7 +44,7 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
         verificationCode.setPhone(phone);
         verificationCode.setCode(code);
         verificationCode.setUsertype(userType);
-        verificationCode.setCreatetime(Utils.currentTimestamp());
+        verificationCode.setCreatetime(DateUtils.currentTimestamp());
          
         return verificationCodeMapper.insert(verificationCode);
     }
@@ -80,7 +81,7 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
     	boolean result = false;
     	VerificationCode verificationCode = selectLastByPhone(phone,userType);
     	if (verificationCode != null && verificationCode.getCode().equals(code)) {
-    		verificationCode.setVerificationtime(Utils.currentTimestamp());
+    		verificationCode.setVerificationtime(DateUtils.currentTimestamp());
         	updateByPrimaryKeySelective(verificationCode);
         	session.setAttribute(Utils.REGISTER_PHONE_SESSION, userType+"@"+phone);
         	result = true;

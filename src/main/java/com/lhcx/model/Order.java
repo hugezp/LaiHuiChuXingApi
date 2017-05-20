@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lhcx.utils.Utils;
+import com.lhcx.utils.DateUtils;
 
 public class Order {
     private Integer id;
@@ -299,8 +299,8 @@ public class Order {
     public Order(JSONObject jsonRequest) throws ParseException{
     	if (jsonRequest != null) {
     		this.passengerphone = jsonRequest.getString("PassengerPhone");
-    		this.departtime = Utils.toDateTime(jsonRequest.getLong("DePartTime")) ;
-			this.ordertime = Utils.toDateTime(jsonRequest.getLong("OrderTime"));
+    		this.departtime = DateUtils.toDateTime(jsonRequest.getLong("DePartTime")) ;
+			this.ordertime = DateUtils.toDateTime(jsonRequest.getLong("OrderTime"));
 			this.passengernote = jsonRequest.getString("PassengerNote");
 			this.departure = jsonRequest.getString("Departure");
 			this.deplongitude = jsonRequest.getString("DepLongitude");
