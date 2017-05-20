@@ -49,6 +49,7 @@ public class DriverLocationImpl implements IDriverLocationService {
 			driverLocation.setPhone(phone);
 			driverLocation.setLoginTime(new Date());
 			insertSelective(driverLocation);
+			result=true;
 		} else {
 			driverLocation.setPositiontime(new Date());
 			driverLocation.setLongitude(jsonRequest.getString("Longitude").trim());
@@ -61,6 +62,7 @@ public class DriverLocationImpl implements IDriverLocationService {
 			}
 			driverLocation.setIsdel(isDel);
 			updateByPhoneSelective(driverLocation);
+			result=true;
 		}
 
 		return result;
