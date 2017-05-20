@@ -51,7 +51,14 @@ public class OrderController {
 
 	@Autowired
 	private IPushNotificationService pushNotificationService;
+	
 
+	/**
+	 * 乘客下单，并推送给附近上线司机
+	 * @param jsonRequest
+	 * @param request
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public ResponseEntity<String> create(@RequestBody JSONObject jsonRequest,
@@ -133,7 +140,7 @@ public class OrderController {
 										+ distance + "','totalDistance':'"
 										+ totalDistance + "','orderId':'"
 										+ orderId + "'}";
-								int flag = JpushClientUtil.getInstance()
+								int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
 										.sendToRegistrationId("11", mobile,
 												content, content, content,
 												content);
@@ -219,6 +226,30 @@ public class OrderController {
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
 					"撤销订单异常！");
 		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	/**
+	 * 司机抢单
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/match", method = RequestMethod.POST)
+	public ResponseEntity<String> match(@RequestBody JSONObject jsonRequest){
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		try {			
+			resultBean = orderService.match(jsonRequest);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("order match error by :" + e.getMessage());
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+					"接单失败 ！服务器繁忙，请重试！");
+		}
+		
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 

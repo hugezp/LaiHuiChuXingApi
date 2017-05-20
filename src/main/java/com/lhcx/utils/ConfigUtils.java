@@ -15,5 +15,11 @@ public class ConfigUtils {
 	
 	//极光秘钥  68f13ab0dfd2e888d11522a0
 	public static final String JPUSH_MASTER_SECRET = "daf0aa323b562a5afdf197b9";
+	
+	//乘客端极光AppKey
+	public static final String PASSENGER_JPUSH_APP_KEY = "5cb88b6bcdd00a001d6df99f";
+	
+	//乘客端极光秘钥
+	public static final String PASSENGER_JPUSH_MASTER_SECRET = "6de64fc3ed2f7b06e03adb93";
 
 }
