@@ -26,12 +26,14 @@
     <result column="CancelTypeCode" property="canceltypecode" jdbcType="VARCHAR" />
     <result column="CancelReason" property="cancelreason" jdbcType="VARCHAR" />
     <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="OrderType" property="orderType" jdbcType="INTEGER" />
+    <result column="CarType" property="carType" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id,  OrderId, PassengerPhone, DepartTime, OrderTime, PassengerNote, 
     Departure, DepLongitude, DepLatitude, Destination, DestLongitude, DestLatitude, Encrypt, 
     FareType, Fee, DriverPhone,  Longitude, Latitude, DistributeTime, 
-    CancelTime, Operator, CancelTypeCode, CancelReason,Status
+    CancelTime, Operator, CancelTypeCode, CancelReason,Status,OrderType,CarType
   </sql>
   <select id="selectByOrderId" resultMap="BaseResultMap" >
     select 
@@ -112,7 +114,13 @@
         CancelReason,
       </if>
        <if test="status != null" >
-        Status
+        Status,
+      </if>
+      <if test="orderType != null" >
+        OrderType,
+      </if>
+      <if test="carType != null" >
+        CarType
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -186,7 +194,13 @@
         #{cancelreason,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=INTEGER}
+        #{status,jdbcType=INTEGER},
+      </if>
+       <if test="orderType != null" >
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="carType != null" >
+        #{carType,jdbcType=INTEGER}
       </if>
     </trim>
   </insert>
@@ -257,7 +271,13 @@
         CancelReason = #{cancelreason,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        Status = #{status,jdbcType=INTEGER}
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+       <if test="orderType != null" >
+        OrderType = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="carType != null" >
+        CarType = #{carType,jdbcType=INTEGER}
       </if>
     </set>
     where OrderId = #{orderid,jdbcType=INTEGER}

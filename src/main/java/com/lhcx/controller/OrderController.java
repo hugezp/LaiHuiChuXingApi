@@ -90,6 +90,13 @@ public class OrderController {
 		String destination = jsonRequest.getString("Destination");
 		// 乘客费用
 		String fee = jsonRequest.getString("Fee");
+		
+		//订单类型
+		Integer orderType = jsonRequest.getInteger("OrderType");
+		
+		//车辆类型
+		Integer carType = jsonRequest.getInteger("CarType");
+		
 		//路程距离
 		double totalDistance = PointToDistance
 				.distanceOfTwoPoints(depLatitude, depLongitude,
@@ -119,14 +126,14 @@ public class OrderController {
 								dateFormat.format(Utils.toDateTime(orderTime)));
 						extrasParam.put("departure", departure);
 						extrasParam.put("destination", destination);
-						extrasParam
-								.put("departureTime", dateFormat.format(Utils
-										.toDateTime(dePartTime)));
+						extrasParam.put("departureTime", dateFormat.format(Utils.toDateTime(dePartTime)));
 						extrasParam.put("fee", fee);
 						extrasParam.put("distance", String.valueOf(distance));
-						extrasParam.put("totalDistance",
-								String.valueOf(totalDistance));
+						extrasParam.put("totalDistance",String.valueOf(totalDistance));
 						extrasParam.put("orderId", orderId);
+						extrasParam.put("orderType", orderType.toString());
+						extrasParam.put("carType", carType.toString());
+						
 						String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
 						int flag = JpushClientUtil.getInstance(
 								ConfigUtils.JPUSH_APP_KEY,

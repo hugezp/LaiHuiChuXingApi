@@ -63,6 +63,10 @@ public class Order {
     private String cancelreason;
     
     private Integer status;
+    
+    private Integer orderType;
+    
+    private Integer carType;
 
     public Integer getId() {
         return id;
@@ -305,7 +309,25 @@ public class Order {
 			this.destlongitude = jsonRequest.getString("DestLongitude");
 			this.destlatitude = jsonRequest.getString("DestLatitude");
 			this.fee = jsonRequest.getBigDecimal("Fee");
+			this.orderType = jsonRequest.getInteger("OrderType");
+			this.carType = jsonRequest.getInteger("CarType");
 			
 		}
     }
+
+	public Integer getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(Integer orderType) {
+		this.orderType = orderType;
+	}
+
+	public Integer getCarType() {
+		return carType;
+	}
+
+	public void setCarType(Integer carType) {
+		this.carType = carType;
+	}
 }
