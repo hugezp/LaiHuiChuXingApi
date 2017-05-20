@@ -7,8 +7,8 @@ package com.lhcx.utils;
  */
 public class ConfigUtils {
 	
-	//推送距离
-	public static final double PUSH_DISTANCE = 50000;
+	//极光推送离线时长 单位:秒
+	public static final long TIME_TO_LIVE = 1800;
 	
 	//极光AppKey 
 	public static final String JPUSH_APP_KEY = "a1835850adc6bff63a9bf7c6";
