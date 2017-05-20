@@ -15,22 +15,20 @@ import cn.jpush.api.push.model.notification.Notification;
 
 
 public class JpushClientUtil {
-
-    private final static String appKey = ConfigUtils.JPUSH_APP_KEY;
-
-    private final static String masterSecret = ConfigUtils.JPUSH_MASTER_SECRET;
-    
-    private static JPushClient jPushClient = new JPushClient(masterSecret,appKey);
+ 
+    private static JPushClient jPushClient = null;
 
     private JpushClientUtil() {}
     private static JpushClientUtil jpushClientUtil=null;
     //静态工厂方法
-    public static JpushClientUtil getInstance() {
+    public static JpushClientUtil getInstance(String appKey,String masterSecret) {
         if (jpushClientUtil == null) {
             jpushClientUtil = new JpushClientUtil();
         }
+        jPushClient = new JPushClient(masterSecret,appKey);
         return jpushClientUtil;
     }
+    
     /**
      * 推送给设备标识参数的用户
      * @param alias 设备标识
@@ -346,9 +344,9 @@ public class JpushClientUtil {
                 .build();
     }
     public static void main(String[] args){
-        if(JpushClientUtil.getInstance().sendToRegistrationId("11","18538191908","测试数据","aaa","this is a ios Dev test","")==1){
-            System.out.println("success");
-        }
+//        if(JpushClientUtil.getInstance().sendToRegistrationId("11","18538191908","测试数据","aaa","this is a ios Dev test","")==1){
+//            System.out.println("success");
+//        }
 
    }
 }
