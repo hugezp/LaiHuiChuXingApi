@@ -110,13 +110,11 @@ public class OrderServiceImpl implements IOrderService {
 				String content = contentBuffer.toString();
 				String passengerPhone = order.getPassengerphone();
 				
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("OrderId", orderId);
-				jsonObject.put("passengerPhone", passengerPhone);
-				jsonObject.put("DriverPhone", driverPhone);
-				jsonObject.put("DistributeTime", distributeTimeString);
-				
-				String extrasParam = jsonObject.toJSONString();
+				Map<String, String> extrasParam= new HashMap<String, String>();
+				extrasParam.put("OrderId", orderId);
+				extrasParam.put("passengerPhone", passengerPhone);
+				extrasParam.put("DriverPhone", driverPhone);
+				extrasParam.put("DistributeTime", distributeTimeString);				
 				
 				int flag = JpushClientUtil.getInstance(ConfigUtils.PASSENGER_JPUSH_APP_KEY,ConfigUtils.PASSENGER_JPUSH_MASTER_SECRET)
 						.sendToRegistrationId("11", passengerPhone,
@@ -130,7 +128,7 @@ public class OrderServiceImpl implements IOrderService {
 					pushNotification.setOrderId(orderId);
 					pushNotification.setAlert(content);
 					pushNotification.setPushType(1);
-					pushNotification.setData(extrasParam);
+					pushNotification.setData(extrasParam.toString());
 					pushNotificationService.insertSelective(pushNotification);
 				}else {
 					throw new Exception();

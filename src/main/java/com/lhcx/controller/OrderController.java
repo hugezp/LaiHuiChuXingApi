@@ -124,26 +124,31 @@ public class OrderController {
 												depLongitude, destLatitude,
 												destLongitude);
 								String mobile = driverLocation.getPhone();
-								String content = "{'mobile':'"
-										+ passengerPhone
-										+ "','createTime':'"
-										+ dateFormat.format(Utils
-												.toDateTime(orderTime))
-										+ "','departure':'"
-										+ departure
-										+ "','destination':'"
-										+ destination
-										+ "','departureTime':'"
-										+ dateFormat.format(Utils
-												.toDateTime(dePartTime))
-										+ "','fee':'" + fee + "','distance':'"
-										+ distance + "','totalDistance':'"
-										+ totalDistance + "','orderId':'"
-										+ orderId + "'}";
+								Map<String, String> extrasParam= new HashMap<String, String>();
+								extrasParam.put("mobile", passengerPhone);
+								extrasParam.put("createTime", dateFormat.format(Utils
+												.toDateTime(orderTime)));
+								extrasParam.put("departure", departure);
+								extrasParam.put("destination", destination);
+								extrasParam.put("departureTime", dateFormat.format(Utils
+										.toDateTime(dePartTime)));
+								extrasParam.put("fee", fee);
+								extrasParam.put("distance", String.valueOf(distance));
+								extrasParam.put("totalDistance", String.valueOf(totalDistance));
+								extrasParam.put("orderId", orderId);
+								
+								
+				                String content = "手机号码为" + passengerPhone + "的用户，在"
+				                        + dateFormat.format(Utils.toDateTime(orderTime))
+				                        + "发布了从" + departure + "到" + destination
+				                        + "的行程，出发时间为 + "
+				                        + dateFormat.format(Utils.toDateTime(dePartTime))
+				                        + "费用为" + fee + "元";
+
 								int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
 										.sendToRegistrationId("11", mobile,
 												content, content, content,
-												content);
+												extrasParam);
 								if (flag == 1) {
 									PushNotification pushNotification = new PushNotification();
 									pushNotification
