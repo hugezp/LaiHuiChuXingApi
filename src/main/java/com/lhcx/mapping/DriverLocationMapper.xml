@@ -28,11 +28,32 @@
     from driver_location
     where Phone = #{phone,jdbcType=INTEGER}
   </select>
-  <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from driver_location
+  <select id="selectList" resultType="com.lhcx.model.DriverLocation" parameterType="com.lhcx.model.DriverLocation" >
+    select id,phone,Latitude,Longitude,
+ 		ROUND(
+	        6378.138 * 2 * ASIN(
+	            SQRT(
+	                POW(
+	                    SIN(
+	                        (
+	                            CAST(#{latitude} AS signed) / 1000000 * PI() / 180 - CAST(Latitude AS signed) / 1000000 * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                ) + COS(CAST(#{latitude} AS signed) / 1000000 * PI() / 180) * COS(CAST(Latitude AS signed) / 1000000 * PI() / 180) * POW(
+	                    SIN(
+	                        (
+	                            CAST(#{longitude} AS signed) / 1000000 * PI() / 180 - CAST(Longitude AS signed) / 1000000 * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                )
+	            )
+        ) * 1000
+    ) AS distance from driver_location
     where isDel = 1
+    having  distance &lt; 50000
+    order by distance
   </select>
 
   <insert id="insertSelective" parameterType="com.lhcx.model.DriverLocation" >

@@ -51,10 +51,10 @@ public class OrderController {
 
 	@Autowired
 	private IPushNotificationService pushNotificationService;
-	
 
 	/**
 	 * 乘客下单，并推送给附近上线司机
+	 * 
 	 * @param jsonRequest
 	 * @param request
 	 * @return
@@ -99,62 +99,56 @@ public class OrderController {
 				// 推送内容
 				SimpleDateFormat dateFormat = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm");
+				DriverLocation d = new DriverLocation();
+				d.setLatitude(jsonRequest.getString("DepLatitude"));
+				d.setLongitude(jsonRequest.getString("DepLongitude"));
 				List<DriverLocation> dLocations = driverLocationService
-						.selectList(new DriverLocation());
+						.selectList(d);
 				if (dLocations.size() > 0) {
 					for (DriverLocation driverLocation : dLocations) {
 						// 车主经度
-						double longitude = "".equals(driverLocation
-								.getLongitude()) ? -1
-								: Double.parseDouble(driverLocation
-										.getLongitude()) / 1000000;
+						double longitude = Double.parseDouble(driverLocation
+								.getLongitude()) / 1000000;
 						// 车主纬度
-						double latitude = "".equals(driverLocation
-								.getLatitude()) ? -1
-								: Double.parseDouble(driverLocation
-										.getLatitude()) / 1000000;
-						if (depLatitude != -1 && depLongitude != -1
-								&& longitude != -1 && latitude != -1) {
-							double distance = PointToDistance
+						double latitude = Double.parseDouble(driverLocation
+								.getLatitude()) / 1000000;
+						double distance = PointToDistance.distanceOfTwoPoints(
+								depLatitude, depLongitude, latitude, longitude);
+						if (distance < ConfigUtils.PUSH_DISTANCE) {
+							double totalDistance = PointToDistance
 									.distanceOfTwoPoints(depLatitude,
-											depLongitude, latitude, longitude);
-							if (distance < ConfigUtils.PUSH_DISTANCE) {
-								double totalDistance = PointToDistance
-										.distanceOfTwoPoints(depLatitude,
-												depLongitude, destLatitude,
-												destLongitude);
-								String mobile = driverLocation.getPhone();
-								String content = "{'mobile':'"
-										+ passengerPhone
-										+ "','createTime':'"
-										+ dateFormat.format(Utils
-												.toDateTime(orderTime))
-										+ "','departure':'"
-										+ departure
-										+ "','destination':'"
-										+ destination
-										+ "','departureTime':'"
-										+ dateFormat.format(Utils
-												.toDateTime(dePartTime))
-										+ "','fee':'" + fee + "','distance':'"
-										+ distance + "','totalDistance':'"
-										+ totalDistance + "','orderId':'"
-										+ orderId + "'}";
-								int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
-										.sendToRegistrationId("11", mobile,
-												content, content, content,
-												content);
-								if (flag == 1) {
-									PushNotification pushNotification = new PushNotification();
-									pushNotification
-											.setPushPhone(passengerPhone);
-									pushNotification.setReceivePhone(mobile);
-									pushNotification.setOrderId(orderId);
-									pushNotification.setAlert(content);
-									pushNotification.setTime(new Date());
-									pushNotificationService
-											.insertSelective(pushNotification);
-								}
+											depLongitude, destLatitude,
+											destLongitude);
+							String mobile = driverLocation.getPhone();
+							String content = "{'mobile':'"
+									+ passengerPhone
+									+ "','createTime':'"
+									+ dateFormat.format(Utils
+											.toDateTime(orderTime))
+									+ "','departure':'"
+									+ departure
+									+ "','destination':'"
+									+ destination
+									+ "','departureTime':'"
+									+ dateFormat.format(Utils
+											.toDateTime(dePartTime))
+									+ "','fee':'" + fee + "','distance':'"
+									+ distance + "','totalDistance':'"
+									+ totalDistance + "','orderId':'" + orderId
+									+ "'}";
+							int flag = JpushClientUtil.getInstance(
+									ConfigUtils.JPUSH_APP_KEY,
+									ConfigUtils.JPUSH_MASTER_SECRET)
+									.sendToRegistrationId("11", mobile,
+											content, content, content, content);
+							if (flag == 1) {
+								PushNotification pushNotification = new PushNotification();
+								pushNotification.setPushPhone(passengerPhone);
+								pushNotification.setReceivePhone(mobile);
+								pushNotification.setOrderId(orderId);
+								pushNotification.setAlert(content);
+								pushNotificationService
+										.insertSelective(pushNotification);
 							}
 						}
 					}
@@ -228,19 +222,20 @@ public class OrderController {
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
+
 	/**
 	 * 司机抢单
+	 * 
 	 * @param jsonRequest
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/match", method = RequestMethod.POST)
-	public ResponseEntity<String> match(@RequestBody JSONObject jsonRequest){
+	public ResponseEntity<String> match(@RequestBody JSONObject jsonRequest) {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		try {			
+		try {
 			resultBean = orderService.match(jsonRequest);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -249,7 +244,7 @@ public class OrderController {
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
 					"接单失败 ！服务器繁忙，请重试！");
 		}
-		
+
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 

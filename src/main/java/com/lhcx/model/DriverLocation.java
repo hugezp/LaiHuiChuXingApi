@@ -38,8 +38,18 @@ public class DriverLocation {
     private	Date loginTime;
     
     private Date logoutTime;
+    
+    private double distance;
+    
+    public double getDistance() {
+		return distance;
+	}
 
-    public Integer getId() {
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+	public Integer getId() {
         return id;
     }
 
