@@ -58,19 +58,19 @@ public class PushController {
 					receive.put("pushId", push.getId());
 					receive.put("content", push.getAlert());
 					receive.put("orderId", push.getOrderId());
-					jsonArray.add(receive);
-					
+					jsonArray.add(receive);					
 				}
-			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"获取列表成功！",jsonArray);
-			return Utils.resultResponseJson(resultBean, jsonpCallback);
-			}	
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"获取列表成功！",jsonArray);
+			}else {
+
+				resultBean = new ResultBean<Object>(ResponseCode.getError(),"获取列表为空！");
+			}
 		} catch (Exception e) {	
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
-					"发布订单异常！");
+					"获取列表失败！");
 		}
-		resultBean = new ResultBean<Object>(ResponseCode.getError(),"获取列表失败！");
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	 }
 	
