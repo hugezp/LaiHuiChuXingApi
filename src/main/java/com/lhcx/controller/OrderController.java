@@ -174,7 +174,6 @@ public class OrderController {
 					"获取费用成功！", result);
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
@@ -229,7 +228,6 @@ public class OrderController {
 		try {
 			resultBean = orderService.match(jsonRequest);
 		} catch (Exception e) {
-			// TODO: handle exception
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
