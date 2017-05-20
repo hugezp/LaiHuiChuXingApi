@@ -105,14 +105,19 @@ public class OrderServiceImpl implements IOrderService {
 				
 				StringBuffer contentBuffer = new StringBuffer();
 				contentBuffer.append("您的行程订单已被接单，司机手机号为：").append(driverPhone)
-				.append("，车牌号为：").append(vehicleNo).append("，接单时间为：").append(distributeTimeString);
-				
-				StringBuffer extrasParamBuffer = new StringBuffer();
-				extrasParamBuffer.append("");
+				.append("，车牌号为：").append(vehicleNo).append("，接单时间为：").append(distributeTimeString);				
 				
 				String content = contentBuffer.toString();
-				String extrasParam = extrasParamBuffer.toString();
 				String passengerPhone = order.getPassengerphone();
+				
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("OrderId", orderId);
+				jsonObject.put("passengerPhone", passengerPhone);
+				jsonObject.put("DriverPhone", driverPhone);
+				jsonObject.put("DistributeTime", distributeTimeString);
+				
+				String extrasParam = jsonObject.toJSONString();
+				
 				int flag = JpushClientUtil.getInstance(ConfigUtils.PASSENGER_JPUSH_APP_KEY,ConfigUtils.PASSENGER_JPUSH_MASTER_SECRET)
 						.sendToRegistrationId("11", passengerPhone,
 								content, content, content,
@@ -124,6 +129,7 @@ public class OrderServiceImpl implements IOrderService {
 					pushNotification.setReceivePhone(passengerPhone);
 					pushNotification.setOrderId(orderId);
 					pushNotification.setAlert(content);
+					pushNotification.setPushType(1);
 					pushNotificationService.insertSelective(pushNotification);
 				}else {
 					throw new Exception();
