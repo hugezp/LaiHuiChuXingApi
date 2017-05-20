@@ -20,6 +20,6 @@ public class ConfigUtils {
 	public static final String PASSENGER_JPUSH_APP_KEY = "8eeea6a55cf60bfba0ec3648";
 	
 	//乘客端极光秘钥
-	public static final String PASSENGER_JPUSH_MASTER_SECRET = "1bd64257812a589e9c6b461a ";
+	public static final String PASSENGER_JPUSH_MASTER_SECRET = "1bd64257812a589e9c6b461a";
 
 }
