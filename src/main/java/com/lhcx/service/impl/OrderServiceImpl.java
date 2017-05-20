@@ -103,11 +103,8 @@ public class OrderServiceImpl implements IOrderService {
 				String vehicleNo = driverInfo.getVehicleNo();
 				String distributeTimeString =  Utils.dateFormat(distributeTime);
 				
-				StringBuffer contentBuffer = new StringBuffer();
-				contentBuffer.append("您的行程订单已被接单，司机手机号为：").append(driverPhone)
-				.append("，车牌号为：").append(vehicleNo).append("，接单时间为：").append(distributeTimeString);				
+				String content = "【来回出行】您的行程订单已被接单，请查看!";
 				
-				String content = contentBuffer.toString();
 				String passengerPhone = order.getPassengerphone();
 				
 				Map<String, String> extrasParam= new HashMap<String, String>();

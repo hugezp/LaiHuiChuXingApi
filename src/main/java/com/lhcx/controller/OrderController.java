@@ -138,12 +138,7 @@ public class OrderController {
 								extrasParam.put("orderId", orderId);
 								
 								
-				                String content = "手机号码为" + passengerPhone + "的用户，在"
-				                        + dateFormat.format(Utils.toDateTime(orderTime))
-				                        + "发布了从" + departure + "到" + destination
-				                        + "的行程，出发时间为 + "
-				                        + dateFormat.format(Utils.toDateTime(dePartTime))
-				                        + "费用为" + fee + "元";
+				                String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
 
 								int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
 										.sendToRegistrationId("11", mobile,
@@ -153,7 +148,7 @@ public class OrderController {
 									PushNotification pushNotification = new PushNotification();
 									pushNotification
 											.setPushPhone(passengerPhone);
-									pushNotification.setReceivePhone(mobile);
+									pushNotification.setReceivePhone(mobile); 
 									pushNotification.setOrderId(orderId);
 									pushNotification.setAlert(content);
 									pushNotification.setTime(new Date());
