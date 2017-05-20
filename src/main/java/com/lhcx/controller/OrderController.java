@@ -90,6 +90,10 @@ public class OrderController {
 		String destination = jsonRequest.getString("Destination");
 		// 乘客费用
 		String fee = jsonRequest.getString("Fee");
+		//路程距离
+		double totalDistance = PointToDistance
+				.distanceOfTwoPoints(depLatitude, depLongitude,
+						destLatitude, destLongitude);
 		ResultBean<?> resultBean = null;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -106,52 +110,39 @@ public class OrderController {
 						.selectList(d);
 				if (dLocations.size() > 0) {
 					for (DriverLocation driverLocation : dLocations) {
-						// 车主经度
-						double longitude = Double.parseDouble(driverLocation
-								.getLongitude()) / 1000000;
-						// 车主纬度
-						double latitude = Double.parseDouble(driverLocation
-								.getLatitude()) / 1000000;
-						double distance = PointToDistance.distanceOfTwoPoints(
-								depLatitude, depLongitude, latitude, longitude);
-							if (distance < ConfigUtils.PUSH_DISTANCE) {
-								double totalDistance = PointToDistance
-										.distanceOfTwoPoints(depLatitude,
-												depLongitude, destLatitude,
-												destLongitude);
-								String mobile = driverLocation.getPhone();
-								Map<String, String> extrasParam= new HashMap<String, String>();
-								extrasParam.put("mobile", passengerPhone);
-								extrasParam.put("createTime", dateFormat.format(Utils
-												.toDateTime(orderTime)));
-								extrasParam.put("departure", departure);
-								extrasParam.put("destination", destination);
-								extrasParam.put("departureTime", dateFormat.format(Utils
+						// 距离
+						double distance = driverLocation.getDistance();
+						String mobile = driverLocation.getPhone();
+						Map<String, String> extrasParam = new HashMap<String, String>();
+						extrasParam.put("mobile", passengerPhone);
+						extrasParam.put("createTime",
+								dateFormat.format(Utils.toDateTime(orderTime)));
+						extrasParam.put("departure", departure);
+						extrasParam.put("destination", destination);
+						extrasParam
+								.put("departureTime", dateFormat.format(Utils
 										.toDateTime(dePartTime)));
-								extrasParam.put("fee", fee);
-								extrasParam.put("distance", String.valueOf(distance));
-								extrasParam.put("totalDistance", String.valueOf(totalDistance));
-								extrasParam.put("orderId", orderId);
-								
-								
-				                String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
-
-								int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
-										.sendToRegistrationId("11", mobile,
-												content, content, content,
-												extrasParam);
-								if (flag == 1) {
-									PushNotification pushNotification = new PushNotification();
-									pushNotification
-											.setPushPhone(passengerPhone);
-									pushNotification.setReceivePhone(mobile); 
-									pushNotification.setOrderId(orderId);
-									pushNotification.setAlert(content);
-									pushNotification.setTime(new Date());
-									pushNotificationService
-											.insertSelective(pushNotification);
-								}
-							}
+						extrasParam.put("fee", fee);
+						extrasParam.put("distance", String.valueOf(distance));
+						extrasParam.put("totalDistance",
+								String.valueOf(totalDistance));
+						extrasParam.put("orderId", orderId);
+						String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
+						int flag = JpushClientUtil.getInstance(
+								ConfigUtils.JPUSH_APP_KEY,
+								ConfigUtils.JPUSH_MASTER_SECRET)
+								.sendToRegistrationId("11", mobile, content,
+										content, content, extrasParam);
+						if (flag == 1) {
+							PushNotification pushNotification = new PushNotification();
+							pushNotification.setPushPhone(passengerPhone);
+							pushNotification.setReceivePhone(mobile);
+							pushNotification.setOrderId(orderId);
+							pushNotification.setAlert(content);
+							pushNotification.setTime(new Date());
+							pushNotificationService
+									.insertSelective(pushNotification);
+						}
 					}
 				}
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
@@ -162,7 +153,6 @@ public class OrderController {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
