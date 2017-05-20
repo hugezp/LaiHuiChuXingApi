@@ -64,6 +64,13 @@ public class OrderController {
 		// 乘客出发地纬度
 		double depLatitude = "".equals(jsonRequest.getString("DepLatitude")) ? -1
 				: Double.parseDouble(jsonRequest.getString("DepLatitude")) / 1000000;
+		// 乘客目的地经度
+		double destLongitude = ""
+				.equals(jsonRequest.getString("DestLongitude")) ? -1 : Double
+				.parseDouble(jsonRequest.getString("DestLongitude")) / 1000000;
+		// 乘客目的地纬度
+		double destLatitude = "".equals(jsonRequest.getString("DestLatitude")) ? -1
+				: Double.parseDouble(jsonRequest.getString("DestLatitude")) / 1000000;
 		// 乘客手机号
 		String passengerPhone = jsonRequest.getString("PassengerPhone");
 		// 乘客发单时间
@@ -85,12 +92,6 @@ public class OrderController {
 				// 推送内容
 				SimpleDateFormat dateFormat = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm");
-				String content = "手机号码为" + passengerPhone + "的用户，在"
-						+ dateFormat.format(Utils.toDateTime(orderTime))
-						+ "发布了从" + departure + "到" + destination
-						+ "的行程，出发时间为 + "
-						+ dateFormat.format(Utils.toDateTime(dePartTime))
-						+ "费用为" + fee + "元";
 				List<DriverLocation> dLocations = driverLocationService
 						.selectList(new DriverLocation());
 				if (dLocations.size() > 0) {
@@ -111,7 +112,27 @@ public class OrderController {
 									.distanceOfTwoPoints(depLatitude,
 											depLongitude, latitude, longitude);
 							if (distance < ConfigUtils.PUSH_DISTANCE) {
+								double totalDistance = PointToDistance
+										.distanceOfTwoPoints(depLatitude,
+												depLongitude, destLatitude,
+												destLongitude);
 								String mobile = driverLocation.getPhone();
+								String content = "{'mobile':'"
+										+ passengerPhone
+										+ "','createTime':'"
+										+ dateFormat.format(Utils
+												.toDateTime(orderTime))
+										+ "','departure':'"
+										+ departure
+										+ "','destination':'"
+										+ destination
+										+ "','departureTime':'"
+										+ dateFormat.format(Utils
+												.toDateTime(dePartTime))
+										+ "','fee':'" + fee + "','distance':'"
+										+ distance + "','totalDistance':'"
+										+ totalDistance + "','orderId':'"
+										+ orderId + "'}";
 								int flag = JpushClientUtil.getInstance()
 										.sendToRegistrationId("11", mobile,
 												content, content, content,
@@ -123,6 +144,7 @@ public class OrderController {
 									pushNotification.setReceivePhone(mobile);
 									pushNotification.setOrderId(orderId);
 									pushNotification.setAlert(content);
+									pushNotification.setTime(new Date());
 									pushNotificationService
 											.insertSelective(pushNotification);
 								}
@@ -131,7 +153,7 @@ public class OrderController {
 					}
 				}
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
-						"发布订单成功！",result);
+						"发布订单成功！", result);
 			} else {
 				resultBean = new ResultBean<Object>(ResponseCode.getError(),
 						"发布订单失败！");
