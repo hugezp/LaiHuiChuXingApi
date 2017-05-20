@@ -114,43 +114,44 @@ public class OrderController {
 								.getLatitude()) / 1000000;
 						double distance = PointToDistance.distanceOfTwoPoints(
 								depLatitude, depLongitude, latitude, longitude);
-						if (distance < ConfigUtils.PUSH_DISTANCE) {
-							double totalDistance = PointToDistance
-									.distanceOfTwoPoints(depLatitude,
-											depLongitude, destLatitude,
-											destLongitude);
-							String mobile = driverLocation.getPhone();
-							String content = "{'mobile':'"
-									+ passengerPhone
-									+ "','createTime':'"
-									+ dateFormat.format(Utils
-											.toDateTime(orderTime))
-									+ "','departure':'"
-									+ departure
-									+ "','destination':'"
-									+ destination
-									+ "','departureTime':'"
-									+ dateFormat.format(Utils
-											.toDateTime(dePartTime))
-									+ "','fee':'" + fee + "','distance':'"
-									+ distance + "','totalDistance':'"
-									+ totalDistance + "','orderId':'" + orderId
-									+ "'}";
-							int flag = JpushClientUtil.getInstance(
-									ConfigUtils.JPUSH_APP_KEY,
-									ConfigUtils.JPUSH_MASTER_SECRET)
-									.sendToRegistrationId("11", mobile,
-											content, content, content, content);
-							if (flag == 1) {
-								PushNotification pushNotification = new PushNotification();
-								pushNotification.setPushPhone(passengerPhone);
-								pushNotification.setReceivePhone(mobile);
-								pushNotification.setOrderId(orderId);
-								pushNotification.setAlert(content);
-								pushNotificationService
-										.insertSelective(pushNotification);
+							if (distance < ConfigUtils.PUSH_DISTANCE) {
+								double totalDistance = PointToDistance
+										.distanceOfTwoPoints(depLatitude,
+												depLongitude, destLatitude,
+												destLongitude);
+								String mobile = driverLocation.getPhone();
+								Map<String, String> extrasParam= new HashMap<String, String>();
+								extrasParam.put("mobile", passengerPhone);
+								extrasParam.put("createTime", dateFormat.format(Utils
+												.toDateTime(orderTime)));
+								extrasParam.put("departure", departure);
+								extrasParam.put("destination", destination);
+								extrasParam.put("departureTime", dateFormat.format(Utils
+										.toDateTime(dePartTime)));
+								extrasParam.put("fee", fee);
+								extrasParam.put("distance", String.valueOf(distance));
+								extrasParam.put("totalDistance", String.valueOf(totalDistance));
+								extrasParam.put("orderId", orderId);
+								
+								
+				                String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
+
+								int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
+										.sendToRegistrationId("11", mobile,
+												content, content, content,
+												extrasParam);
+								if (flag == 1) {
+									PushNotification pushNotification = new PushNotification();
+									pushNotification
+											.setPushPhone(passengerPhone);
+									pushNotification.setReceivePhone(mobile); 
+									pushNotification.setOrderId(orderId);
+									pushNotification.setAlert(content);
+									pushNotification.setTime(new Date());
+									pushNotificationService
+											.insertSelective(pushNotification);
+								}
 							}
-						}
 					}
 				}
 				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
