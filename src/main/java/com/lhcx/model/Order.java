@@ -48,6 +48,8 @@ public class Order {
 
     private Integer status;
     
+    private Integer oldstatus;
+    
     private Integer orderType;
     
     private Integer carType;
@@ -64,7 +66,8 @@ public class Order {
     }
     
     public Integer getStatus() {
-    	if (this.status == OrderType.BILL.value() && this.departtime.getTime() > new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
+    	if (this.status == OrderType.BILL.value() && this.departtime.getTime() < new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
+    		this.oldstatus = OrderType.BILL.value();
     		return OrderType.FAILURE.value();
     	}
         return status;
@@ -263,8 +266,20 @@ public class Order {
 				if(orderLogTemp.getOperatorstatus() == OrderType.Receiving.value()){
 					this.driverphone = orderLogTemp.getOperatorphone();
 				}
-				this.status = orderLogTemp.getOperatorstatus();			
+				this.status = orderLogTemp.getOperatorstatus();
+				this.oldstatus = orderLogTemp.getOldstatus();
 			}
 		}
+	}
+
+	public Integer getOldstatus() {
+		if (this.status == OrderType.BILL.value() && this.departtime.getTime() < new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
+    		return OrderType.BILL.value();
+    	}
+		return oldstatus;
+	}
+
+	public void setOldstatus(Integer oldstatus) {
+		this.oldstatus = oldstatus;
 	}
 }

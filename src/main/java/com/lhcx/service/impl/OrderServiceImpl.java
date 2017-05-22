@@ -63,7 +63,7 @@ public class OrderServiceImpl implements IOrderService {
 		List<OrderLog> orderLogs = orderLogService.selectByOrderId(orderId);
 		order.setOrderLogs(orderLogs);
 		//10分钟没有接单，订单失效。
-		if (order.getStatus() == OrderType.BILL.value() && order.getDeparttime().getTime() > new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
+		if (order.getStatus() == OrderType.FAILURE.value()  && order.getOldstatus() == OrderType.BILL.value() ) {
 			OrderLog orderLog = new OrderLog();
 			orderLog.setOrderid(orderId);
 			orderLog.setOldstatus(OrderType.BILL.value());
