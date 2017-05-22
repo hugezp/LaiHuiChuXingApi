@@ -244,15 +244,21 @@ public class OrderController {
 	public ResponseEntity<String> depart(@RequestBody JSONObject jsonRequest) {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		String orderId = jsonRequest.getString("OrderId");
 		ResultBean<?> resultBean = null;
 		try {
-			
+			int flag = orderService.depart(jsonRequest);
+			if (flag > 0) {
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+						"开始行程！");
+			} else {
+				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+						"开始行程失败，请重试！");
+			}
 		} catch (Exception e) {
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
-					"接单失败 ！服务器繁忙，请重试！");
+					"开始行程异常 ！服务器繁忙，请重试！");
 		}
 
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -271,7 +277,14 @@ public class OrderController {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
 		try {
-			//TODO
+			int flag = orderService.arrive(jsonRequest);
+			if (flag > 0) {
+				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+						"开始行程！");
+			} else {
+				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+						"开始行程失败，请重试！");
+			}
 		} catch (Exception e) {
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();

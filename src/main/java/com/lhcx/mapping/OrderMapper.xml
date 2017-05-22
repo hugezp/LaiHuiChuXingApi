@@ -17,23 +17,13 @@
     <result column="Encrypt" property="encrypt" jdbcType="INTEGER" />
     <result column="FareType" property="faretype" jdbcType="VARCHAR" />
     <result column="Fee" property="fee" jdbcType="DECIMAL" />
-    <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
-    <result column="Longitude" property="longitude" jdbcType="VARCHAR" />
-    <result column="Latitude" property="latitude" jdbcType="VARCHAR" />
-    <result column="DistributeTime" property="distributetime" jdbcType="TIMESTAMP" />
-    <result column="CancelTime" property="canceltime" jdbcType="TIMESTAMP" />
-    <result column="Operator" property="operator" jdbcType="VARCHAR" />
-    <result column="CancelTypeCode" property="canceltypecode" jdbcType="VARCHAR" />
-    <result column="CancelReason" property="cancelreason" jdbcType="VARCHAR" />
-    <result column="Status" property="status" jdbcType="INTEGER" />
     <result column="OrderType" property="orderType" jdbcType="INTEGER" />
     <result column="CarType" property="carType" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id,  OrderId, PassengerPhone, DepartTime, OrderTime, PassengerNote, 
     Departure, DepLongitude, DepLatitude, Destination, DestLongitude, DestLatitude, Encrypt, 
-    FareType, Fee, DriverPhone,  Longitude, Latitude, DistributeTime, 
-    CancelTime, Operator, CancelTypeCode, CancelReason,Status,OrderType,CarType
+    FareType, Fee, OrderType,CarType
   </sql>
   <select id="selectByOrderId" resultMap="BaseResultMap" >
     select 
@@ -88,34 +78,7 @@
       </if>
       <if test="fee != null" >
         Fee,
-      </if>
-      <if test="driverphone != null" >
-        DriverPhone,
-      </if>    
-      <if test="longitude != null" >
-        Longitude,
-      </if>
-      <if test="latitude != null" >
-        Latitude,
-      </if>
-      <if test="distributetime != null" >
-        DistributeTime,
-      </if>
-      <if test="canceltime != null" >
-        CancelTime,
-      </if>
-      <if test="operator != null" >
-        Operator,
-      </if>
-      <if test="canceltypecode != null" >
-        CancelTypeCode,
-      </if>
-      <if test="cancelreason != null" >
-        CancelReason,
-      </if>
-       <if test="status != null" >
-        Status,
-      </if>
+      </if>       
       <if test="orderType != null" >
         OrderType,
       </if>
@@ -168,34 +131,7 @@
       </if>
       <if test="fee != null" >
         #{fee,jdbcType=DECIMAL},
-      </if>
-      <if test="driverphone != null" >
-        #{driverphone,jdbcType=VARCHAR},
-      </if>    
-      <if test="longitude != null" >
-        #{longitude,jdbcType=VARCHAR},
-      </if>
-      <if test="latitude != null" >
-        #{latitude,jdbcType=VARCHAR},
-      </if>
-      <if test="distributetime != null" >
-        #{distributetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="canceltime != null" >
-        #{canceltime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="operator != null" >
-        #{operator,jdbcType=VARCHAR},
-      </if>
-      <if test="canceltypecode != null" >
-        #{canceltypecode,jdbcType=VARCHAR},
-      </if>
-      <if test="cancelreason != null" >
-        #{cancelreason,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
+      </if>      
        <if test="orderType != null" >
         #{orderType,jdbcType=INTEGER},
       </if>
@@ -245,34 +181,7 @@
       </if>
       <if test="fee != null" >
         Fee = #{fee,jdbcType=DECIMAL},
-      </if>
-      <if test="driverphone != null" >
-        DriverPhone = #{driverphone,jdbcType=VARCHAR},
-      </if>   
-      <if test="longitude != null" >
-        Longitude = #{longitude,jdbcType=VARCHAR},
-      </if>
-      <if test="latitude != null" >
-        Latitude = #{latitude,jdbcType=VARCHAR},
-      </if>
-      <if test="distributetime != null" >
-        DistributeTime = #{distributetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="canceltime != null" >
-        CancelTime = #{canceltime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="operator != null" >
-        Operator = #{operator,jdbcType=VARCHAR},
-      </if>
-      <if test="canceltypecode != null" >
-        CancelTypeCode = #{canceltypecode,jdbcType=VARCHAR},
-      </if>
-      <if test="cancelreason != null" >
-        CancelReason = #{cancelreason,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        Status = #{status,jdbcType=INTEGER},
-      </if>
+      </if>     
        <if test="orderType != null" >
         OrderType = #{orderType,jdbcType=INTEGER},
       </if>

@@ -1,7 +1,7 @@
 package com.lhcx.model;
 
 public enum OrderType {
-	CANCEL(0,"已撤销"), BILL(1,"已发单"),Receiving(2,"已接单"),ABORAD(3,"已发车"),COMPLETE(4,"已完成") ;
+	CANCEL(0,"已撤销"), BILL(1,"已发单"),Receiving(2,"已接单"),ABORAD(3,"已发车"),ARRIVE(4,"已完成") ;
 	
 	private Integer value;
 	private String message;

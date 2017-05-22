@@ -19,7 +19,7 @@ public class SmsUtils {
     public static final int DEF_READ_TIMEOUT = 30000;
     public static String userAgent =  "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
 
-    public static final String ignorPhones[] = {"13298172885","18560459018","15639356022","18538129108"};
+    public static final String ignorPhones[] = {"13298172885","18560459018","15639356022","18538129108","15516015893"};
     public static final String commonCode = "1389";
     
     public static boolean sendCodeMessage(String mobile,String code) {    	

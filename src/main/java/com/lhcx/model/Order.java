@@ -259,7 +259,7 @@ public class Order {
 				if(orderLogTemp.getOperatorstatus() == OrderType.Receiving.value()){
 					this.driverphone = orderLogTemp.getOperatorphone();
 				}
-				this.setStatus(orderLogTemp.getOperatorstatus());
+				this.status = orderLogTemp.getOperatorstatus();
 			}
 		}
 	}
