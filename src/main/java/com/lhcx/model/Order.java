@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.DateUtils;
 
 public class Order {
@@ -63,6 +64,9 @@ public class Order {
     }
     
     public Integer getStatus() {
+    	if (this.status == OrderType.BILL.value() && this.departtime.getTime() > new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
+    		return OrderType.FAILURE.value();
+    	}
         return status;
     }
 
