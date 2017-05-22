@@ -12,4 +12,5 @@ public interface IOrderService {
 	ResultBean<?> match(JSONObject jsonRequest) throws Exception;
 	String create(JSONObject jsonRequest) throws ParseException ;
 	int updateByOrderIdSelective(Order record);
+	int cancel(JSONObject jsonRequest);
 }

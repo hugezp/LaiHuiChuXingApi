@@ -3,6 +3,7 @@ package com.lhcx.service.impl;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import com.lhcx.dao.OrderMapper;
 import com.lhcx.model.DriverInfo;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.Order;
+import com.lhcx.model.OrderLog;
 import com.lhcx.model.OrderType;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
@@ -23,6 +25,7 @@ import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
+import com.lhcx.service.IOrderLogService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.ConfigUtils;
@@ -44,6 +47,8 @@ public class OrderServiceImpl implements IOrderService {
     private HttpSession session;
 	@Autowired
 	private IPushNotificationService pushNotificationService;
+	@Autowired
+	private IOrderLogService orderLogService;
 	
 	public int insertSelective(Order order) {
 		return orderMapper.insertSelective(order);
@@ -54,7 +59,10 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	public Order selectByOrderId(String orderId) {
-		return orderMapper.selectByOrderId(orderId);
+		Order order = orderMapper.selectByOrderId(orderId);
+		List<OrderLog> orderLog = orderLogService.selectByOrderId(orderId);
+		order.setOrderLog(orderLog);
+		return order;
 	}
 	
 	public String create(JSONObject jsonRequest) throws ParseException {
@@ -62,7 +70,17 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = new Order(jsonRequest);
 		String orderId = MD5Kit.encode(String.valueOf(System.currentTimeMillis()));
 		order.setOrderid(orderId);
-		if (insertSelective(order) > 0) {
+		//保存订单日志记录
+		Integer operatortype = jsonRequest.getInteger("OperatorType");
+		OrderLog orderLog = new OrderLog();
+		orderLog.setOrderid(orderId);
+		orderLog.setOperatorphone(order.getPassengerphone());
+		orderLog.setOperatortime(new Date());
+		orderLog.setOperatorstatus(OrderType.BILL.value());
+		orderLog.setOperatordescription(OrderType.BILL.message());
+		orderLog.setOperatortype(operatortype);
+		
+		if (insertSelective(order) > 0 && orderLogService.insertSelective(orderLog) > 0) {
 			result = orderId;
 		}
 		
@@ -80,23 +98,25 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = selectByOrderId(orderId);
 		
 		if (driverLocation != null && driverLocation.getIsdel() == 1) {
-			if (order == null || order.getStatus() != 1) {
+			if (order == null || order.getStatus() != OrderType.BILL.value()) {
 				resultBean = new ResultBean<Object>(ResponseCode.getError(),
 						"该订单已失效或已被接单，如有疑问请联系售后！");
 			}else {
 				String longitude = jsonRequest.getString("Longitude");
 				String latitude = jsonRequest.getString("Latitude");
-				Integer encrypt = jsonRequest.getInteger("Encrypt");
+				Integer operatortype = jsonRequest.getInteger("OperatorType");
 				Date distributeTime = new Date();
 				
-				//step1：保存接单信息
-				order.setDriverphone(driverPhone);
-				order.setLongitude(longitude);
-				order.setLatitude(latitude);
-				order.setEncrypt(encrypt);
-				order.setDistributetime(distributeTime);
-				order.setStatus(OrderType.Receiving.value());
-				updateByOrderIdSelective(order);
+				//step1：保存订单日志记录				
+				OrderLog orderLog = new OrderLog();
+				orderLog.setOrderid(orderId);
+				orderLog.setOperatorphone(driverPhone);
+				orderLog.setOperatortime(distributeTime);
+				orderLog.setOperatorstatus(OrderType.Receiving.value());
+				orderLog.setOperatordescription(OrderType.Receiving.message());
+				orderLog.setOldstatus(OrderType.BILL.value());
+				orderLog.setOperatortype(operatortype);
+				orderLogService.insertSelective(orderLog);
 				
 				//step2：推送给发单乘客
 				DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
@@ -148,6 +168,29 @@ public class OrderServiceImpl implements IOrderService {
 		}
 				
 		return resultBean;
+	}
+	
+	public int cancel(JSONObject jsonRequest) {
+		String orderId = jsonRequest.getString("OrderId");
+		String operator = jsonRequest.getString("Operator");
+		String cancelTypeCode = jsonRequest.getString("CancelTypeCode");
+		String cancelReason = jsonRequest.getString("CancelReason");
+		
+		User user = (User)session.getAttribute("CURRENT_USER");
+		Order order = selectByOrderId(orderId);
+		
+		OrderLog orderLog = new OrderLog();
+		orderLog.setOrderid(orderId);
+		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setOperatorstatus(OrderType.CANCEL.value());
+		orderLog.setOperatordescription(OrderType.CANCEL.message());
+		orderLog.setOldstatus(order.getStatus());
+		orderLog.setDescription(cancelReason);
+		orderLog.setOperatortype(Integer.parseInt(operator));
+		orderLog.setOperatortime(new Date());
+		orderLog.setCanceltypecode(Integer.parseInt(cancelTypeCode));
+		return orderLogService.insertSelective(orderLog);
+		
 	}
 
 }

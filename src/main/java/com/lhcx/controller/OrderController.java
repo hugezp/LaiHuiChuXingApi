@@ -1,7 +1,6 @@
 package com.lhcx.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
-import com.lhcx.model.Order;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
@@ -51,6 +49,7 @@ public class OrderController {
 
 	@Autowired
 	private IPushNotificationService pushNotificationService;
+	
 
 	/**
 	 * 乘客下单，并推送给附近上线司机
@@ -197,19 +196,9 @@ public class OrderController {
 	public ResponseEntity<String> cancel(@RequestBody JSONObject jsonRequest) {
 		// 获取参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		String orderId = jsonRequest.getString("OrderId");
-		String operator = jsonRequest.getString("Operator");
-		String cancelTypeCode = jsonRequest.getString("CancelTypeCode");
-		String cancelReason = jsonRequest.getString("CancelReason");
+		
 		ResultBean<?> resultBean = null;
-		Order order = new Order();
-		order.setOrderid(orderId);
-		order.setOperator(operator);
-		order.setCanceltypecode(cancelTypeCode);
-		order.setCanceltime(new Date());
-		order.setCancelreason(cancelReason);
-		order.setStatus(0);
-		int flag = orderService.updateByOrderIdSelective(order);
+		int flag = orderService.cancel(jsonRequest);
 		if (flag > 0) {
 			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
 					"撤销订单成功！");
@@ -243,5 +232,53 @@ public class OrderController {
 
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
+	
+	/**
+	 * 司机接到乘客后发车
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/depart", method = RequestMethod.POST)
+	public ResponseEntity<String> depart(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String orderId = jsonRequest.getString("OrderId");
+		ResultBean<?> resultBean = null;
+		try {
+			
+		} catch (Exception e) {
+			log.error("order match error by :" + e.getMessage());
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+					"接单失败 ！服务器繁忙，请重试！");
+		}
 
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+
+	/**
+	 * 订单完成
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/arrive", method = RequestMethod.POST)
+	public ResponseEntity<String> arrive(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		try {
+			//TODO
+		} catch (Exception e) {
+			log.error("order match error by :" + e.getMessage());
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+					"接单失败 ！服务器繁忙，请重试！");
+		}
+
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
 }

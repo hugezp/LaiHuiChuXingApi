@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.OrderLogMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.OrderLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
+    <result column="OperatorPhone" property="operatorphone" jdbcType="VARCHAR" />
+    <result column="OperatorTime" property="operatortime" jdbcType="TIMESTAMP" />
+    <result column="OperatorDescription" property="operatordescription" jdbcType="VARCHAR" />
+    <result column="OperatorStatus" property="operatorstatus" jdbcType="INTEGER" />
+    <result column="OldStatus" property="oldstatus" jdbcType="INTEGER" />
+    <result column="OperatorType" property="operatortype" jdbcType="INTEGER" />
+    <result column="CancelTypeCode" property="canceltypecode" jdbcType="INTEGER" />
+    <result column="Description" property="description" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, OrderId, OperatorPhone, OperatorTime, OperatorDescription, OperatorStatus, OldStatus, 
+    OperatorType, CancelTypeCode, Description, CreateTime, UpdateTime
+  </sql>
+  <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_logs
+    where OrderId = #{orderid,jdbcType=VARCHAR} order by OperatorTime desc;
+  </select>
+
+  <insert id="insertSelective" parameterType="com.lhcx.model.OrderLog" >
+    insert into order_logs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderid != null" >
+        OrderId,
+      </if>
+      <if test="operatorphone != null" >
+        OperatorPhone,
+      </if>
+      <if test="operatortime != null" >
+        OperatorTime,
+      </if>
+      <if test="operatordescription != null" >
+        OperatorDescription,
+      </if>
+      <if test="operatorstatus != null" >
+        OperatorStatus,
+      </if>
+      <if test="oldstatus != null" >
+        OldStatus,
+      </if>
+      <if test="operatortype != null" >
+        OperatorType,
+      </if>
+      <if test="canceltypecode != null" >
+        CancelTypeCode,
+      </if>
+      <if test="description != null" >
+        Description,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorphone != null" >
+        #{operatorphone,jdbcType=VARCHAR},
+      </if>
+      <if test="operatortime != null" >
+        #{operatortime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatordescription != null" >
+        #{operatordescription,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorstatus != null" >
+        #{operatorstatus,jdbcType=INTEGER},
+      </if>
+      <if test="oldstatus != null" >
+        #{oldstatus,jdbcType=INTEGER},
+      </if>
+      <if test="operatortype != null" >
+        #{operatortype,jdbcType=INTEGER},
+      </if>
+      <if test="canceltypecode != null" >
+        #{canceltypecode,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+</mapper>

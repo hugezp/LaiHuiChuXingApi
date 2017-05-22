@@ -3,6 +3,7 @@ package com.lhcx.model;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.utils.DateUtils;
@@ -44,29 +45,14 @@ public class Order {
 
     private String driverphone;
 
-    private String licenseid;
-
-    private String vehicleno;
-
-    private String longitude;
-
-    private String latitude;
-
-    private Date distributetime;
-
-    private Date canceltime;
-
-    private String operator;
-
-    private String canceltypecode;
-
-    private String cancelreason;
-    
     private Integer status;
     
     private Integer orderType;
     
     private Integer carType;
+    
+    private List<OrderLog> orderLog;
+    
 
     public Integer getId() {
         return id;
@@ -212,86 +198,15 @@ public class Order {
         this.fee = fee;
     }
 
-    public String getDriverphone() {
+    public String getDriverphone() {    	
         return driverphone;
     }
 
-    public void setDriverphone(String driverphone) {
+    public void setDriverphone() {
         this.driverphone = driverphone == null ? null : driverphone.trim();
     }
 
-    public String getLicenseid() {
-        return licenseid;
-    }
 
-    public void setLicenseid(String licenseid) {
-        this.licenseid = licenseid == null ? null : licenseid.trim();
-    }
-
-    public String getVehicleno() {
-        return vehicleno;
-    }
-
-    public void setVehicleno(String vehicleno) {
-        this.vehicleno = vehicleno == null ? null : vehicleno.trim();
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude == null ? null : longitude.trim();
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude == null ? null : latitude.trim();
-    }
-
-    public Date getDistributetime() {
-        return distributetime;
-    }
-
-    public void setDistributetime(Date distributetime) {
-        this.distributetime = distributetime;
-    }
-
-    public Date getCanceltime() {
-        return canceltime;
-    }
-
-    public void setCanceltime(Date canceltime) {
-        this.canceltime = canceltime;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator == null ? null : operator.trim();
-    }
-
-    public String getCanceltypecode() {
-        return canceltypecode;
-    }
-
-    public void setCanceltypecode(String canceltypecode) {
-        this.canceltypecode = canceltypecode == null ? null : canceltypecode.trim();
-    }
-
-    public String getCancelreason() {
-        return cancelreason;
-    }
-
-    public void setCancelreason(String cancelreason) {
-        this.cancelreason = cancelreason == null ? null : cancelreason.trim();
-    }
-    
     public Order(){
     	
     }
@@ -329,5 +244,23 @@ public class Order {
 
 	public void setCarType(Integer carType) {
 		this.carType = carType;
+	}
+
+	public List<OrderLog> getOrderLog() {
+		return orderLog;
+	}
+
+	public void setOrderLog(List<OrderLog> orderLog) {
+		this.orderLog = orderLog;
+		
+		//设置接单司机及订单状态
+		if (this.orderLog != null ) {
+			for (OrderLog orderLogTemp : this.orderLog) {
+				if(orderLogTemp.getOperatorstatus() == OrderType.Receiving.value()){
+					this.driverphone = orderLogTemp.getOperatorphone();
+				}
+				this.setStatus(orderLogTemp.getOperatorstatus());
+			}
+		}
 	}
 }
