@@ -60,8 +60,25 @@ public class OrderServiceImpl implements IOrderService {
 	
 	public Order selectByOrderId(String orderId) {
 		Order order = orderMapper.selectByOrderId(orderId);
-		List<OrderLog> orderLog = orderLogService.selectByOrderId(orderId);
-		order.setOrderLog(orderLog);
+		List<OrderLog> orderLogs = orderLogService.selectByOrderId(orderId);
+		order.setOrderLogs(orderLogs);
+		//10分钟没有接单，订单失效。
+		if (order.getStatus() == OrderType.BILL.value() && order.getDeparttime().getTime() > new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
+			OrderLog orderLog = new OrderLog();
+			orderLog.setOrderid(orderId);
+			orderLog.setOldstatus(OrderType.BILL.value());
+			orderLog.setOperatorstatus(OrderType.FAILURE.value());
+			orderLog.setOperatordescription(OrderType.FAILURE.message());
+			orderLog.setOperatorphone("");
+			orderLog.setDescription("由于长时间没有司机接单，订单自动失效。");
+			orderLog.setOperatortime(new Date());
+			orderLog.setOperatortype(3);//操作人员类型:：1-乘客，2-驾驶员，3-平台公司
+			
+			orderLogService.insertSelective(orderLog);
+			orderLogs = orderLogService.selectByOrderId(orderId);
+			order.setOrderLogs(orderLogs);
+		}
+		
 		return order;
 	}
 	

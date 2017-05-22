@@ -51,7 +51,7 @@ public class Order {
     
     private Integer carType;
     
-    private List<OrderLog> orderLog;
+    private List<OrderLog> orderLogs;
     
 
     public Integer getId() {
@@ -246,20 +246,20 @@ public class Order {
 		this.carType = carType;
 	}
 
-	public List<OrderLog> getOrderLog() {
-		return orderLog;
+	public List<OrderLog> getOrderLogs() {
+		return orderLogs;
 	}
 
-	public void setOrderLog(List<OrderLog> orderLog) {
-		this.orderLog = orderLog;
+	public void setOrderLogs(List<OrderLog> orderLogs) {
+		this.orderLogs = orderLogs;
 		
 		//设置接单司机及订单状态
-		if (this.orderLog != null ) {
-			for (OrderLog orderLogTemp : this.orderLog) {
+		if (this.orderLogs != null ) {
+			for (OrderLog orderLogTemp : this.orderLogs) {
 				if(orderLogTemp.getOperatorstatus() == OrderType.Receiving.value()){
 					this.driverphone = orderLogTemp.getOperatorphone();
 				}
-				this.status = orderLogTemp.getOperatorstatus();
+				this.status = orderLogTemp.getOperatorstatus();			
 			}
 		}
 	}
