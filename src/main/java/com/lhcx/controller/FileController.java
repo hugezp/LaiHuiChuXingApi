@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lhcx.model.ResponseCode;
+import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IFileService;
 import com.lhcx.utils.Utils;
@@ -71,7 +71,7 @@ public class FileController {
             result.put("url",filePath);
             result.put("title", originalFileName);
             result.put("original", originalFileName);
-            resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"文件上传成功",result); 
+            resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),"文件上传成功",result); 
             
         }catch (Exception e) {
             log.error("文件 "+fileName+" 上传失败!"+ e.getMessage());
@@ -79,7 +79,7 @@ public class FileController {
             result.put("url","");
             result.put("title", "");
             result.put("original", "");
-            resultBean = new ResultBean<Object>(ResponseCode.getError(),"文件上传失败！请稍后重试！",result); 
+            resultBean = new ResultBean<Object>(ResponseCode1.getError(),"文件上传失败！请稍后重试！",result); 
     		
         }
         return Utils.resultResponseJson(resultBean,jsonpCallback);

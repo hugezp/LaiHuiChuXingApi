@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.PushNotification;
-import com.lhcx.model.ResponseCode;
+import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.service.IDriverLocationService;
@@ -60,15 +60,15 @@ public class PushController {
 					receive.put("orderId", push.getOrderId());
 					jsonArray.add(receive);					
 				}
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"获取列表成功！",jsonArray);
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),"获取列表成功！",jsonArray);
 			}else {
 
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),"获取列表为空！");
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),"获取列表为空！");
 			}
 		} catch (Exception e) {	
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"获取列表失败！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -85,13 +85,13 @@ public class PushController {
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
 			if (driverLocationService.setButton(jsonRequest,user.getUserphone())) {
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"设置成功！");
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),"设置成功！");
 			}else {
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),"设置失败！");
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),"设置失败！");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),"设置失败！");
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),"设置失败！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
@@ -115,12 +115,12 @@ public class PushController {
 			driverLocation.setPositiontime(new Date());
 			int flag = driverLocationService.updateByPhoneSelective(driverLocation);
 			if (flag > 0) {
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"更新成功！");
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),"更新成功！");
 			}else {
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),"更新失败！");
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),"更新失败！");
 			}
 		} catch (Exception e) {
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),"更新失败！");
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),"更新失败！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}

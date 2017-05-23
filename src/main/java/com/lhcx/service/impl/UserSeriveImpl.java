@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lhcx.dao.UserMapper;
 import com.lhcx.model.DriverInfo;
 import com.lhcx.model.PassengerInfo;
-import com.lhcx.model.ResponseCode;
+import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.model.UserType;
@@ -114,14 +114,14 @@ public class UserSeriveImpl implements IUserService{
 				result.put("userType", userType);
 				result.put("token", user.getToken());
 				
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"登录成功！",result);
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),"登录成功！",result);
 			}else{
 				//验证失败
-				resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"验证失败！请检查手机号或验证码，验证码有效期30分钟！");    
+				resultBean = new ResultBean<Object>(ResponseCode1.getSms_checked_failed(),"验证失败！请检查手机号或验证码，验证码有效期30分钟！");    
 			}
 		}else{
 			//用户不存在
-			resultBean = new ResultBean<Object>(ResponseCode.get_no_user(),"登录失败!用户不存在");		        
+			resultBean = new ResultBean<Object>(ResponseCode1.get_no_user(),"登录失败!用户不存在");		        
 		}
 		
 		return resultBean;

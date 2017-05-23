@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.PushNotification;
-import com.lhcx.model.ResponseCode;
+import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
@@ -151,17 +151,17 @@ public class OrderController {
 						}
 					}
 				}
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),
 						"发布订单成功！", result);
 			} else {
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 						"发布订单失败！");
 			}
 
 		} catch (Exception e) {
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"发布订单异常！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -176,13 +176,13 @@ public class OrderController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			result.put("Fee", "123.50");
-			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),
 					"获取费用成功！", result);
 
 		} catch (Exception e) {
 			log.error("create order error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"获取费用异常！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -200,10 +200,10 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		int flag = orderService.cancel(jsonRequest);
 		if (flag > 0) {
-			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),
 					"撤销订单成功！");
 		} else {
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"撤销订单异常！");
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -226,7 +226,7 @@ public class OrderController {
 		} catch (Exception e) {
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"接单失败 ！服务器繁忙，请重试！");
 		}
 
@@ -248,16 +248,16 @@ public class OrderController {
 		try {
 			int flag = orderService.depart(jsonRequest);
 			if (flag > 0) {
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),
 						"开始行程！");
 			} else {
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 						"开始行程失败，请重试！");
 			}
 		} catch (Exception e) {
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"开始行程异常 ！服务器繁忙，请重试！");
 		}
 
@@ -279,16 +279,16 @@ public class OrderController {
 		try {
 			int flag = orderService.arrive(jsonRequest);
 			if (flag > 0) {
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),
 						"开始行程！");
 			} else {
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 						"开始行程失败，请重试！");
 			}
 		} catch (Exception e) {
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"接单失败 ！服务器繁忙，请重试！");
 		}
 

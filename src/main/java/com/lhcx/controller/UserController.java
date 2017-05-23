@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lhcx.model.ResponseCode;
+import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.model.UserType;
@@ -65,7 +65,7 @@ public class UserController {
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getSms_checked_failed(),"登录失败！服务器繁忙，请稍后重试！");
+			resultBean = new ResultBean<Object>(ResponseCode1.getSms_checked_failed(),"登录失败！服务器繁忙，请稍后重试！");
 		}
          return Utils.resultResponseJson(resultBean,jsonpCallback);
     }
@@ -87,7 +87,7 @@ public class UserController {
         String jsonpCallback = jsonRequest.getString("jsonpCallback");
         String phone = jsonRequest.getString("phone");
         String userType = UserType.DRIVER.value();
-        ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册提交失败！");
+        ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode1.getError(),"注册提交失败！");
         Map<String,Object> result = new HashMap<String, Object>();
         try {
         	String checkSession = (String) session.getAttribute(Utils.REGISTER_PHONE_SESSION);
@@ -98,19 +98,19 @@ public class UserController {
         			result.put("phone", phone);
     				result.put("userType", userType);
     				result.put("token", user.getToken());
-        			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),"注册提交成功！",result);
+        			resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),"注册提交成功！",result);
         		}else {
-        			resultBean = new ResultBean<Object>(ResponseCode.getError(),"用户注册失败！");
+        			resultBean = new ResultBean<Object>(ResponseCode1.getError(),"用户注册失败！");
 				}
         		
         	}else{
-        		resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册验证码错误或已失效，有效期为30分钟！");
+        		resultBean = new ResultBean<Object>(ResponseCode1.getError(),"注册验证码错误或已失效，有效期为30分钟！");
         	}
 			
 		} catch (Exception e) {
 			log.error("register error by :" + e.getMessage());
 			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),"注册提交失败！");
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),"注册提交失败！");
 		}
         
         return Utils.resultResponseJson(resultBean,jsonpCallback);
@@ -119,14 +119,14 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/noLogin", method = RequestMethod.GET)
     public ResponseEntity<String> noLogin1() {    	
-    	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"未登录或登录已失效，请重新登录！");
+    	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode1.getError(),"未登录或登录已失效，请重新登录！");
     	return Utils.resultResponseJson(resultBean,null);
     }
     
     @ResponseBody
     @RequestMapping(value = "/noLogin", method = RequestMethod.POST)
     public ResponseEntity<String> noLogin2() {    	
-    	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode.getError(),"未登录或登录已失效，请重新登录！");
+    	ResultBean<?>  resultBean = new ResultBean<Object>(ResponseCode1.getError(),"未登录或登录已失效，请重新登录！");
     	return Utils.resultResponseJson(resultBean,null);
     }
     

@@ -20,7 +20,7 @@ import com.lhcx.model.Order;
 import com.lhcx.model.OrderLog;
 import com.lhcx.model.OrderType;
 import com.lhcx.model.PushNotification;
-import com.lhcx.model.ResponseCode;
+import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.service.IDriverInfoService;
@@ -116,7 +116,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		if (driverLocation != null && driverLocation.getIsdel() == 1) {
 			if (order == null || order.getStatus() != OrderType.BILL.value()) {
-				resultBean = new ResultBean<Object>(ResponseCode.getError(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 						"该订单已失效或已被接单，如有疑问请联系售后！");
 			}else {
 				String longitude = jsonRequest.getString("Longitude");
@@ -176,11 +176,11 @@ public class OrderServiceImpl implements IOrderService {
 				result.put("Latitude", latitude);
 				result.put("DistributeTime",distributeTimeString);				
 
-				resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+				resultBean = new ResultBean<Object>(ResponseCode1.getSuccess(),
 						"接单成功！",result);
 			}
 		} else {
-			resultBean = new ResultBean<Object>(ResponseCode.getError(),
+			resultBean = new ResultBean<Object>(ResponseCode1.getError(),
 					"您没有经营上线，请经营上线后接单！");
 		}
 				
