@@ -12,7 +12,7 @@ public enum ResponseCode {
 	SMS_TIMES_LIMIT(3005,"发送验证码过于频繁"),
 	SMS_CHECKED_FAILED(3006,"验证码校验失败"),
 	RELEASE_ORDER_FAILED(3007,"发布订单失败"),
-	CANCEL_ORDER_FAILED(3008,"发布订单失败"),
+	CANCEL_ORDER_FAILED(3008,"撤销订单失败"),
 	DEPART_ORDER_FAILED(3009,"开始行程失败"),
 	ARRIVE_ORDER_FAILED(3010,"订单完成失败"),
 	PUSH_BUTTON_FAILED(3011,"设置失败"),
