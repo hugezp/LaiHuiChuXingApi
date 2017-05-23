@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,14 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResponseCode;
-import com.lhcx.model.ResponseCode1;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.SmsUtils;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
-import com.lhcx.utils.sdk.GeetestConfig;
-import com.lhcx.utils.sdk.GeetestLib;
 
 /**
  * 手机验证码
@@ -38,14 +34,14 @@ public class VerificationCodeController {
 	@Autowired
 	private IVerificationCodeService verificationCodeService;
 	// 自定义userid
-	private String userid = "lhcx@2017";
+	/*private String userid = "lhcx@2017";*/
 
 	/**
 	 * geetest 滑动验证模块 客户端第一次请求，从第三方取得数据返回给客户端
 	 * 
 	 * @param request
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/verify/address", method = RequestMethod.GET)
 	public ResponseEntity<String> address(HttpServletRequest request,
 			String callBack) {
@@ -65,12 +61,12 @@ public class VerificationCodeController {
 				HttpStatus.OK);
 	}
 
-	/**
+	*//**
 	 * 客户端第二次请求，进行第二次验证
 	 * 
 	 * @param request
 	 * @return
-	 */
+	 *//*
 	@ResponseBody
 	@RequestMapping(value = "/verify/date", method = RequestMethod.POST)
 	public ResponseEntity<String> date(HttpServletRequest request) {
@@ -133,7 +129,7 @@ public class VerificationCodeController {
 		}
 		return Utils.resultResponseJson(resultBean, callBack);
 	}
-
+*/
 	/**
 	 * 获取验证码
 	 * 
