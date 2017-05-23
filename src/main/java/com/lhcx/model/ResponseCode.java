@@ -18,7 +18,7 @@ public enum ResponseCode {
 	PUSH_BUTTON_FAILED(3011,"设置失败"),
 	PUSH_UPDATE_FAILED(3012,"更新失败"),
 	LOGIN_FAILED(3013,"未登录或登录已失效"),
-	REGISTER_FAILED(3013,"注册失败"),
+	REGISTER_FAILED(3014,"注册失败"),
 	PARAMETER_WRONG(4000,"参数不完整"),
 	NO_DATA(4004,"暂无数据"),
 	NO_USER(4005,"用户不存在");
