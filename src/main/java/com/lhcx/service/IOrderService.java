@@ -13,6 +13,8 @@ public interface IOrderService {
 	String create(JSONObject jsonRequest) throws ParseException ;
 	int updateByOrderIdSelective(Order record);
 	int cancel(JSONObject jsonRequest);
+	int reached(JSONObject jsonRequest);
 	int depart(JSONObject jsonRequest);
 	int arrive(JSONObject jsonRequest);
+	Order info(String orderId);
 }

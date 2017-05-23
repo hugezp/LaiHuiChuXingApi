@@ -18,7 +18,7 @@ import com.lhcx.model.DriverInfo;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.Order;
 import com.lhcx.model.OrderLog;
-import com.lhcx.model.OrderType;
+import com.lhcx.model.OrderStatus;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
@@ -32,6 +32,7 @@ import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.MD5Kit;
+import com.lhcx.utils.Utils;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -60,15 +61,21 @@ public class OrderServiceImpl implements IOrderService {
 	
 	public Order selectByOrderId(String orderId) {
 		Order order = orderMapper.selectByOrderId(orderId);
+		
+		return setLogOrderByOrder(order);
+	}
+	
+	public Order setLogOrderByOrder(Order order) {
+		String orderId = order.getOrderid();
 		List<OrderLog> orderLogs = orderLogService.selectByOrderId(orderId);
 		order.setOrderLogs(orderLogs);
 		//10分钟没有接单，订单失效。
-		if (order.getStatus() == OrderType.FAILURE.value()  && order.getOldstatus() == OrderType.BILL.value() ) {
+		if (order.getStatus() == OrderStatus.BILL.value() && order.getDeparttime().getTime() < new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
 			OrderLog orderLog = new OrderLog();
 			orderLog.setOrderid(orderId);
-			orderLog.setOldstatus(OrderType.BILL.value());
-			orderLog.setOperatorstatus(OrderType.FAILURE.value());
-			orderLog.setOperatordescription(OrderType.FAILURE.message());
+			orderLog.setOldstatus(OrderStatus.BILL.value());
+			orderLog.setOperatorstatus(OrderStatus.FAILURE.value());
+			orderLog.setOperatordescription(OrderStatus.FAILURE.message());
 			orderLog.setOperatorphone("");
 			orderLog.setDescription("由于长时间没有司机接单，订单自动失效。");
 			orderLog.setOperatortime(new Date());
@@ -77,6 +84,8 @@ public class OrderServiceImpl implements IOrderService {
 			orderLogService.insertSelective(orderLog);
 			orderLogs = orderLogService.selectByOrderId(orderId);
 			order.setOrderLogs(orderLogs);
+			order.setStatus(OrderStatus.FAILURE.value());
+			order.setOldstatus(OrderStatus.BILL.value());
 		}
 		
 		return order;
@@ -93,8 +102,8 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(order.getPassengerphone());
 		orderLog.setOperatortime(new Date());
-		orderLog.setOperatorstatus(OrderType.BILL.value());
-		orderLog.setOperatordescription(OrderType.BILL.message());
+		orderLog.setOperatorstatus(OrderStatus.BILL.value());
+		orderLog.setOperatordescription(OrderStatus.BILL.message());
 		orderLog.setOperatortype(operatortype);
 		
 		if (insertSelective(order) > 0 && orderLogService.insertSelective(orderLog) > 0) {
@@ -115,7 +124,7 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = selectByOrderId(orderId);
 		
 		if (driverLocation != null && driverLocation.getIsdel() == 1) {
-			if (order == null || order.getStatus() != OrderType.BILL.value()) {
+			if (order == null || order.getStatus() != OrderStatus.BILL.value()) {
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						"该订单已失效或已被接单，如有疑问请联系售后！");
 			}else {
@@ -129,9 +138,9 @@ public class OrderServiceImpl implements IOrderService {
 				orderLog.setOrderid(orderId);
 				orderLog.setOperatorphone(driverPhone);
 				orderLog.setOperatortime(distributeTime);
-				orderLog.setOperatorstatus(OrderType.Receiving.value());
-				orderLog.setOperatordescription(OrderType.Receiving.message());
-				orderLog.setOldstatus(OrderType.BILL.value());
+				orderLog.setOperatorstatus(OrderStatus.Receiving.value());
+				orderLog.setOperatordescription(OrderStatus.Receiving.message());
+				orderLog.setOldstatus(OrderStatus.BILL.value());
 				orderLog.setOperatortype(operatortype);
 				orderLogService.insertSelective(orderLog);
 				
@@ -196,11 +205,19 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		String userPhone = user.getUserphone();
+		String passenegerPhone = order.getPassengerphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(passenegerPhone)  && !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
-		orderLog.setOperatorstatus(OrderType.CANCEL.value());
-		orderLog.setOperatordescription(OrderType.CANCEL.message());
+		orderLog.setOperatorstatus(OrderStatus.CANCEL.value());
+		orderLog.setOperatordescription(OrderStatus.CANCEL.message());
 		orderLog.setOldstatus(order.getStatus());
 		orderLog.setDescription(cancelReason);
 		orderLog.setOperatortype(Integer.parseInt(operator));
@@ -210,6 +227,31 @@ public class OrderServiceImpl implements IOrderService {
 		
 	}
 	
+	public int reached(JSONObject jsonRequest) {
+		String orderId = jsonRequest.getString("OrderId");
+		String operator = jsonRequest.getString("Operator");
+		
+		User user = (User)session.getAttribute("CURRENT_USER");
+		Order order = selectByOrderId(orderId);
+		
+		String userPhone = user.getUserphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
+		OrderLog orderLog = new OrderLog();
+		orderLog.setOrderid(orderId);
+		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setOperatorstatus(OrderStatus.REACHED.value());
+		orderLog.setOperatordescription(OrderStatus.REACHED.message());
+		orderLog.setOldstatus(order.getStatus());
+		orderLog.setOperatortype(Integer.parseInt(operator));
+		orderLog.setOperatortime(new Date());
+		return orderLogService.insertSelective(orderLog);
+	}
+	
 	public int depart(JSONObject jsonRequest) {
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
@@ -217,11 +259,18 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		String userPhone = user.getUserphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
-		orderLog.setOperatorstatus(OrderType.ABORAD.value());
-		orderLog.setOperatordescription(OrderType.ABORAD.message());
+		orderLog.setOperatorstatus(OrderStatus.ABORAD.value());
+		orderLog.setOperatordescription(OrderStatus.ABORAD.message());
 		orderLog.setOldstatus(order.getStatus());
 		orderLog.setOperatortype(Integer.parseInt(operator));
 		orderLog.setOperatortime(new Date());
@@ -236,16 +285,42 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		String userPhone = user.getUserphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
-		orderLog.setOperatorstatus(OrderType.ARRIVE.value());
-		orderLog.setOperatordescription(OrderType.ARRIVE.message());
+		orderLog.setOperatorstatus(OrderStatus.ARRIVE.value());
+		orderLog.setOperatordescription(OrderStatus.ARRIVE.message());
 		orderLog.setOldstatus(order.getStatus());
 		orderLog.setOperatortype(Integer.parseInt(operator));
 		orderLog.setOperatortime(new Date());
 		return orderLogService.insertSelective(orderLog);
 		
+	}
+	
+	public Order info(String orderId) {
+		Order order = selectByOrderId(orderId);
+		String driverPhone =  order.getDriverphone();
+		if (Utils.isNullOrEmpty(driverPhone) ) {
+			if (order.getStatus() == OrderStatus.Receiving.value() ) {
+				//接单后距离乘客上车实时位置
+				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverPhone,Long.parseLong(order.getDeplongitude()) ,Long.parseLong(order.getDeplatitude()));
+				order.setOnTimeDistance(driverLocation.getDistance());
+				
+			}else if (order.getStatus() == OrderStatus.ABORAD.value()) {
+				//接到乘客后距离目的地实时位置
+				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverPhone,Long.parseLong(order.getDestlongitude()) ,Long.parseLong(order.getDestlatitude()));
+				order.setOnTimeTotalDistance(driverLocation.getDistance());
+			}
+		}
+		
+		return order;
 	}
 
 }

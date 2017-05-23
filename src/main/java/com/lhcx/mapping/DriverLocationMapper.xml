@@ -28,6 +28,31 @@
     from driver_location
     where Phone = #{phone,jdbcType=INTEGER}
   </select>
+  <select id="selectOnTimeDistance" resultType="com.lhcx.model.DriverLocation" >
+    select id,phone,Latitude,Longitude,
+ 		ROUND(
+	        6378.138 * 2 * ASIN(
+	            SQRT(
+	                POW(
+	                    SIN(
+	                        (
+	                            CAST(#{lat} AS signed) / 1000000 * PI() / 180 - CAST(Latitude AS signed) / 1000000 * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                ) + COS(CAST(#{lat} AS signed) / 1000000 * PI() / 180) * COS(CAST(Latitude AS signed) / 1000000 * PI() / 180) * POW(
+	                    SIN(
+	                        (
+	                            CAST(#{lon} AS signed) / 1000000 * PI() / 180 - CAST(Longitude AS signed) / 1000000 * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                )
+	            )
+        ) * 1000
+    ) AS distance from driver_location
+    where phone = #{phone}
+  </select>
   <select id="selectList" resultType="com.lhcx.model.DriverLocation" parameterType="com.lhcx.model.DriverLocation" >
     select id,phone,Latitude,Longitude,
  		ROUND(

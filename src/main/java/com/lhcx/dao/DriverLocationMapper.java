@@ -16,4 +16,6 @@ public interface DriverLocationMapper {
     
     DriverLocation selectByPhone(@Param("phone") String phone);
     
+    DriverLocation selectOnTimeDistance(@Param("phone") String phone,@Param("lon") long lon,@Param("lat") long lat);
+    
 }

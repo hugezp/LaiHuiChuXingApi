@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
+import com.lhcx.model.Order;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.model.response.OrderResponse;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPushNotificationService;
@@ -264,6 +266,37 @@ public class OrderController {
 	 * @return
 	 */
 	@ResponseBody
+	@RequestMapping(value = "/reached", method = RequestMethod.POST)
+	public ResponseEntity<String> reached(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+				String jsonpCallback = jsonRequest.getString("jsonpCallback");
+				ResultBean<?> resultBean = null;
+				try {
+					int flag = orderService.reached(jsonRequest);
+					if (flag > 0) {
+						resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+								"司机已到达乘客所在位置！");
+					} else {
+						resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+								"订单状态更新失败，请重试！");
+					}
+				} catch (Exception e) {
+					log.error("order reached error by :" + e.getMessage());
+					e.printStackTrace();
+					resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+							"订单更新失败 ！服务器繁忙，请重试！");
+				}
+
+				return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	/**
+	 * 司机接到乘客后发车
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping(value = "/depart", method = RequestMethod.POST)
 	public ResponseEntity<String> depart(@RequestBody JSONObject jsonRequest) {
 		// 取得参数值
@@ -286,7 +319,7 @@ public class OrderController {
 							ResponseCode.DEPART_ORDER_FAILED.message());
 				}
 			} catch (Exception e) {
-				log.error("order match error by :" + e.getMessage());
+				log.error("order depart error by :" + e.getMessage());
 				e.printStackTrace();
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						ResponseCode.ERROR.message());
@@ -324,7 +357,7 @@ public class OrderController {
 							ResponseCode.ARRIVE_ORDER_FAILED.message());
 				}
 			} catch (Exception e) {
-				log.error("order match error by :" + e.getMessage());
+				log.error("order arrive error by :" + e.getMessage());
 				e.printStackTrace();
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						ResponseCode.ERROR.message());
@@ -332,4 +365,33 @@ public class OrderController {
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
+	
+	/**
+	 * 订单行程
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	public ResponseEntity<String> info(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String orderId = jsonRequest.getString("OrderId");
+		ResultBean<?> resultBean = null;
+		try {
+			Order order = orderService.info(orderId);
+			OrderResponse result = new OrderResponse(order);
+			
+			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+					"获取订单信息成功！",result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"获取订单信息失败！");
+		}
+		
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
 }
