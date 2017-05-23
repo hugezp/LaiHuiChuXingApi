@@ -67,7 +67,7 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		if (!VerificationUtils.createOrder(jsonRequest)) {
+		if (!VerificationUtils.createOrderValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
@@ -216,7 +216,7 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		// 获取参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		if (!VerificationUtils.cancelOrder(jsonRequest)) {
+		if (!VerificationUtils.cancelOrderValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
@@ -302,7 +302,7 @@ public class OrderController {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		if (!VerificationUtils.departOrder(jsonRequest)) {
+		if (!VerificationUtils.departOrderValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
@@ -340,7 +340,7 @@ public class OrderController {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		if (!VerificationUtils.departOrder(jsonRequest)) {
+		if (!VerificationUtils.departOrderValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
