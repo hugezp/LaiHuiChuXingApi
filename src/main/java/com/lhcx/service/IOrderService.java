@@ -16,4 +16,5 @@ public interface IOrderService {
 	int reached(JSONObject jsonRequest);
 	int depart(JSONObject jsonRequest);
 	int arrive(JSONObject jsonRequest);
+	Order info(String orderId);
 }

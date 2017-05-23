@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverLocation;
+import com.lhcx.model.Order;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
@@ -337,7 +338,18 @@ public class OrderController {
 	public ResponseEntity<String> info(@RequestBody JSONObject jsonRequest) {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String orderId = jsonRequest.getString("OrderId");
 		ResultBean<?> resultBean = null;
+		try {
+			Order order = orderService.info(orderId);
+			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+					"获取订单信息成功！",order);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+					"获取订单信息失败！");
+		}
 		
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}

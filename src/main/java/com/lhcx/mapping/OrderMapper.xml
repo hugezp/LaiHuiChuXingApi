@@ -25,12 +25,33 @@
     Departure, DepLongitude, DepLatitude, Destination, DestLongitude, DestLatitude, Encrypt, 
     FareType, Fee, OrderType,CarType
   </sql>
-  <select id="selectByOrderId" resultMap="BaseResultMap" >
+  <select id="selectByOrderId" resultType="com.lhcx.model.Order">
     select 
-    <include refid="Base_Column_List" />
-    from orders
+    <include refid="Base_Column_List" />,
+ 		ROUND(
+	        6378.138 * 2 * ASIN(
+	            SQRT(
+	                POW(
+	                    SIN(
+	                        (
+	                            CAST(DepLatitude AS signed) / 1000000 * PI() / 180 - CAST(DestLatitude AS signed) / 1000000 * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                ) + COS(CAST(DepLatitude AS signed) / 1000000 * PI() / 180) * COS(CAST(DestLatitude AS signed) / 1000000 * PI() / 180) * POW(
+	                    SIN(
+	                        (
+	                            CAST(DepLongitude AS signed) / 1000000 * PI() / 180 - CAST(DestLongitude AS signed) / 1000000 * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                )
+	            )
+        ) * 1000
+    ) AS totalDistance from orders
     where OrderId = #{orderId}
   </select>
+  
   <insert id="insertSelective" parameterType="com.lhcx.model.Order" >
     insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >

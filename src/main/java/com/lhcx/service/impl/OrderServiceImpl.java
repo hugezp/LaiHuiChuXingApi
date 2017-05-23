@@ -32,6 +32,7 @@ import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.MD5Kit;
 import com.lhcx.utils.DateUtils;
+import com.lhcx.utils.Utils;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -196,6 +197,14 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		String userPhone = user.getUserphone();
+		String passenegerPhone = order.getPassengerphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(passenegerPhone)  && !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
@@ -217,6 +226,13 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		String userPhone = user.getUserphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
@@ -234,6 +250,13 @@ public class OrderServiceImpl implements IOrderService {
 		
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
+		
+		String userPhone = user.getUserphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(driverPhone)) {
+			return -1;
+		}
 		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
@@ -254,6 +277,13 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		String userPhone = user.getUserphone();
+		String driverPhone = order.getDriverphone();
+		
+		if ( !userPhone.equals(driverPhone)) {
+			return -1;
+		}
+		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
@@ -268,7 +298,19 @@ public class OrderServiceImpl implements IOrderService {
 	
 	public Order info(String orderId) {
 		Order order = selectByOrderId(orderId);
-		
+		String driverPhone =  order.getDriverphone();
+		if (Utils.isNullOrEmpty(driverPhone) ) {
+			if (order.getStatus() == OrderType.Receiving.value() ) {
+				//接单后距离乘客上车实时位置
+				long onTimeDistance = 0;
+				order.setOnTimeDistance(onTimeDistance);
+				
+			}else if (order.getStatus() == OrderType.ARRIVE.value()) {
+				//接到乘客后距离目的地实时位置
+				long onTimeTotalDistance = 0;
+				order.setOnTimeTotalDistance(onTimeTotalDistance);
+			}
+		}
 		
 		return order;
 	}

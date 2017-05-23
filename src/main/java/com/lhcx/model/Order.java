@@ -54,6 +54,15 @@ public class Order {
     
     private Integer carType;
     
+    //订单行程总距离
+    private Long totalDistance;
+    
+    //司机据目的地实时距离
+    private Long onTimeTotalDistance;
+    
+    //司机据乘客上车地实时距离
+    private Long onTimeDistance;
+    
     private List<OrderLog> orderLogs;
     
 
@@ -251,6 +260,30 @@ public class Order {
 
 	public void setCarType(Integer carType) {
 		this.carType = carType;
+	}
+
+	public Long getTotalDistance() {
+		return totalDistance;
+	}
+
+	public void setTotalDistance(Long totalDistance) {
+		this.totalDistance = totalDistance;
+	}
+
+	public Long getOnTimeTotalDistance() {
+		return onTimeTotalDistance;
+	}
+
+	public void setOnTimeTotalDistance(Long onTimeTotalDistance) {
+		this.onTimeTotalDistance = onTimeTotalDistance;
+	}
+
+	public Long getOnTimeDistance() {
+		return onTimeDistance;
+	}
+
+	public void setOnTimeDistance(Long onTimeDistance) {
+		this.onTimeDistance = onTimeDistance;
 	}
 
 	public List<OrderLog> getOrderLogs() {
