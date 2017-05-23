@@ -216,22 +216,20 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		// 获取参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		if (!VerificationUtils.cancelOrderValidation(jsonRequest)) {
-			resultBean = new ResultBean<Object>(
-					ResponseCode.PARAMETER_WRONG.value(),
-					ResponseCode.PARAMETER_WRONG.message());
-		} else {
-			int flag = orderService.cancel(jsonRequest);
-			if (flag > 0) {
+		try {
+			if (!VerificationUtils.cancelOrderValidation(jsonRequest)) {
 				resultBean = new ResultBean<Object>(
-						ResponseCode.SUCCESS.value(),
-						ResponseCode.SUCCESS.message());
+						ResponseCode.PARAMETER_WRONG.value(),
+						ResponseCode.PARAMETER_WRONG.message());
 			} else {
-				resultBean = new ResultBean<Object>(
-						ResponseCode.CANCEL_ORDER_FAILED.value(),
-						ResponseCode.CANCEL_ORDER_FAILED.message());
+				resultBean = orderService.cancel(jsonRequest);		
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					ResponseCode.ERROR.message());
 		}
+		
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 
@@ -253,7 +251,7 @@ public class OrderController {
 			log.error("order match error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-					"接单失败 ！服务器繁忙，请重试！");
+					ResponseCode.ERROR.message());
 		}
 
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -272,19 +270,12 @@ public class OrderController {
 				String jsonpCallback = jsonRequest.getString("jsonpCallback");
 				ResultBean<?> resultBean = null;
 				try {
-					int flag = orderService.reached(jsonRequest);
-					if (flag > 0) {
-						resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-								"司机已到达乘客所在位置！");
-					} else {
-						resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-								"订单状态更新失败，请重试！");
-					}
+					resultBean = orderService.reached(jsonRequest);
 				} catch (Exception e) {
 					log.error("order reached error by :" + e.getMessage());
 					e.printStackTrace();
 					resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-							"订单更新失败 ！服务器繁忙，请重试！");
+							ResponseCode.ERROR.message());
 				}
 
 				return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -308,16 +299,7 @@ public class OrderController {
 					ResponseCode.PARAMETER_WRONG.message());
 		} else {
 			try {
-				int flag = orderService.depart(jsonRequest);
-				if (flag > 0) {
-					resultBean = new ResultBean<Object>(
-							ResponseCode.SUCCESS.value(),
-							ResponseCode.SUCCESS.message());
-				} else {
-					resultBean = new ResultBean<Object>(
-							ResponseCode.DEPART_ORDER_FAILED.value(),
-							ResponseCode.DEPART_ORDER_FAILED.message());
-				}
+				resultBean = orderService.depart(jsonRequest);				
 			} catch (Exception e) {
 				log.error("order depart error by :" + e.getMessage());
 				e.printStackTrace();
@@ -346,16 +328,8 @@ public class OrderController {
 					ResponseCode.PARAMETER_WRONG.message());
 		} else {
 			try {
-				int flag = orderService.arrive(jsonRequest);
-				if (flag > 0) {
-					resultBean = new ResultBean<Object>(
-							ResponseCode.SUCCESS.value(),
-							ResponseCode.SUCCESS.message());
-				} else {
-					resultBean = new ResultBean<Object>(
-							ResponseCode.ARRIVE_ORDER_FAILED.value(),
-							ResponseCode.ARRIVE_ORDER_FAILED.message());
-				}
+				resultBean = orderService.arrive(jsonRequest);
+				
 			} catch (Exception e) {
 				log.error("order arrive error by :" + e.getMessage());
 				e.printStackTrace();
