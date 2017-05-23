@@ -205,6 +205,10 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
+		if (order.getStatus() == OrderStatus.FAILURE.value()) {
+			return -1;
+		}
+		
 		String userPhone = user.getUserphone();
 		String passenegerPhone = order.getPassengerphone();
 		String driverPhone = order.getDriverphone();
@@ -220,7 +224,9 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatordescription(OrderStatus.CANCEL.message());
 		orderLog.setOldstatus(order.getStatus());
 		orderLog.setDescription(cancelReason);
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
 		orderLog.setCanceltypecode(Integer.parseInt(cancelTypeCode));
 		return orderLogService.insertSelective(orderLog);
@@ -233,6 +239,10 @@ public class OrderServiceImpl implements IOrderService {
 		
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
+		
+		if (order.getStatus() == OrderStatus.FAILURE.value()) {
+			return -1;
+		}
 		
 		String userPhone = user.getUserphone();
 		String driverPhone = order.getDriverphone();
@@ -247,7 +257,9 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatorstatus(OrderStatus.REACHED.value());
 		orderLog.setOperatordescription(OrderStatus.REACHED.message());
 		orderLog.setOldstatus(order.getStatus());
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
 		return orderLogService.insertSelective(orderLog);
 	}
@@ -258,6 +270,10 @@ public class OrderServiceImpl implements IOrderService {
 		
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
+		
+		if (order.getStatus() == OrderStatus.FAILURE.value()) {
+			return -1;
+		}
 		
 		String userPhone = user.getUserphone();
 		String driverPhone = order.getDriverphone();
@@ -272,7 +288,9 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatorstatus(OrderStatus.ABORAD.value());
 		orderLog.setOperatordescription(OrderStatus.ABORAD.message());
 		orderLog.setOldstatus(order.getStatus());
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
 		return orderLogService.insertSelective(orderLog);
 		
@@ -284,6 +302,10 @@ public class OrderServiceImpl implements IOrderService {
 		
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
+		
+		if (order.getStatus() == OrderStatus.FAILURE.value()) {
+			return -1;
+		}
 		
 		String userPhone = user.getUserphone();
 		String driverPhone = order.getDriverphone();
