@@ -307,7 +307,7 @@ public class OrderServiceImpl implements IOrderService {
 	public Order info(String orderId) {
 		Order order = selectByOrderId(orderId);
 		String driverPhone =  order.getDriverphone();
-		if (Utils.isNullOrEmpty(driverPhone) ) {
+		if (!Utils.isNullOrEmpty(driverPhone) ) {
 			if (order.getStatus() == OrderStatus.Receiving.value() ) {
 				//接单后距离乘客上车实时位置
 				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverPhone,Long.parseLong(order.getDeplongitude()) ,Long.parseLong(order.getDeplatitude()));
