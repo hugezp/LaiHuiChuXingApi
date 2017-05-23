@@ -22,6 +22,7 @@ import com.lhcx.model.Order;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.model.response.OrderResponse;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPushNotificationService;
@@ -342,10 +343,11 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		try {
 			Order order = orderService.info(orderId);
+			OrderResponse result = new OrderResponse(order);
+			
 			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
-					"获取订单信息成功！",order);
+					"获取订单信息成功！",result);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
 					"获取订单信息失败！");

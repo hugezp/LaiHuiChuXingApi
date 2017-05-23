@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.DateUtils;
 
 public class Order {
@@ -55,13 +54,13 @@ public class Order {
     private Integer carType;
     
     //订单行程总距离
-    private Long totalDistance;
+    private double totalDistance;
     
     //司机据目的地实时距离
-    private Long onTimeTotalDistance;
+    private double onTimeTotalDistance;
     
     //司机据乘客上车地实时距离
-    private Long onTimeDistance;
+    private double onTimeDistance;
     
     private List<OrderLog> orderLogs;
     
@@ -75,10 +74,6 @@ public class Order {
     }
     
     public Integer getStatus() {
-    	if (this.status == OrderType.BILL.value() && this.departtime.getTime() < new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
-    		this.oldstatus = OrderType.BILL.value();
-    		return OrderType.FAILURE.value();
-    	}
         return status;
     }
 
@@ -262,27 +257,27 @@ public class Order {
 		this.carType = carType;
 	}
 
-	public Long getTotalDistance() {
+	public double getTotalDistance() {
 		return totalDistance;
 	}
 
-	public void setTotalDistance(Long totalDistance) {
+	public void setTotalDistance(double totalDistance) {
 		this.totalDistance = totalDistance;
 	}
 
-	public Long getOnTimeTotalDistance() {
+	public double getOnTimeTotalDistance() {
 		return onTimeTotalDistance;
 	}
 
-	public void setOnTimeTotalDistance(Long onTimeTotalDistance) {
+	public void setOnTimeTotalDistance(double onTimeTotalDistance) {
 		this.onTimeTotalDistance = onTimeTotalDistance;
 	}
 
-	public Long getOnTimeDistance() {
+	public double getOnTimeDistance() {
 		return onTimeDistance;
 	}
 
-	public void setOnTimeDistance(Long onTimeDistance) {
+	public void setOnTimeDistance(double onTimeDistance) {
 		this.onTimeDistance = onTimeDistance;
 	}
 
@@ -295,20 +290,18 @@ public class Order {
 		
 		//设置接单司机及订单状态
 		if (this.orderLogs != null ) {
+			this.status = orderLogs.get(0).getOperatorstatus();
+			this.oldstatus = orderLogs.get(0).getOldstatus();
 			for (OrderLog orderLogTemp : this.orderLogs) {
-				if(orderLogTemp.getOperatorstatus() == OrderType.Receiving.value()){
+				if(orderLogTemp.getOperatorstatus() == OrderStatus.Receiving.value()){
 					this.driverphone = orderLogTemp.getOperatorphone();
+					return;
 				}
-				this.status = orderLogTemp.getOperatorstatus();
-				this.oldstatus = orderLogTemp.getOldstatus();
 			}
 		}
 	}
 
 	public Integer getOldstatus() {
-		if (this.status == OrderType.BILL.value() && this.departtime.getTime() < new Date().getTime() - ConfigUtils.ORDER_TO_LIVE ) {
-    		return OrderType.BILL.value();
-    	}
 		return oldstatus;
 	}
 
