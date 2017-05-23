@@ -240,6 +240,37 @@ public class OrderController {
 	 * @return
 	 */
 	@ResponseBody
+	@RequestMapping(value = "/reached", method = RequestMethod.POST)
+	public ResponseEntity<String> reached(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+				String jsonpCallback = jsonRequest.getString("jsonpCallback");
+				ResultBean<?> resultBean = null;
+				try {
+					int flag = orderService.reached(jsonRequest);
+					if (flag > 0) {
+						resultBean = new ResultBean<Object>(ResponseCode.getSuccess(),
+								"司机已到达乘客所在位置！");
+					} else {
+						resultBean = new ResultBean<Object>(ResponseCode.getError(),
+								"订单状态更新失败，请重试！");
+					}
+				} catch (Exception e) {
+					log.error("order reached error by :" + e.getMessage());
+					e.printStackTrace();
+					resultBean = new ResultBean<Object>(ResponseCode.getError(),
+							"订单更新失败 ！服务器繁忙，请重试！");
+				}
+
+				return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	/**
+	 * 司机接到乘客后发车
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping(value = "/depart", method = RequestMethod.POST)
 	public ResponseEntity<String> depart(@RequestBody JSONObject jsonRequest) {
 		// 取得参数值
@@ -255,7 +286,7 @@ public class OrderController {
 						"开始行程失败，请重试！");
 			}
 		} catch (Exception e) {
-			log.error("order match error by :" + e.getMessage());
+			log.error("order depart error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
 					"开始行程异常 ！服务器繁忙，请重试！");
@@ -286,7 +317,7 @@ public class OrderController {
 						"开始行程失败，请重试！");
 			}
 		} catch (Exception e) {
-			log.error("order match error by :" + e.getMessage());
+			log.error("order arrive error by :" + e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.getError(),
 					"接单失败 ！服务器繁忙，请重试！");
@@ -294,4 +325,21 @@ public class OrderController {
 
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
+	
+	/**
+	 * 订单行程
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	public ResponseEntity<String> info(@RequestBody JSONObject jsonRequest) {
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
 }

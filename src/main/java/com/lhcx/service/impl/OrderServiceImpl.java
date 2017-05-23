@@ -210,6 +210,24 @@ public class OrderServiceImpl implements IOrderService {
 		
 	}
 	
+	public int reached(JSONObject jsonRequest) {
+		String orderId = jsonRequest.getString("OrderId");
+		String operator = jsonRequest.getString("Operator");
+		
+		User user = (User)session.getAttribute("CURRENT_USER");
+		Order order = selectByOrderId(orderId);
+		
+		OrderLog orderLog = new OrderLog();
+		orderLog.setOrderid(orderId);
+		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setOperatorstatus(OrderType.REACHED.value());
+		orderLog.setOperatordescription(OrderType.REACHED.message());
+		orderLog.setOldstatus(order.getStatus());
+		orderLog.setOperatortype(Integer.parseInt(operator));
+		orderLog.setOperatortime(new Date());
+		return orderLogService.insertSelective(orderLog);
+	}
+	
 	public int depart(JSONObject jsonRequest) {
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
@@ -246,6 +264,13 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatortime(new Date());
 		return orderLogService.insertSelective(orderLog);
 		
+	}
+	
+	public Order info(String orderId) {
+		Order order = selectByOrderId(orderId);
+		
+		
+		return order;
 	}
 
 }
