@@ -1,7 +1,7 @@
 package com.lhcx.model;
 
 public enum OrderStatus {
-	FAILURE(-1,"已失效"),CANCEL(0,"已撤销"), BILL(1,"已发单"),Receiving(2,"已接单"),REACHED(3,"已到达乘客乘客位置"), ABORAD(4,"已发车"),ARRIVE(5,"已完成");
+	FAILURE(-1,"已失效"),CANCEL(0,"已撤销"), BILL(1,"已发单"),Receiving(2,"已接单"),REACHED(3,"已到达乘客乘客位置"), ABORAD(4,"已发车"),ARRIVE(5,"已到达");
 	
 	private Integer value;
 	private String message;

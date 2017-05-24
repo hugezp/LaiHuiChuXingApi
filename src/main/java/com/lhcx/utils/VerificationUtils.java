@@ -15,7 +15,7 @@ public class VerificationUtils {
 	 * 
 	 * @return -1表示参数不完整 0表示手机号格式错误 1通过验证
 	 */
-	public static int sendPhoneCode(JSONObject jsonRequest) {
+	public static int sendPhoneCodeValidation(JSONObject jsonRequest) {
 		int count = -1;
 		String mobile = jsonRequest.getString("phone");
 		String userType = jsonRequest.getString("userType");
@@ -33,7 +33,7 @@ public class VerificationUtils {
 	 * 
 	 * @return -1表示参数不完整 0表示手机号格式错误 1通过验证
 	 */
-	public static int checkPhoneCode(JSONObject jsonRequest) {
+	public static int checkPhoneCodeValidation(JSONObject jsonRequest) {
 		int count = -1;
 		String mobile = jsonRequest.getString("phone");
 		String userType = jsonRequest.getString("userType");
@@ -53,7 +53,7 @@ public class VerificationUtils {
 	 * 
 	 * @return
 	 */
-	public static boolean createOrder(JSONObject jsonRequest) {
+	public static boolean createOrderValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		// 乘客出发地
 		String departure = jsonRequest.getString("Departure");
@@ -91,7 +91,7 @@ public class VerificationUtils {
 	 * @param jsonRequest
 	 * @return
 	 */
-	public static boolean cancelOrder(JSONObject jsonRequest) {
+	public static boolean cancelOrderValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		String operator = jsonRequest.getString("Operator");
 		String cancelTypeCode = jsonRequest.getString("CancelTypeCode");
@@ -110,12 +110,10 @@ public class VerificationUtils {
 	 * @param jsonRequest
 	 * @return
 	 */
-	public static boolean departOrder(JSONObject jsonRequest) {
+	public static boolean departOrderValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		String orderId = jsonRequest.getString("OrderId");
-		String operator = jsonRequest.getString("Operator");
-		if (StringUtils.isOrNotEmpty(orderId)
-				&& StringUtils.isOrNotEmpty(operator)) {
+		if (StringUtils.isOrNotEmpty(orderId)) {
 			flag = true;
 		}
 		return flag;
@@ -127,7 +125,7 @@ public class VerificationUtils {
 	 * @param jsonRequest
 	 * @return
 	 */
-	public static boolean pushButton(JSONObject jsonRequest) {
+	public static boolean pushButtonValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		String longitude = jsonRequest.getString("Longitude");
 		String latitude = jsonRequest.getString("Latitude");
@@ -145,7 +143,7 @@ public class VerificationUtils {
 	 * @param jsonRequest
 	 * @return
 	 */
-	public static boolean update(JSONObject jsonRequest) {
+	public static boolean updateValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		String longitude = jsonRequest.getString("Longitude");
 		String latitude = jsonRequest.getString("Latitude");
@@ -161,7 +159,7 @@ public class VerificationUtils {
 	 * @param jsonRequest
 	 * @return
 	 */
-	public static boolean login(JSONObject jsonRequest) {
+	public static boolean loginValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		String phone = jsonRequest.getString("phone");
 	    String userType = jsonRequest.getString("userType");

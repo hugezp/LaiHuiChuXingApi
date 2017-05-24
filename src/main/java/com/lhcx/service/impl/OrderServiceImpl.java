@@ -196,7 +196,8 @@ public class OrderServiceImpl implements IOrderService {
 		return resultBean;
 	}
 	
-	public int cancel(JSONObject jsonRequest) {
+	public ResultBean<?> cancel(JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
 		String cancelTypeCode = jsonRequest.getString("CancelTypeCode");
@@ -210,7 +211,19 @@ public class OrderServiceImpl implements IOrderService {
 		String driverPhone = order.getDriverphone();
 		
 		if ( !userPhone.equals(passenegerPhone)  && !userPhone.equals(driverPhone)) {
-			return -1;
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"您没有权限取消该订单！");
+			return resultBean;
+		}else if (order.getStatus() > OrderStatus.Receiving.value() ) {
+			//订单不可取消状态
+			resultBean = new ResultBean<Object>(ResponseCode.CANCEL_ORDER_FAILED.value(),
+					"司机已发车，订单不能被取消！");
+			return resultBean;
+		}else if(order.getStatus() == OrderStatus.FAILURE.value() || order.getStatus() == OrderStatus.CANCEL.value()){
+			//订单不可取消状态
+			resultBean = new ResultBean<Object>(ResponseCode.CANCEL_ORDER_FAILED.value(),
+					"订单已取消或已失效，不能被取消！");
+			return resultBean;
 		}
 		
 		OrderLog orderLog = new OrderLog();
@@ -220,25 +233,40 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatordescription(OrderStatus.CANCEL.message());
 		orderLog.setOldstatus(order.getStatus());
 		orderLog.setDescription(cancelReason);
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
 		orderLog.setCanceltypecode(Integer.parseInt(cancelTypeCode));
-		return orderLogService.insertSelective(orderLog);
+		
+		orderLogService.insertSelective(orderLog);
+		
+		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+				"订单取消成功！");
+		return resultBean;
 		
 	}
 	
-	public int reached(JSONObject jsonRequest) {
+	public ResultBean<?> reached(JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
 		
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
-		
+
 		String userPhone = user.getUserphone();
-		String driverPhone = order.getDriverphone();
+		String driverPhone = order.getDriverphone();		
 		
 		if ( !userPhone.equals(driverPhone)) {
-			return -1;
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"您没有权限操作该订单！");
+			return resultBean;
+		}else if (order.getStatus() != OrderStatus.Receiving.value()) {
+			//订单处于接单状态才可操作
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"订单操作失败！该订单没有处于接单状态。");
+			return resultBean;
 		}
 		
 		OrderLog orderLog = new OrderLog();
@@ -247,12 +275,19 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatorstatus(OrderStatus.REACHED.value());
 		orderLog.setOperatordescription(OrderStatus.REACHED.message());
 		orderLog.setOldstatus(order.getStatus());
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
-		return orderLogService.insertSelective(orderLog);
+		orderLogService.insertSelective(orderLog);
+		
+		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+				"订单操作成功！");
+		return resultBean;
 	}
 	
-	public int depart(JSONObject jsonRequest) {
+	public ResultBean<?> depart(JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
 		
@@ -263,7 +298,14 @@ public class OrderServiceImpl implements IOrderService {
 		String driverPhone = order.getDriverphone();
 		
 		if ( !userPhone.equals(driverPhone)) {
-			return -1;
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"您没有权限操作该订单！");
+			return resultBean;
+		}else if (order.getStatus() != OrderStatus.Receiving.value()) {
+			//订单处于接单状态才可操作
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"订单操作失败！该订单没有处于接单状态。");
+			return resultBean;
 		}
 		
 		OrderLog orderLog = new OrderLog();
@@ -272,13 +314,19 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatorstatus(OrderStatus.ABORAD.value());
 		orderLog.setOperatordescription(OrderStatus.ABORAD.message());
 		orderLog.setOldstatus(order.getStatus());
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
-		return orderLogService.insertSelective(orderLog);
+		orderLogService.insertSelective(orderLog);
 		
+		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+				"订单操作成功！");
+		return resultBean;
 	}
 	
-	public int arrive(JSONObject jsonRequest) {
+	public ResultBean<?> arrive(JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
 		
@@ -289,7 +337,14 @@ public class OrderServiceImpl implements IOrderService {
 		String driverPhone = order.getDriverphone();
 		
 		if ( !userPhone.equals(driverPhone)) {
-			return -1;
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"您没有权限操作该订单！");
+			return resultBean;
+		}else if (order.getStatus() != OrderStatus.ABORAD.value()) {
+			//订单处于已发车状态才可操作
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"订单操作失败！该订单没有处于发车状态。");
+			return resultBean;
 		}
 		
 		OrderLog orderLog = new OrderLog();
@@ -298,14 +353,20 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatorstatus(OrderStatus.ARRIVE.value());
 		orderLog.setOperatordescription(OrderStatus.ARRIVE.message());
 		orderLog.setOldstatus(order.getStatus());
-		orderLog.setOperatortype(Integer.parseInt(operator));
+		if (operator != null) {
+			orderLog.setOperatortype(Integer.parseInt(operator));
+		}
 		orderLog.setOperatortime(new Date());
-		return orderLogService.insertSelective(orderLog);
+		orderLogService.insertSelective(orderLog);
+		
+		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+				"订单操作成功！");
+		return resultBean;
 		
 	}
 	
 	public Order info(String orderId) {
-		Order order = selectByOrderId(orderId);
+		Order order = selectByOrderId(orderId); 
 		String driverPhone =  order.getDriverphone();
 		if (!Utils.isNullOrEmpty(driverPhone) ) {
 			if (order.getStatus() == OrderStatus.Receiving.value() ) {

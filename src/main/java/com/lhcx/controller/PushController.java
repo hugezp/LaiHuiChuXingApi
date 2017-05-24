@@ -90,7 +90,7 @@ public class PushController {
 			@RequestBody JSONObject jsonRequest, HttpServletRequest request) {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		if (!VerificationUtils.pushButton(jsonRequest)) {
+		if (!VerificationUtils.pushButtonValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
@@ -122,7 +122,7 @@ public class PushController {
 	public ResponseEntity<String> update(@RequestBody JSONObject jsonRequest) {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		if (!VerificationUtils.update(jsonRequest)) {
+		if (!VerificationUtils.updateValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());

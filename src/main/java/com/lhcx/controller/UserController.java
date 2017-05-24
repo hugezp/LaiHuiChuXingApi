@@ -60,7 +60,7 @@ public class UserController {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 
 		ResultBean<?> resultBean = null;
-		if (!VerificationUtils.login(jsonRequest)) {
+		if (!VerificationUtils.loginValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());

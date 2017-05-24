@@ -146,7 +146,7 @@ public class VerificationCodeController {
 		String userType = jsonRequest.getString("userType");
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		int count = VerificationUtils.sendPhoneCode(jsonRequest);
+		int count = VerificationUtils.sendPhoneCodeValidation(jsonRequest);
 		if (count == -1) {
 			resultBean = new ResultBean<Object>(ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
@@ -201,7 +201,7 @@ public class VerificationCodeController {
 		String code = jsonRequest.getString("code");
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		int count = VerificationUtils.checkPhoneCode(jsonRequest);
+		int count = VerificationUtils.checkPhoneCodeValidation(jsonRequest);
 		if (count == -1) {
 			resultBean = new ResultBean<Object>(ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
