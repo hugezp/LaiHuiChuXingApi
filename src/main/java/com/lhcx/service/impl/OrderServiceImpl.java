@@ -214,10 +214,15 @@ public class OrderServiceImpl implements IOrderService {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"您没有权限取消该订单！");
 			return resultBean;
-		}else if (order.getStatus() != OrderStatus.BILL.value() || order.getStatus() != OrderStatus.Receiving.value()) {
-			//订单可取消状态
-			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+		}else if (order.getStatus() > OrderStatus.Receiving.value() ) {
+			//订单不可取消状态
+			resultBean = new ResultBean<Object>(ResponseCode.CANCEL_ORDER_FAILED.value(),
 					"司机已发车，订单不能被取消！");
+			return resultBean;
+		}else if(order.getStatus() == OrderStatus.FAILURE.value() || order.getStatus() == OrderStatus.CANCEL.value()){
+			//订单不可取消状态
+			resultBean = new ResultBean<Object>(ResponseCode.CANCEL_ORDER_FAILED.value(),
+					"订单已取消或已失效，不能被取消！");
 			return resultBean;
 		}
 		
