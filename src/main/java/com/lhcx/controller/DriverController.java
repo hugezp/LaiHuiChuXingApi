@@ -9,12 +9,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.Order;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
@@ -40,9 +38,9 @@ public class DriverController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/order/noFinished", method = RequestMethod.POST)
-	public ResponseEntity<String> info(@RequestBody JSONObject jsonRequest) {
+	public ResponseEntity<String> info() {
 		// 取得参数值
-		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String jsonpCallback = "";
 		ResultBean<?> resultBean = null;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
