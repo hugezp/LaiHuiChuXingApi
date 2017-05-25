@@ -55,12 +55,12 @@
   </select>
   
   <select id="selectNewOrderByPhone" resultType="com.lhcx.model.Order">
-  	select OrderId from orders where PassengerPhone = #{passengerPhone} and Status = 1
+  	select OrderId,status from orders where PassengerPhone = #{passengerPhone} and (Status > 1 or Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
   
    <select id="selectNewOrderByDriverPhone" resultType="com.lhcx.model.Order">
-  	select OrderId from orders where DriverPhone = #{driverPhone} and (Status > 1 or Status &lt; 5)
+  	select OrderId,status from orders where DriverPhone = #{driverPhone} and (Status > 1 or Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
   
