@@ -41,10 +41,6 @@ public class DriverLocation {
     
     private double distance;
     
-    private String driverPhone;
-    
-    private Integer orderStatus;
-    
     public double getDistance() {
 		return distance;
 	}
@@ -195,22 +191,6 @@ public class DriverLocation {
 
 	public void setLogoutTime(Date logoutTime) {
 		this.logoutTime = logoutTime;
-	}
-
-	public String getDriverPhone() {
-		return driverPhone;
-	}
-
-	public void setDriverPhone(String driverPhone) {
-		this.driverPhone = driverPhone;
-	}
-
-	public Integer getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(Integer orderStatus) {
-		this.orderStatus = orderStatus;
 	}
     
 }
