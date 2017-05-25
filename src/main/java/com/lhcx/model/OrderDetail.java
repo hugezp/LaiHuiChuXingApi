@@ -7,6 +7,15 @@ public class OrderDetail {
 	private String departure;
 	private String destination;
 	private String fee;
+	private int status;
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	public String getOrderId() {
 		return orderId;

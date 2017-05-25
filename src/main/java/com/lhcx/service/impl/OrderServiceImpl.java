@@ -424,4 +424,14 @@ public class OrderServiceImpl implements IOrderService {
 		return orderMapper.selectNewOrderByDriverPhone(driverPhone);
 	}
 
+	@Override
+	public List<Order> selectOrderByPassengerPhone(String passengerPhone) {
+		return orderMapper.selectOrderByPassengerPhone(passengerPhone);
+	}
+
+	@Override
+	public List<Order> selectOrderByDriverPhone(String driverPhone) {
+		return orderMapper.selectOrderByDriverPhone(driverPhone);
+	}
+
 }

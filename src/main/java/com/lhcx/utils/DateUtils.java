@@ -60,4 +60,16 @@ public class DateUtils {
     	return date;		
     }
     
+    public static String todayDate(Date date){
+    	String dateFormat = dateFormat(date);
+    	String[] split = dateFormat.split(" ");
+    	String currentTime = currentTime();
+    	String[] split2 = currentTime.split(" ");
+    	if (split[0].equals(split2[0])) {
+			return "今天 " + split[1];
+		}else {
+			return dateFormat;
+		}
+    }
+    
 }
