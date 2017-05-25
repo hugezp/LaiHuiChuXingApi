@@ -2,6 +2,7 @@ package com.lhcx.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,45 +82,8 @@ public class OrderController {
 					ResponseCode.PARAMETER_WRONG.message());
 		} else {
 
-			// 乘客出发地经度
-			double depLongitude = "".equals(jsonRequest
-					.getString("DepLongitude")) ? -1
-					: Double.parseDouble(jsonRequest.getString("DepLongitude")) / 1000000;
-			// 乘客出发地纬度
-			double depLatitude = ""
-					.equals(jsonRequest.getString("DepLatitude")) ? -1
-					: Double.parseDouble(jsonRequest.getString("DepLatitude")) / 1000000;
-			// 乘客目的地经度
-			double destLongitude = "".equals(jsonRequest
-					.getString("DestLongitude")) ? -1
-					: Double.parseDouble(jsonRequest.getString("DestLongitude")) / 1000000;
-			// 乘客目的地纬度
-			double destLatitude = "".equals(jsonRequest
-					.getString("DestLatitude")) ? -1
-					: Double.parseDouble(jsonRequest.getString("DestLatitude")) / 1000000;
 			// 乘客手机号
 			String passengerPhone = jsonRequest.getString("PassengerPhone");
-			// 乘客发单时间
-			long orderTime = Long.parseLong(jsonRequest.getString("OrderTime"));
-			// 乘客出发时间
-			long dePartTime = Long.parseLong(jsonRequest
-					.getString("DePartTime"));
-			// 乘客出发地
-			String departure = jsonRequest.getString("Departure");
-			// 乘客目的地
-			String destination = jsonRequest.getString("Destination");
-			// 乘客费用
-			String fee = jsonRequest.getString("Fee");
-
-			// 订单类型
-			Integer orderType = jsonRequest.getInteger("OrderType");
-
-			// 车辆类型
-			Integer carType = jsonRequest.getInteger("CarType");
-
-			// 路程距离
-			double totalDistance = PointToDistance.distanceOfTwoPoints(
-					depLatitude, depLongitude, destLatitude, destLongitude);
 			Map<String, Object> result = new HashMap<String, Object>();
 			try {
 				Order newOrder = orderService
@@ -129,67 +93,6 @@ public class OrderController {
 					if (!orderId.equals("")) {
 						result.put("OrderId", orderId);
 						// 推送内容
-						SimpleDateFormat dateFormat = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm");
-						DriverLocation d = new DriverLocation();
-						d.setLatitude(jsonRequest.getString("DepLatitude"));
-						d.setLongitude(jsonRequest.getString("DepLongitude"));
-						List<DriverLocation> dLocations = driverLocationService
-								.selectList(d);
-						if (dLocations.size() > 0) {
-							for (DriverLocation driverLocation : dLocations) {
-								String driverPhone = driverLocation.getDriverPhone();
-								Integer orderStatus = driverLocation.getOrderStatus();
-								if (orderStatus != null && !Utils.isNullOrEmpty(driverPhone)) {
-									boolean isReceiving = (OrderStatus.Receiving.value() < orderStatus &&  orderStatus < OrderStatus.ARRIVE.value());
-									if (isReceiving ) {
-										continue;
-									}
-								}
-								// 距离
-								double distance = driverLocation.getDistance();
-								String mobile = driverLocation.getPhone();
-								Map<String, String> extrasParam = new HashMap<String, String>();
-								extrasParam.put("mobile", passengerPhone);
-								extrasParam.put("createTime",
-										dateFormat.format(DateUtils
-												.toDateTime(orderTime)));
-								extrasParam.put("departure", departure);
-								extrasParam.put("destination", destination);
-								extrasParam.put("departureTime", dateFormat
-										.format(DateUtils
-												.toDateTime(dePartTime)));
-								extrasParam.put("fee", fee);
-								extrasParam.put("distance",
-										String.valueOf(distance));
-								extrasParam.put("totalDistance",
-										String.valueOf(totalDistance));
-								extrasParam.put("orderId", orderId);
-								extrasParam.put("orderType",
-										orderType.toString());
-								extrasParam.put("carType", carType.toString());
-
-								String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
-								int flag = JpushClientUtil.getInstance(
-										ConfigUtils.JPUSH_APP_KEY,
-										ConfigUtils.JPUSH_MASTER_SECRET)
-										.sendToRegistrationId("11", mobile,
-												content, content, content,
-												extrasParam);
-								if (flag == 1) {
-									PushNotification pushNotification = new PushNotification();
-									pushNotification
-											.setPushPhone(passengerPhone);
-									pushNotification.setReceivePhone(mobile);
-									pushNotification.setOrderId(orderId);
-									pushNotification.setAlert(content);
-									pushNotification.setData(extrasParam
-											.toString());
-									pushNotificationService
-											.insertSelective(pushNotification);
-								}
-							}
-						}
 						resultBean = new ResultBean<Object>(
 								ResponseCode.SUCCESS.value(),
 								ResponseCode.SUCCESS.message(), result);
@@ -232,6 +135,108 @@ public class OrderController {
 					ResponseCode.ERROR.message());
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	
+	/**
+	 * 创建成功后推送
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/create/push", method = RequestMethod.POST)
+	public void push(@RequestBody JSONObject jsonRequest) {
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm");
+			DriverLocation d = new DriverLocation();
+			String orderId = jsonRequest.getString("OrderId");
+			
+			Order order = orderService.selectByOrderId(orderId);
+			// 乘客出发地经度
+			double depLongitude = Double.parseDouble(order.getDeplongitude()) / 1000000;
+			// 乘客出发地纬度
+			double depLatitude = Double.parseDouble(order.getDeplatitude()) / 1000000;
+			// 乘客目的地经度
+			double destLongitude = Double.parseDouble(order.getDestlongitude()) / 1000000;
+			// 乘客目的地纬度
+			double destLatitude =Double.parseDouble(order.getDestlatitude()) / 1000000;
+			// 乘客手机号
+			String passengerPhone = order.getPassengerphone();
+			// 乘客发单时间
+			Date orderTime = order.getOrdertime();
+			// 乘客出发时间
+			Date dePartTime = order.getDeparttime();
+			// 乘客出发地
+			String departure = order.getDeparture();
+			// 乘客目的地
+			String destination = order.getDestination();
+			// 乘客费用
+			String fee = order.getFee().toString();
+
+			// 订单类型
+			Integer orderType = order.getOrderType();
+
+			// 车辆类型
+			Integer carType = order.getCarType();
+			
+			// 路程距离
+			double totalDistance = PointToDistance.distanceOfTwoPoints(
+					depLatitude, depLongitude, destLatitude, destLongitude);
+
+			d.setLatitude(order.getDeplatitude());
+			d.setLongitude(order.getDeplongitude());
+			List<DriverLocation> dLocations = driverLocationService
+					.selectList(d);
+			if (dLocations.size() > 0) {
+				for (DriverLocation driverLocation : dLocations) {
+					double distance = driverLocation.getDistance();
+					String mobile = driverLocation.getPhone();
+					Map<String, String> extrasParam = new HashMap<String, String>();
+					extrasParam.put("mobile", passengerPhone);
+					extrasParam.put("createTime",
+							dateFormat.format(orderTime));
+					extrasParam.put("departure", departure);
+					extrasParam.put("destination", destination);
+					extrasParam.put("departureTime", dateFormat
+							.format(dePartTime));
+					extrasParam.put("fee", fee);
+					extrasParam.put("distance",
+							String.valueOf(distance));
+					extrasParam.put("totalDistance",
+							String.valueOf(totalDistance));
+					extrasParam.put("orderId", orderId);
+					extrasParam.put("orderType",
+							orderType.toString());
+					extrasParam.put("carType", carType.toString());
+
+					String content = "【来回出行】有用户发布新的行程订单消息，请前往查看抢单!";
+					int flag = JpushClientUtil.getInstance(
+							ConfigUtils.JPUSH_APP_KEY,
+							ConfigUtils.JPUSH_MASTER_SECRET)
+							.sendToRegistrationId("11", mobile,
+									content, content, content,
+									extrasParam);
+					if (flag == 1) {
+						PushNotification pushNotification = new PushNotification();
+						pushNotification
+								.setPushPhone(passengerPhone);
+						pushNotification.setReceivePhone(mobile);
+						pushNotification.setOrderId(orderId);
+						pushNotification.setAlert(content);
+						pushNotification.setData(extrasParam
+								.toString());
+						pushNotificationService
+								.insertSelective(pushNotification);
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 
 	/**
