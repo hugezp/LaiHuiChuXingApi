@@ -213,7 +213,7 @@ public class Order {
         return driverphone;
     }
 
-    public void setDriverphone() {
+    public void setDriverphone(String driverphone) {
         this.driverphone = driverphone == null ? null : driverphone.trim();
     }
 
@@ -290,14 +290,7 @@ public class Order {
 		
 		//设置接单司机及订单状态
 		if (this.orderLogs != null ) {
-			this.status = orderLogs.get(0).getOperatorstatus();
 			this.oldstatus = orderLogs.get(0).getOldstatus();
-			for (OrderLog orderLogTemp : this.orderLogs) {
-				if(orderLogTemp.getOperatorstatus() == OrderStatus.Receiving.value()){
-					this.driverphone = orderLogTemp.getOperatorphone();
-					return;
-				}
-			}
 		}
 	}
 

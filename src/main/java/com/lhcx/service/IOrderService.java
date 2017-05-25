@@ -18,4 +18,5 @@ public interface IOrderService {
 	ResultBean<?> arrive(JSONObject jsonRequest);
 	Order info(String orderId);
 	Order selectNewOrderByPhone(String passengerPhone);
+	Order selectNewOrderByDriverPhone(String driverPhone);
 }

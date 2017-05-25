@@ -79,13 +79,17 @@ public class OrderServiceImpl implements IOrderService {
 			orderLog.setOperatorphone("");
 			orderLog.setDescription("由于长时间没有司机接单，订单自动失效。");
 			orderLog.setOperatortime(new Date());
-			orderLog.setOperatortype(3);//操作人员类型:：1-乘客，2-驾驶员，3-平台公司
+			orderLog.setOperatortype(3);//操作人员类型:：1-乘客，2-驾驶员，3-平台公司			
 			
+			//更新订单日志
 			orderLogService.insertSelective(orderLog);
 			orderLogs = orderLogService.selectByOrderId(orderId);
+			
+			//更新订单最终状态
 			order.setOrderLogs(orderLogs);
 			order.setStatus(OrderStatus.FAILURE.value());
 			order.setOldstatus(OrderStatus.BILL.value());
+			updateByOrderIdSelective(order);
 		}
 		
 		return order;
@@ -96,6 +100,7 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = new Order(jsonRequest);
 		String orderId = MD5Kit.encode(String.valueOf(System.currentTimeMillis()));
 		order.setOrderid(orderId);
+		order.setStatus(OrderStatus.BILL.value());
 		//保存订单日志记录
 		Integer operatortype = jsonRequest.getInteger("OperatorType");
 		OrderLog orderLog = new OrderLog();
@@ -122,8 +127,8 @@ public class OrderServiceImpl implements IOrderService {
 		DriverLocation driverLocation = driverLocationService.selectByPhone(driverPhone);
 		String orderId = jsonRequest.getString("OrderId");
 		Order order = selectByOrderId(orderId);
-		OrderLog olBean = orderLogService.selectByOrderPhone(driverPhone);
-		if (olBean == null || olBean.getOperatorstatus() == OrderStatus.ARRIVE.value()) {
+		Order olBean = selectNewOrderByDriverPhone(driverPhone);
+		if (olBean == null || olBean.getStatus() >= OrderStatus.ARRIVE.value() || olBean.getStatus() <= OrderStatus.CANCEL.value()) {
 			if (driverLocation != null && driverLocation.getIsdel() == 1) {
 				if (order == null || order.getStatus() != OrderStatus.BILL.value()) {
 					resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
@@ -144,6 +149,11 @@ public class OrderServiceImpl implements IOrderService {
 					orderLog.setOldstatus(OrderStatus.BILL.value());
 					orderLog.setOperatortype(operatortype);
 					orderLogService.insertSelective(orderLog);
+					
+					//step1.1：保存订单最终状态
+					order.setDriverphone(driverPhone);
+					order.setStatus(OrderStatus.Receiving.value());
+					updateByOrderIdSelective(order);
 					
 					//step2：推送给发单乘客
 					DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
@@ -230,6 +240,7 @@ public class OrderServiceImpl implements IOrderService {
 			return resultBean;
 		}
 		
+		//更新订单日志
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
@@ -244,6 +255,10 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setCanceltypecode(Integer.parseInt(cancelTypeCode));
 		
 		orderLogService.insertSelective(orderLog);
+		
+		//更新订单最终状态
+		order.setStatus(OrderStatus.CANCEL.value());
+		updateByOrderIdSelective(order);
 		
 		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 				"订单取消成功！");
@@ -273,6 +288,7 @@ public class OrderServiceImpl implements IOrderService {
 			return resultBean;
 		}
 		
+		//更新订单日志
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
@@ -284,6 +300,10 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		orderLog.setOperatortime(new Date());
 		orderLogService.insertSelective(orderLog);
+		
+		//更新订单最终状态
+		order.setStatus(OrderStatus.REACHED.value());
+		updateByOrderIdSelective(order);
 		
 		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 				"订单操作成功！");
@@ -324,6 +344,10 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatortime(new Date());
 		orderLogService.insertSelective(orderLog);
 		
+		//更新订单最终状态
+		order.setStatus(OrderStatus.ABORAD.value());
+		updateByOrderIdSelective(order);
+		
 		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 				"订单操作成功！");
 		return resultBean;
@@ -363,6 +387,10 @@ public class OrderServiceImpl implements IOrderService {
 		orderLog.setOperatortime(new Date());
 		orderLogService.insertSelective(orderLog);
 		
+		//更新订单最终状态
+		order.setStatus(OrderStatus.ARRIVE.value());
+		updateByOrderIdSelective(order);
+		
 		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 				"订单操作成功！");
 		return resultBean;
@@ -388,9 +416,12 @@ public class OrderServiceImpl implements IOrderService {
 		return order;
 	}
 
-	@Override
 	public Order selectNewOrderByPhone(String passengerPhone) {
 		return orderMapper.selectNewOrderByPhone(passengerPhone);
+	}
+	
+	public Order selectNewOrderByDriverPhone(String driverPhone) {
+		return orderMapper.selectNewOrderByDriverPhone(driverPhone);
 	}
 
 }

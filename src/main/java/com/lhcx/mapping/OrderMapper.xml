@@ -19,11 +19,13 @@
     <result column="Fee" property="fee" jdbcType="DECIMAL" />
     <result column="OrderType" property="orderType" jdbcType="INTEGER" />
     <result column="CarType" property="carType" jdbcType="INTEGER" />
+    <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id,  OrderId, PassengerPhone, DepartTime, OrderTime, PassengerNote, 
     Departure, DepLongitude, DepLatitude, Destination, DestLongitude, DestLatitude, Encrypt, 
-    FareType, Fee, OrderType,CarType
+    FareType, Fee, OrderType,CarType,DriverPhone,Status
   </sql>
   <select id="selectByOrderId" resultType="com.lhcx.model.Order">
     select 
@@ -52,8 +54,13 @@
     where OrderId = #{orderId}
   </select>
   
-  <select id="selectNewOrderByPhone" resultType="com.lhcx.model.Order" parameterType="java.lang.String">
-  	select OrderId from orders where PassengerPhone = #{passengerPhone}
+  <select id="selectNewOrderByPhone" resultType="com.lhcx.model.Order">
+  	select OrderId from orders where PassengerPhone = #{passengerPhone} and Status = 1
+  	order by OrderTime desc limit 1
+  </select>
+  
+   <select id="selectNewOrderByDriverPhone" resultType="com.lhcx.model.Order">
+  	select OrderId from orders where DriverPhone = #{driverPhone} and (Status > 1 or Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
   
@@ -109,7 +116,13 @@
         OrderType,
       </if>
       <if test="carType != null" >
-        CarType
+        CarType,
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone,
+      </if>
+      <if test="status != null" >
+        Status
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -162,7 +175,13 @@
         #{orderType,jdbcType=INTEGER},
       </if>
       <if test="carType != null" >
-        #{carType,jdbcType=INTEGER}
+        #{carType,jdbcType=INTEGER},
+      </if>
+      <if test="driverphone != null" >
+        #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER}
       </if>
     </trim>
   </insert>
@@ -212,7 +231,13 @@
         OrderType = #{orderType,jdbcType=INTEGER},
       </if>
       <if test="carType != null" >
-        CarType = #{carType,jdbcType=INTEGER}
+        CarType = #{carType,jdbcType=INTEGER},
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER}
       </if>
     </set>
     where OrderId = #{orderid,jdbcType=INTEGER}

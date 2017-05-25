@@ -124,12 +124,7 @@ public class OrderController {
 			try {
 				Order newOrder = orderService
 						.selectNewOrderByPhone(passengerPhone);
-				if (newOrder == null
-						|| !(orderLogService.selectByOrderId(
-								newOrder.getOrderid()).size() == 1 && orderLogService
-								.selectByOrderId(newOrder.getOrderid()).get(0)
-								.getOperatorstatus() == OrderStatus.BILL
-								.value())) {
+				if (newOrder == null) {
 					String orderId = orderService.create(jsonRequest);
 					if (!orderId.equals("")) {
 						result.put("OrderId", orderId);
@@ -143,6 +138,13 @@ public class OrderController {
 								.selectList(d);
 						if (dLocations.size() > 0) {
 							for (DriverLocation driverLocation : dLocations) {
+								String driverPhone = driverLocation.getDriverPhone();
+								Integer orderStatus = driverLocation.getOrderStatus();
+								boolean isReceiving = (OrderStatus.Receiving.value() < orderStatus &&  orderStatus < OrderStatus.ARRIVE.value());
+								if ( !Utils.isNullOrEmpty(driverPhone) && isReceiving ) {
+									continue;
+								}
+								
 								// 距离
 								double distance = driverLocation.getDistance();
 								String mobile = driverLocation.getPhone();
@@ -193,19 +195,18 @@ public class OrderController {
 					} else {
 						resultBean = new ResultBean<Object>(
 								ResponseCode.RELEASE_ORDER_FAILED.value(),
-								ResponseCode.RELEASE_ORDER_FAILED.message(),
-								result);
+								ResponseCode.RELEASE_ORDER_FAILED.message());
 					}
 				} else {
 					resultBean = new ResultBean<Object>(
 							ResponseCode.RELEASE_ORDER_REPEAT.value(),
-							"您当前有未处理的订单,不能发单", result);
+							"您当前有未处理的订单,不能发单");
 				}
 			} catch (Exception e) {
 				log.error("create order error by :" + e.getMessage());
 				e.printStackTrace();
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-						ResponseCode.ERROR.message(), result);
+						ResponseCode.ERROR.message());
 			}
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
@@ -283,7 +284,7 @@ public class OrderController {
 	}
 
 	/**
-	 * 司机接到乘客后发车
+	 * 司机已到达乘客乘客位置
 	 * 
 	 * @param jsonRequest
 	 * @return

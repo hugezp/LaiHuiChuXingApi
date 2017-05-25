@@ -13,5 +13,7 @@ public interface OrderMapper {
     int updateByOrderIdSelective(Order record);
     
     Order selectNewOrderByPhone(@Param("passengerPhone") String passengerPhone);
+    
+    Order selectNewOrderByDriverPhone(@Param("driverPhone") String driverPhone);
 
 }
