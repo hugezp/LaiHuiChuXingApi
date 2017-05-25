@@ -59,7 +59,7 @@
 	</select>
 	<select id="selectList" resultType="com.lhcx.model.DriverLocation"
 		parameterType="com.lhcx.model.DriverLocation">
-		select driver_location.id,phone,Latitude,Longitude,orders.driverPhone,orders.status as orderStatus,
+		select driver_location.id,phone,Latitude,Longitude,orders.driverPhone
 		ROUND(
 		6378.138 * 2 * ASIN(
 		SQRT(
@@ -84,8 +84,11 @@
 		)
 		) * 1000
 		) AS distance from driver_location
-		left join orders on orders.driverPhone = driver_location.phone
-		where isDel = 1
+		where isDel = 1 and driver_location.Phone not in (
+			select orders.PassengerPhone 
+			from orders 
+			where orders.Status > 1 and orders.Status &lt; 5
+		)
 		having distance &lt; 50000
 		order by distance
 	</select>
