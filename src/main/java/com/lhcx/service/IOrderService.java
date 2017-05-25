@@ -1,6 +1,7 @@
 package com.lhcx.service;
 
 import java.text.ParseException;
+import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.Order;
@@ -19,4 +20,6 @@ public interface IOrderService {
 	Order info(String orderId);
 	Order selectNewOrderByPhone(String passengerPhone);
 	Order selectNewOrderByDriverPhone(String driverPhone);
+	List<Order> selectOrderByPassengerPhone(String passengerPhone);
+	List<Order> selectOrderByDriverPhone(String driverPhone);
 }

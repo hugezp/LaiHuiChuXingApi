@@ -19,17 +19,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lhcx.model.DriverInfo;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.Order;
 import com.lhcx.model.OrderDetail;
 import com.lhcx.model.OrderStatus;
+import com.lhcx.model.PassengerInfo;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.response.OrderResponse;
+import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderLogService;
 import com.lhcx.service.IOrderService;
+import com.lhcx.service.IPassengerInfoService;
 import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.JpushClientUtil;
@@ -60,6 +64,12 @@ public class OrderController {
 
 	@Autowired
 	private IOrderLogService orderLogService;
+	
+	@Autowired
+	private IDriverInfoService driverInfoService;
+	
+	@Autowired
+	private IPassengerInfoService passengerInfoService;
 
 	/**
 	 * 乘客下单，并推送给附近上线司机
@@ -238,7 +248,6 @@ public class OrderController {
 			}
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
@@ -405,49 +414,89 @@ public class OrderController {
 	}
 	
 	/**
-	 * 订单列表
+	 * 车主订单列表
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/orderList", method = RequestMethod.POST)
-	public ResponseEntity<String> orderList(@RequestBody JSONObject jsonRequest){
+	@RequestMapping(value = "/orderDriverList", method = RequestMethod.POST)
+	public ResponseEntity<String> orderDriverList(@RequestBody JSONObject jsonRequest){
 		ResultBean<?> resultBean = null;
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		String operatorPhone = jsonRequest.getString("OperatorPhone");
+		String driverPhone = jsonRequest.getString("DriverPhone");
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<OrderDetail> list = new ArrayList<OrderDetail>();
-		if (!StringUtils.isOrNotEmpty(operatorPhone)) {
+		if (!StringUtils.isOrNotEmpty(driverPhone)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message(),result);
 		}else {
-			result.put("userPhoto", "http://img2.imgtn.bdimg.com/it/u=3142877305,1290741287&fm=214&gp=0.jpg");
-			result.put("userName", "大呲花");
-			result.put("money", "86.68元");
-			OrderDetail od1 = new OrderDetail();
-			OrderDetail od2 = new OrderDetail();
-			OrderDetail od3 = new OrderDetail();
-			od1.setTime("昨天 19:30");
-			od1.setFee("15.68元");
-			od1.setDeparture("英协大厦");
-			od1.setDestination("二七广场");
-			od1.setOrderId("44efc11880b387d202d619e3100dae11");
-			od2.setTime("今天 20:30");
-			od2.setFee("21.84元");
-			od2.setDeparture("英协大厦");
-			od2.setDestination("中原万达");
-			od2.setOrderId("44efc11880b387d202d619e3100dae11");
-			od3.setTime("今天 20:50");
-			od3.setFee("150.68元");
-			od3.setDeparture("北关区");
-			od3.setDestination("开发区");
-			od3.setOrderId("44efc11880b387d202d619e3100dae11");
-			list.add(od1);
-			list.add(od2);
-			list.add(od3);
-			result.put("detailList", list);
+			DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
+			if (driverInfo != null) {
+				result.put("money","86.86");
+				result.put("userName",driverInfo.getDrivername());
+				result.put("userPhoto",driverInfo.getPhoto());
+				List<Order> orderList = orderService.selectOrderByDriverPhone(driverInfo.getDriverphone());
+				for (Order order : orderList) {
+					OrderDetail orderDetail = new OrderDetail();
+					orderDetail.setDeparture(order.getDeparture());
+					orderDetail.setDestination(order.getDestination());
+					orderDetail.setFee(order.getFee().toString());
+					orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
+					orderDetail.setStatus(order.getStatus());
+					list.add(orderDetail);
+				}
+				result.put("detailList", list);
+				resultBean = new ResultBean<Object>(
+						ResponseCode.SUCCESS.value(),
+						ResponseCode.SUCCESS.message(),result);
+			}else{
+				resultBean = new ResultBean<Object>(
+						ResponseCode.NO_USER.value(),
+						ResponseCode.NO_USER.message(),result);
+			}
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	/**
+	 * 乘客订单列表
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/orderPassengerList", method = RequestMethod.POST)
+	public ResponseEntity<String> orderPassengerList(@RequestBody JSONObject jsonRequest){
+		ResultBean<?> resultBean = null;
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String passengerPhone = jsonRequest.getString("PassengerPhone");
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<OrderDetail> list = new ArrayList<OrderDetail>();
+		if (!StringUtils.isOrNotEmpty(passengerPhone)) {
 			resultBean = new ResultBean<Object>(
-					ResponseCode.SUCCESS.value(),
-					ResponseCode.SUCCESS.message(),result);
+					ResponseCode.PARAMETER_WRONG.value(),
+					ResponseCode.PARAMETER_WRONG.message(),result);
+		}else {
+			PassengerInfo passenger = passengerInfoService.selectByPhone(passengerPhone);
+			if (passenger != null) {
+				result.put("money","86.86");
+				result.put("userName",passenger.getPassengername());
+				result.put("userPhoto",passenger.getPassengername());
+				List<Order> orderList = orderService.selectOrderByDriverPhone(passenger.getPassengerphone());
+				for (Order order : orderList) {
+					OrderDetail orderDetail = new OrderDetail();
+					orderDetail.setDeparture(order.getDeparture());
+					orderDetail.setDestination(order.getDestination());
+					orderDetail.setFee(order.getFee().toString());
+					orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
+					orderDetail.setStatus(order.getStatus());
+					list.add(orderDetail);
+				}
+				result.put("detailList", list);
+				resultBean = new ResultBean<Object>(
+						ResponseCode.SUCCESS.value(),
+						ResponseCode.SUCCESS.message(),result);
+			}else{
+				resultBean = new ResultBean<Object>(
+						ResponseCode.NO_USER.value(),
+						"请前往注册页面注册个人信息",result);
+			}
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
