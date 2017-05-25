@@ -55,7 +55,7 @@
   </select>
   
   <select id="selectNewOrderByPhone" resultType="com.lhcx.model.Order">
-  	select OrderId,status from orders where PassengerPhone = #{passengerPhone} and (Status > 1 or Status &lt; 5)
+  	select OrderId,status from orders where PassengerPhone = #{passengerPhone} and (Status > 0 or Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
   
