@@ -71,6 +71,11 @@ public class DriverLocationImpl implements IDriverLocationService {
 	public DriverLocation selectOnTimeDistance(String phone,long lon,long lat){
 		return driverLocationMapper.selectOnTimeDistance(phone, lon, lat);
 	}
+
+	@Override
+	public int updateLocation(DriverLocation record) {
+		return driverLocationMapper.updateLocation(record);
+	}
 	
 
 }

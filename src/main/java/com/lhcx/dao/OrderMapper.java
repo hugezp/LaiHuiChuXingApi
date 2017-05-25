@@ -11,5 +11,7 @@ public interface OrderMapper {
     Order selectByOrderId(@Param("orderId") String orderId);
     
     int updateByOrderIdSelective(Order record);
+    
+    Order selectNewOrderByPhone(@Param("passengerPhone") String passengerPhone);
 
 }

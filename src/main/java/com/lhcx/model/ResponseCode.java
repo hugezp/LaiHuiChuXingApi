@@ -19,6 +19,8 @@ public enum ResponseCode {
 	PUSH_UPDATE_FAILED(3012,"更新失败"),
 	LOGIN_FAILED(3013,"未登录或登录已失效"),
 	REGISTER_FAILED(3014,"注册失败"),
+	RELEASE_ORDER_REPEAT(3015,"您当前有未处理的订单,不能发单"),
+	DEPART_ORDER_REPEAT(3016,"您已接单,不能抢单！"),
 	PARAMETER_WRONG(4000,"参数不完整"),
 	NO_DATA(4004,"暂无数据"),
 	NO_USER(4005,"用户不存在");

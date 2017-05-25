@@ -8,4 +8,6 @@ public interface IOrderLogService {
  	int insertSelective(OrderLog record);
 
  	List<OrderLog> selectByOrderId(String orderid);
+ 	
+ 	OrderLog selectByOrderPhone(String operatorPhone);
 }

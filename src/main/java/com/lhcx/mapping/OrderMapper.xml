@@ -52,6 +52,11 @@
     where OrderId = #{orderId}
   </select>
   
+  <select id="selectNewOrderByPhone" resultType="com.lhcx.model.Order" parameterType="java.lang.String">
+  	select OrderId from orders where PassengerPhone = #{passengerPhone}
+  	order by OrderTime desc limit 1
+  </select>
+  
   <insert id="insertSelective" parameterType="com.lhcx.model.Order" >
     insert into orders
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -25,6 +25,12 @@
     from order_logs
     where OrderId = #{orderid,jdbcType=VARCHAR} order by OperatorTime desc;
   </select>
+  
+  <select id="selectByOrderPhone" resultType="com.lhcx.model.OrderLog" parameterType="java.lang.String" >
+    select OperatorStatus
+    from order_logs
+    where OperatorPhone = #{operatorPhone} order by OperatorTime desc limit 1;
+  </select>
 
   <insert id="insertSelective" parameterType="com.lhcx.model.OrderLog" >
     insert into order_logs

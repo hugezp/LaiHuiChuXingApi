@@ -137,7 +137,7 @@ public class PushController {
 				driverLocation.setLatitude(latitude);
 				driverLocation.setPositiontime(new Date());
 				int flag = driverLocationService
-						.updateByPhoneSelective(driverLocation);
+						.updateLocation(driverLocation);
 				if (flag > 0) {
 					resultBean = new ResultBean<Object>(
 							ResponseCode.SUCCESS.value(),

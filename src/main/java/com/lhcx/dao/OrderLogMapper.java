@@ -2,6 +2,8 @@ package com.lhcx.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.lhcx.model.OrderLog;
 
 public interface OrderLogMapper {
@@ -9,4 +11,6 @@ public interface OrderLogMapper {
     int insertSelective(OrderLog record);
 
     List<OrderLog> selectByOrderId(String orderid);
+    
+    OrderLog selectByOrderPhone(@Param("operatorPhone") String operatorPhone);
 }
