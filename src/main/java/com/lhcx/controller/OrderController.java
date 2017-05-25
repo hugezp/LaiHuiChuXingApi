@@ -23,7 +23,6 @@ import com.lhcx.model.DriverInfo;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.Order;
 import com.lhcx.model.OrderDetail;
-import com.lhcx.model.OrderStatus;
 import com.lhcx.model.PassengerInfo;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
@@ -244,7 +243,6 @@ public class OrderController {
 			}
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
