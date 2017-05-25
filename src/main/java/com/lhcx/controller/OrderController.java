@@ -140,11 +140,12 @@ public class OrderController {
 							for (DriverLocation driverLocation : dLocations) {
 								String driverPhone = driverLocation.getDriverPhone();
 								Integer orderStatus = driverLocation.getOrderStatus();
-								boolean isReceiving = (OrderStatus.Receiving.value() < orderStatus &&  orderStatus < OrderStatus.ARRIVE.value());
-								if ( !Utils.isNullOrEmpty(driverPhone) && isReceiving ) {
-									continue;
+								if (orderStatus != null && !Utils.isNullOrEmpty(driverPhone)) {
+									boolean isReceiving = (OrderStatus.Receiving.value() < orderStatus &&  orderStatus < OrderStatus.ARRIVE.value());
+									if (isReceiving ) {
+										continue;
+									}
 								}
-								
 								// 距离
 								double distance = driverLocation.getDistance();
 								String mobile = driverLocation.getPhone();
