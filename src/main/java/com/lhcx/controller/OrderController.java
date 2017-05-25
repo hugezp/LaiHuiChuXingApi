@@ -32,7 +32,6 @@ import com.lhcx.service.IOrderLogService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.ConfigUtils;
-import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.PointToDistance;
 import com.lhcx.utils.StringUtils;
@@ -154,6 +153,11 @@ public class OrderController {
 			String orderId = jsonRequest.getString("OrderId");
 			
 			Order order = orderService.selectByOrderId(orderId);
+			
+			if (order.getStatus() != OrderStatus.BILL.value()) {
+				return;
+			}
+			
 			// 乘客出发地经度
 			double depLongitude = Double.parseDouble(order.getDeplongitude()) / 1000000;
 			// 乘客出发地纬度

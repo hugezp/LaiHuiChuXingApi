@@ -59,7 +59,7 @@
 	</select>
 	<select id="selectList" resultType="com.lhcx.model.DriverLocation"
 		parameterType="com.lhcx.model.DriverLocation">
-		select driver_location.id,phone,Latitude,Longitude,orders.driverPhone
+		select driver_location.id,phone,Latitude,Longitude,
 		ROUND(
 		6378.138 * 2 * ASIN(
 		SQRT(
