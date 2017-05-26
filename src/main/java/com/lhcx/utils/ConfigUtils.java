@@ -25,5 +25,8 @@ public class ConfigUtils {
 	
 	//订单失效时间
 	public static final long ORDER_TO_LIVE = 10 * 60 * 1000;
+	
+	//订单列表每页个数
+	public static final int PAGE_SIZE = 4;
 
 }

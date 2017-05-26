@@ -468,14 +468,12 @@ public class OrderServiceImpl implements IOrderService {
 		return orderMapper.selectNewOrderByDriverPhone(driverPhone);
 	}
 
-	@Override
-	public List<Order> selectOrderByPassengerPhone(String passengerPhone) {
-		return orderMapper.selectOrderByPassengerPhone(passengerPhone);
+	public List<Order> selectOrderByPassengerPhone(String passengerPhone,int page,int pageSize) {
+		return orderMapper.selectOrderByPassengerPhone(passengerPhone,(page-1)*pageSize, pageSize);
 	}
-
-	@Override
-	public List<Order> selectOrderByDriverPhone(String driverPhone) {
-		return orderMapper.selectOrderByDriverPhone(driverPhone);
+	
+	public List<Order> selectOrderByDriverPhone(String driverPhone, int page, int pageSize) {
+		return orderMapper.selectOrderByDriverPhone(driverPhone, (page-1)*pageSize, pageSize);
 	}
 
 }

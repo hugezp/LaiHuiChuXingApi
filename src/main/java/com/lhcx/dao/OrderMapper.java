@@ -18,8 +18,8 @@ public interface OrderMapper {
     
     Order selectNewOrderByDriverPhone(@Param("driverPhone") String driverPhone);
     
-    List<Order> selectOrderByPassengerPhone(@Param("passengerPhone") String passengerPhone);
+    List<Order> selectOrderByPassengerPhone(@Param("passengerPhone") String passengerPhone,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
     
-    List<Order> selectOrderByDriverPhone(@Param("driverPhone") String driverPhone);
+    List<Order> selectOrderByDriverPhone(@Param("driverPhone") String driverPhone,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
 
 }

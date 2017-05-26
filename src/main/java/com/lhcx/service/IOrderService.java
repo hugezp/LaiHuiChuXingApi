@@ -20,6 +20,6 @@ public interface IOrderService {
 	Order info(String orderId);
 	Order selectNewOrderByPhone(String passengerPhone);
 	Order selectNewOrderByDriverPhone(String driverPhone);
-	List<Order> selectOrderByPassengerPhone(String passengerPhone);
-	List<Order> selectOrderByDriverPhone(String driverPhone);
+	List<Order> selectOrderByPassengerPhone(String passengerPhone,int page,int pageSize);
+	List<Order> selectOrderByDriverPhone(String driverPhone,int page,int pageSize);
 }

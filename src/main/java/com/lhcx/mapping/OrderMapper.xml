@@ -65,6 +65,7 @@
   	 from orders 
   	 where PassengerPhone = #{passengerPhone} 
   	 order by OrderTime desc
+  	 limit #{startPro},#{pageSize}
   </select>
   
   <select id="selectOrderByDriverPhone" resultType="com.lhcx.model.Order">
@@ -73,6 +74,7 @@
   	 from orders 
   	 where DriverPhone = #{driverPhone} 
   	 order by OrderTime desc
+  	 limit #{startPro},#{pageSize}
   </select>
   
    <select id="selectNewOrderByDriverPhone" resultType="com.lhcx.model.Order">

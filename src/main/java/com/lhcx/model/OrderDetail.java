@@ -8,6 +8,7 @@ public class OrderDetail {
 	private String destination;
 	private String fee;
 	private int status;
+	private int orderType;
 	
 	public int getStatus() {
 		return status;
@@ -55,6 +56,14 @@ public class OrderDetail {
 
 	public void setFee(String fee) {
 		this.fee = fee;
+	}
+
+	public int getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(int orderType) {
+		this.orderType = orderType;
 	}
 
 }

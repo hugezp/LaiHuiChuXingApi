@@ -424,8 +424,11 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/orderDriverList", method = RequestMethod.POST)
-	public ResponseEntity<String> orderDriverList(){
+	public ResponseEntity<String> orderDriverList(@RequestBody JSONObject jsonRequest){
 		ResultBean<?> resultBean = null;
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		int page = jsonRequest.getInteger("page")==null? 1 : jsonRequest.getInteger("page");
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
 			String driverPhone = user.getUserphone();
@@ -441,10 +444,11 @@ public class OrderController {
 					result.put("money","86.86");
 					result.put("userName",driverInfo.getDrivername());
 					result.put("userPhoto",driverInfo.getPhoto());
-					List<Order> orderList = orderService.selectOrderByDriverPhone(driverInfo.getDriverphone());
+					List<Order> orderList = orderService.selectOrderByDriverPhone(driverInfo.getDriverphone(),page,ConfigUtils.PAGE_SIZE);
 					for (Order order : orderList) {
 						OrderDetail orderDetail = new OrderDetail();
 						orderDetail.setOrderId(order.getOrderid());
+						orderDetail.setOrderType(order.getOrderType());
 						orderDetail.setDeparture(order.getDeparture());
 						orderDetail.setDestination(order.getDestination());
 						orderDetail.setFee(order.getFee().toString());
@@ -463,13 +467,14 @@ public class OrderController {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultBean = new ResultBean<Object>(
 					ResponseCode.ERROR.value(),
 					"服务器繁忙，请稍后再试！");
 		}
 		
 		
-		return Utils.resultResponseJson(resultBean, null);
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 	
 	/**
@@ -477,7 +482,10 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/orderPassengerList", method = RequestMethod.POST)
-	public ResponseEntity<String> orderPassengerList(){
+	public ResponseEntity<String> orderPassengerList(@RequestBody JSONObject jsonRequest){
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		int page = jsonRequest.getInteger("page")==null? 1 : jsonRequest.getInteger("page");
 		ResultBean<?> resultBean = null;
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
@@ -495,10 +503,11 @@ public class OrderController {
 					result.put("userName",passenger.getPassengername());
 					result.put("userPhoto",passenger.getPassengername());
 				}
-				List<Order> orderList = orderService.selectOrderByPassengerPhone(user.getUserphone());
+				List<Order> orderList = orderService.selectOrderByPassengerPhone(user.getUserphone(),page,ConfigUtils.PAGE_SIZE);
 				for (Order order : orderList) {
 					OrderDetail orderDetail = new OrderDetail();
 					orderDetail.setOrderId(order.getOrderid());
+					orderDetail.setOrderType(order.getOrderType());
 					orderDetail.setDeparture(order.getDeparture());
 					orderDetail.setDestination(order.getDestination());
 					orderDetail.setFee(order.getFee().toString());
@@ -512,12 +521,13 @@ public class OrderController {
 						ResponseCode.SUCCESS.message(),result);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			resultBean = new ResultBean<Object>(
 					ResponseCode.ERROR.value(),
 					"服务器繁忙，请稍后再试！");
 		}
 		
-		return Utils.resultResponseJson(resultBean, null);
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 	
 }
