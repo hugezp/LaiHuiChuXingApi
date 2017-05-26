@@ -274,19 +274,24 @@ public class OrderServiceImpl implements IOrderService {
 		int flag = 0;
 		PushNotification pushNotification = new PushNotification();
 		if (userType.equals(UserType.PASSENGER.value()) && !Utils.isNullOrEmpty(driverPhone)) {
+			//已接单乘客取消推给司机
 			flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
 					.sendToRegistrationId("11", driverPhone,
 							content, content, content,
 							extrasParam);
 			pushNotification.setPushPhone(passenegerPhone);
 			pushNotification.setReceivePhone(driverPhone);
-		}else {
+		}else if(userType.equals(UserType.DRIVER.value())){
+			//已接单司机取消推给乘客
 			flag = JpushClientUtil.getInstance(ConfigUtils.PASSENGER_JPUSH_APP_KEY,ConfigUtils.PASSENGER_JPUSH_MASTER_SECRET)
 					.sendToRegistrationId("11", passenegerPhone,
 							content, content, content,
 							extrasParam);
 			pushNotification.setPushPhone(driverPhone);
 			pushNotification.setReceivePhone(passenegerPhone);
+		}else {
+			//未接单
+			flag = 2;
 		}
 		
 		if (flag == 1) {
@@ -295,7 +300,7 @@ public class OrderServiceImpl implements IOrderService {
 			pushNotification.setPushType(1);
 			pushNotification.setData(extrasParam.toString());
 			pushNotificationService.insertSelective(pushNotification);
-		}else {
+		}else if(flag == 0){
 			throw new Exception();
 		}
 		
