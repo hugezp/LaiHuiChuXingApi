@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import com.lhcx.model.PassengerInfo;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.model.User;
 import com.lhcx.model.response.OrderResponse;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
@@ -71,6 +73,9 @@ public class OrderController {
 	
 	@Autowired
 	private IPassengerInfoService passengerInfoService;
+	
+	@Autowired
+	private HttpSession session;
 
 	/**
 	 * 乘客下单，并推送给附近上线司机
@@ -419,43 +424,52 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/orderDriverList", method = RequestMethod.POST)
-	public ResponseEntity<String> orderDriverList(@RequestBody JSONObject jsonRequest){
+	public ResponseEntity<String> orderDriverList(){
 		ResultBean<?> resultBean = null;
-		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		String driverPhone = jsonRequest.getString("DriverPhone");
-		Map<String, Object> result = new HashMap<String, Object>();
-		List<OrderDetail> list = new ArrayList<OrderDetail>();
-		if (!StringUtils.isOrNotEmpty(driverPhone)) {
-			resultBean = new ResultBean<Object>(
-					ResponseCode.PARAMETER_WRONG.value(),
-					ResponseCode.PARAMETER_WRONG.message(),result);
-		}else {
-			DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
-			if (driverInfo != null) {
-				result.put("money","86.86");
-				result.put("userName",driverInfo.getDrivername());
-				result.put("userPhoto",driverInfo.getPhoto());
-				List<Order> orderList = orderService.selectOrderByDriverPhone(driverInfo.getDriverphone());
-				for (Order order : orderList) {
-					OrderDetail orderDetail = new OrderDetail();
-					orderDetail.setDeparture(order.getDeparture());
-					orderDetail.setDestination(order.getDestination());
-					orderDetail.setFee(order.getFee().toString());
-					orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
-					orderDetail.setStatus(order.getStatus());
-					list.add(orderDetail);
+		try {
+			User user = (User)session.getAttribute("CURRENT_USER");
+			String driverPhone = user.getUserphone();
+			Map<String, Object> result = new HashMap<String, Object>();
+			List<OrderDetail> list = new ArrayList<OrderDetail>();
+			if (!StringUtils.isOrNotEmpty(driverPhone)) {
+				resultBean = new ResultBean<Object>(
+						ResponseCode.PARAMETER_WRONG.value(),
+						ResponseCode.PARAMETER_WRONG.message(),result);
+			}else {
+				DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
+				if (driverInfo != null) {
+					result.put("money","86.86");
+					result.put("userName",driverInfo.getDrivername());
+					result.put("userPhoto",driverInfo.getPhoto());
+					List<Order> orderList = orderService.selectOrderByDriverPhone(driverInfo.getDriverphone());
+					for (Order order : orderList) {
+						OrderDetail orderDetail = new OrderDetail();
+						orderDetail.setOrderId(order.getOrderid());
+						orderDetail.setDeparture(order.getDeparture());
+						orderDetail.setDestination(order.getDestination());
+						orderDetail.setFee(order.getFee().toString());
+						orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
+						orderDetail.setStatus(order.getStatus());
+						list.add(orderDetail);
+					}
+					result.put("detailList", list);
+					resultBean = new ResultBean<Object>(
+							ResponseCode.SUCCESS.value(),
+							ResponseCode.SUCCESS.message(),result);
+				}else{
+					resultBean = new ResultBean<Object>(
+							ResponseCode.NO_USER.value(),
+							ResponseCode.NO_USER.message(),result);
 				}
-				result.put("detailList", list);
-				resultBean = new ResultBean<Object>(
-						ResponseCode.SUCCESS.value(),
-						ResponseCode.SUCCESS.message(),result);
-			}else{
-				resultBean = new ResultBean<Object>(
-						ResponseCode.NO_USER.value(),
-						ResponseCode.NO_USER.message(),result);
 			}
+		} catch (Exception e) {
+			resultBean = new ResultBean<Object>(
+					ResponseCode.ERROR.value(),
+					"服务器繁忙，请稍后再试！");
 		}
-		return Utils.resultResponseJson(resultBean, jsonpCallback);
+		
+		
+		return Utils.resultResponseJson(resultBean, null);
 	}
 	
 	/**
@@ -463,43 +477,51 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/orderPassengerList", method = RequestMethod.POST)
-	public ResponseEntity<String> orderPassengerList(@RequestBody JSONObject jsonRequest){
+	public ResponseEntity<String> orderPassengerList(){
 		ResultBean<?> resultBean = null;
-		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		String passengerPhone = jsonRequest.getString("PassengerPhone");
-		Map<String, Object> result = new HashMap<String, Object>();
-		List<OrderDetail> list = new ArrayList<OrderDetail>();
-		if (!StringUtils.isOrNotEmpty(passengerPhone)) {
-			resultBean = new ResultBean<Object>(
-					ResponseCode.PARAMETER_WRONG.value(),
-					ResponseCode.PARAMETER_WRONG.message(),result);
-		}else {
-			PassengerInfo passenger = passengerInfoService.selectByPhone(passengerPhone);
-			if (passenger != null) {
-				result.put("money","86.86");
-				result.put("userName",passenger.getPassengername());
-				result.put("userPhoto",passenger.getPassengername());
-				List<Order> orderList = orderService.selectOrderByDriverPhone(passenger.getPassengerphone());
-				for (Order order : orderList) {
-					OrderDetail orderDetail = new OrderDetail();
-					orderDetail.setDeparture(order.getDeparture());
-					orderDetail.setDestination(order.getDestination());
-					orderDetail.setFee(order.getFee().toString());
-					orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
-					orderDetail.setStatus(order.getStatus());
-					list.add(orderDetail);
+		try {
+			User user = (User)session.getAttribute("CURRENT_USER");
+			String passengerPhone = user.getUserphone();
+			Map<String, Object> result = new HashMap<String, Object>();
+			List<OrderDetail> list = new ArrayList<OrderDetail>();
+			if (!StringUtils.isOrNotEmpty(passengerPhone)) {
+				resultBean = new ResultBean<Object>(
+						ResponseCode.PARAMETER_WRONG.value(),
+						ResponseCode.PARAMETER_WRONG.message(),result);
+			}else {
+				PassengerInfo passenger = passengerInfoService.selectByPhone(passengerPhone);
+				if (passenger != null) {
+					result.put("money","86.86");
+					result.put("userName",passenger.getPassengername());
+					result.put("userPhoto",passenger.getPassengername());
+					List<Order> orderList = orderService.selectOrderByPassengerPhone(passenger.getPassengerphone());
+					for (Order order : orderList) {
+						OrderDetail orderDetail = new OrderDetail();
+						orderDetail.setOrderId(order.getOrderid());
+						orderDetail.setDeparture(order.getDeparture());
+						orderDetail.setDestination(order.getDestination());
+						orderDetail.setFee(order.getFee().toString());
+						orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
+						orderDetail.setStatus(order.getStatus());
+						list.add(orderDetail);
+					}
+					result.put("detailList", list);
+					resultBean = new ResultBean<Object>(
+							ResponseCode.SUCCESS.value(),
+							ResponseCode.SUCCESS.message(),result);
+				}else{
+					resultBean = new ResultBean<Object>(
+							ResponseCode.NO_USER.value(),
+							"请前往注册页面注册个人信息",result);
 				}
-				result.put("detailList", list);
-				resultBean = new ResultBean<Object>(
-						ResponseCode.SUCCESS.value(),
-						ResponseCode.SUCCESS.message(),result);
-			}else{
-				resultBean = new ResultBean<Object>(
-						ResponseCode.NO_USER.value(),
-						"请前往注册页面注册个人信息",result);
 			}
+		} catch (Exception e) {
+			resultBean = new ResultBean<Object>(
+					ResponseCode.ERROR.value(),
+					"服务器繁忙，请稍后再试！");
 		}
-		return Utils.resultResponseJson(resultBean, jsonpCallback);
+		
+		return Utils.resultResponseJson(resultBean, null);
 	}
 	
 }
