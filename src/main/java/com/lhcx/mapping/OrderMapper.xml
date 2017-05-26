@@ -59,6 +59,22 @@
   	order by OrderTime desc limit 1
   </select>
   
+   <select id="selectOrderByPassengerPhone" resultType="com.lhcx.model.Order">
+  	select 
+  	<include refid="Base_Column_List" />
+  	 from orders 
+  	 where PassengerPhone = #{passengerPhone} 
+  	 order by OrderTime desc
+  </select>
+  
+  <select id="selectOrderByDriverPhone" resultType="com.lhcx.model.Order">
+  	select 
+  	<include refid="Base_Column_List" />
+  	 from orders 
+  	 where DriverPhone = #{driverPhone} 
+  	 order by OrderTime desc
+  </select>
+  
    <select id="selectNewOrderByDriverPhone" resultType="com.lhcx.model.Order">
   	select OrderId,status from orders where DriverPhone = #{driverPhone} and (Status > 1 and Status &lt; 5)
   	order by OrderTime desc limit 1
