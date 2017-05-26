@@ -273,7 +273,7 @@ public class OrderServiceImpl implements IOrderService {
 		String userType = user.getUsertype();
 		int flag = 0;
 		PushNotification pushNotification = new PushNotification();
-		if (userType.equals(UserType.PASSENGER.value())) {
+		if (userType.equals(UserType.PASSENGER.value()) && !Utils.isNullOrEmpty(driverPhone)) {
 			flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
 					.sendToRegistrationId("11", driverPhone,
 							content, content, content,
