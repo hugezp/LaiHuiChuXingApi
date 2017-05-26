@@ -37,6 +37,7 @@ public class PassengerController {
 	private IOrderService orderService;
 	@Autowired
 	private IPassengerInfoService passengerInfoService;
+	@Autowired
 	private HttpSession session;
 
 	/**
