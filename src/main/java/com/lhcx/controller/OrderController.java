@@ -494,26 +494,22 @@ public class OrderController {
 					result.put("money","86.86");
 					result.put("userName",passenger.getPassengername());
 					result.put("userPhoto",passenger.getPassengername());
-					List<Order> orderList = orderService.selectOrderByPassengerPhone(passenger.getPassengerphone());
-					for (Order order : orderList) {
-						OrderDetail orderDetail = new OrderDetail();
-						orderDetail.setOrderId(order.getOrderid());
-						orderDetail.setDeparture(order.getDeparture());
-						orderDetail.setDestination(order.getDestination());
-						orderDetail.setFee(order.getFee().toString());
-						orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
-						orderDetail.setStatus(order.getStatus());
-						list.add(orderDetail);
-					}
-					result.put("detailList", list);
-					resultBean = new ResultBean<Object>(
-							ResponseCode.SUCCESS.value(),
-							ResponseCode.SUCCESS.message(),result);
-				}else{
-					resultBean = new ResultBean<Object>(
-							ResponseCode.NO_USER.value(),
-							"请前往注册页面注册个人信息",result);
 				}
+				List<Order> orderList = orderService.selectOrderByPassengerPhone(user.getUserphone());
+				for (Order order : orderList) {
+					OrderDetail orderDetail = new OrderDetail();
+					orderDetail.setOrderId(order.getOrderid());
+					orderDetail.setDeparture(order.getDeparture());
+					orderDetail.setDestination(order.getDestination());
+					orderDetail.setFee(order.getFee().toString());
+					orderDetail.setTime(DateUtils.todayDate(order.getOrdertime()));
+					orderDetail.setStatus(order.getStatus());
+					list.add(orderDetail);
+				}
+				result.put("detailList", list);
+				resultBean = new ResultBean<Object>(
+						ResponseCode.SUCCESS.value(),
+						ResponseCode.SUCCESS.message(),result);
 			}
 		} catch (Exception e) {
 			resultBean = new ResultBean<Object>(
