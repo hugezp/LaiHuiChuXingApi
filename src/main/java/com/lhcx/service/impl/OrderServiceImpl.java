@@ -23,6 +23,7 @@ import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
+import com.lhcx.model.UserType;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderLogService;
@@ -210,7 +211,7 @@ public class OrderServiceImpl implements IOrderService {
 		return resultBean;
 	}
 	
-	public ResultBean<?> cancel(JSONObject jsonRequest) {
+	public ResultBean<?> cancel(JSONObject jsonRequest) throws Exception {
 		ResultBean<?> resultBean = null;
 		String orderId = jsonRequest.getString("OrderId");
 		String operator = jsonRequest.getString("Operator");
@@ -259,6 +260,44 @@ public class OrderServiceImpl implements IOrderService {
 		//更新订单最终状态
 		order.setStatus(OrderStatus.CANCEL.value());
 		updateByOrderIdSelective(order);
+				
+		//step2：推送给接单司机
+		
+		String content = "【来回出行】您的行程订单已被取消，请前往查看!";
+		
+		Map<String, String> extrasParam= new HashMap<String, String>();
+		extrasParam.put("OrderId", orderId);
+		extrasParam.put("passengerPhone", passenegerPhone);
+		extrasParam.put("DriverPhone", driverPhone);				
+		
+		String userType = user.getUsertype();
+		int flag = 0;
+		PushNotification pushNotification = new PushNotification();
+		if (userType.equals(UserType.PASSENGER.value())) {
+			flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
+					.sendToRegistrationId("11", driverPhone,
+							content, content, content,
+							extrasParam);
+			pushNotification.setPushPhone(passenegerPhone);
+			pushNotification.setReceivePhone(driverPhone);
+		}else {
+			flag = JpushClientUtil.getInstance(ConfigUtils.PASSENGER_JPUSH_APP_KEY,ConfigUtils.PASSENGER_JPUSH_MASTER_SECRET)
+					.sendToRegistrationId("11", passenegerPhone,
+							content, content, content,
+							extrasParam);
+			pushNotification.setPushPhone(driverPhone);
+			pushNotification.setReceivePhone(passenegerPhone);
+		}
+		
+		if (flag == 1) {
+			pushNotification.setOrderId(orderId);
+			pushNotification.setAlert(content);
+			pushNotification.setPushType(1);
+			pushNotification.setData(extrasParam.toString());
+			pushNotificationService.insertSelective(pushNotification);
+		}else {
+			throw new Exception();
+		}
 		
 		resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 				"订单取消成功！");

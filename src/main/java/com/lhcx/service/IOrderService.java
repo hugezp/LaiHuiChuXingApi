@@ -13,7 +13,7 @@ public interface IOrderService {
 	ResultBean<?> match(JSONObject jsonRequest) throws Exception;
 	String create(JSONObject jsonRequest) throws ParseException ;
 	int updateByOrderIdSelective(Order record);
-	ResultBean<?> cancel(JSONObject jsonRequest);
+	ResultBean<?> cancel(JSONObject jsonRequest) throws Exception;
 	ResultBean<?> reached(JSONObject jsonRequest);
 	ResultBean<?> depart(JSONObject jsonRequest);
 	ResultBean<?> arrive(JSONObject jsonRequest);
