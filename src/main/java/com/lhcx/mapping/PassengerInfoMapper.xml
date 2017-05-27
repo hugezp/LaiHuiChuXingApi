@@ -110,7 +110,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.PassengerInfo" >
+  <update id="updateByPhoneSelective" parameterType="com.lhcx.model.PassengerInfo" >
     update passenger_infos
     <set >
       <if test="companyid != null" >
@@ -118,9 +118,6 @@
       </if>
       <if test="registerdate != null" >
         RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="passengerphone != null" >
-        PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
       </if>
       <if test="passengername != null" >
         PassengerName = #{passengername,jdbcType=VARCHAR},
@@ -141,9 +138,9 @@
         UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where PassengerPhone = #{passengerphone,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.PassengerInfo" >
+  <update id="updateByPhone" parameterType="com.lhcx.model.PassengerInfo" >
     update passenger_infos
     set CompanyId = #{companyid,jdbcType=VARCHAR},
       RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
@@ -154,6 +151,6 @@
       Flag = #{flag,jdbcType=INTEGER},
       CreateTime = #{createtime,jdbcType=TIMESTAMP},
       UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
   </update>
 </mapper>

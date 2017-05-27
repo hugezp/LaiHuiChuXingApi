@@ -48,7 +48,7 @@ public class PassengerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/order/noFinished", method = RequestMethod.POST)
-	public ResponseEntity<String> info() {
+	public ResponseEntity<String> noFinished() {
 		// 取得参数值
 		String jsonpCallback = "";
 		ResultBean<?> resultBean = null;
@@ -73,43 +73,88 @@ public class PassengerController {
 
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-
+	
 	/**
-	 * 完善个人信息
-	 * @param passengerName 乘客姓名
-	 * @param passengerGeender 乘客性别
+	 * 获取基本信息
+	 * 
+	 * @param jsonRequest
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/add/info", method = RequestMethod.POST)
-	public ResponseEntity<String> add(@RequestBody JSONObject jsonRequest) {
+	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	public ResponseEntity<String> info() {
+		// 取得参数值
 		// 取得参数值
 		String jsonpCallback = "";
-		String passengerName = jsonRequest.getString("passengerName");
-		String passengerGeender = jsonRequest.getString("passengerGeender");
-		PassengerInfo passengerInfo = new PassengerInfo();
 		ResultBean<?> resultBean = null;
-//		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			passengerInfo.setPassengername(passengerName);
-			passengerInfo.setPassengergeender(passengerGeender);
-			passengerInfo.setRegisterdate(new Date());
-			passengerInfo.setCreatetime(new Date());
-			passengerInfo.setPassengerphone(user.getUserphone());
-			passengerInfo.setFlag(1);
-			passengerInfo.setState(0);
-			passengerInfo.setUpdatetime(new Date());
-			passengerInfoService.insertSelective(passengerInfo);
+			PassengerInfo info = passengerInfoService.selectByPhone(user.getUserphone());
+			if (info != null) {
+				result.put("passengerName", info.getPassengername());
+				result.put("passengerGeender", info.getPassengergeender());
+			}else {
+				result.put("passengerName", "");
+				result.put("passengerGeender", "");
+			}
+			result.put("phone", user.getUserphone());
+						
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-					"用户信息添加成功！");
+					"获取成功！",result);
+			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-					"用户信息添加失败！");
+					"获取失败！");
 		}
-
+		
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
+	
+	/**
+	 * 司机端更新
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ResponseEntity<String> update(@RequestBody JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		try {
+			String passengerName = jsonRequest.getString("passengerName");
+			String passengerGeender = jsonRequest.getString("passengerGeender");
+			User user = (User) session.getAttribute("CURRENT_USER");
+			PassengerInfo info = passengerInfoService.selectByPhone(user.getUserphone());
+			if (info == null) {
+				info = new PassengerInfo();
+				info.setPassengername(passengerName);
+				info.setPassengergeender(passengerGeender);
+				info.setRegisterdate(new Date());
+				info.setCreatetime(new Date());
+				info.setPassengerphone(user.getUserphone());
+				info.setFlag(1);
+				info.setState(0);
+				info.setUpdatetime(new Date());
+				passengerInfoService.insertSelective(info);
+			} else {
+				info.setPassengername(passengerName);
+				info.setPassengergeender(passengerGeender);
+				info.setFlag(2);
+				info.setUpdatetime(new Date());
+				passengerInfoService.updateByPhoneSelective(info);
+			}
+			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+					"乘客信息提交成功！");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					"提交失败！");
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
 }

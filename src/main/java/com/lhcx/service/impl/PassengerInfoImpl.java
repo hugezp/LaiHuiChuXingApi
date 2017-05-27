@@ -21,7 +21,11 @@ public class PassengerInfoImpl implements IPassengerInfoService {
 
 	@Override
 	public int insertSelective(PassengerInfo passengerInfo) {
-		// TODO Auto-generated method stub
 		return passengerInfoMapper.insertSelective(passengerInfo);
+	}
+
+	@Override
+	public int updateByPhoneSelective(PassengerInfo record) {
+		return passengerInfoMapper.updateByPhoneSelective(record);
 	}
 }

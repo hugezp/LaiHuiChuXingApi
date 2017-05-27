@@ -13,9 +13,9 @@ public interface PassengerInfoMapper {
 
     PassengerInfo selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(PassengerInfo record);
+    int updateByPhoneSelective(PassengerInfo record);
 
-    int updateByPrimaryKey(PassengerInfo record);
+    int updateByPhone(PassengerInfo record);
     
     PassengerInfo selectByPhone(@Param("phone") String phone);
 }
