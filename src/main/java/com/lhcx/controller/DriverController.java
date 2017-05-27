@@ -3,7 +3,6 @@ package com.lhcx.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -124,16 +123,12 @@ public class DriverController {
 	}
 	
 	/**
-	 * 司机端注册 content-type:application/json
-	 * 
-	 * @param: mobile:手机号 userType:用户类型，driver-司机端，passenger-乘客端 code:验证码
-	 *         jsonpCallback：跨域参数
+	 * 司机端更新
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ResponseEntity<String> update(HttpServletRequest request,
-			@RequestBody JSONObject jsonRequest) {
+	public ResponseEntity<String> update(@RequestBody JSONObject jsonRequest) {
 		ResultBean<?> resultBean = null;
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
