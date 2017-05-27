@@ -202,7 +202,7 @@ public class OrderServiceImpl implements IOrderService {
 				}
 			} else {
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-						"您没有经营上线，请经营上线后接单！");
+						"您没有听单上线，请听单上线后接单！");
 			}
 		}else {
 			resultBean = new ResultBean<Object>(ResponseCode.DEPART_ORDER_REPEAT.value(),

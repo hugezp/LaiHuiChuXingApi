@@ -21,10 +21,10 @@ public enum ResponseCode {
 	REGISTER_FAILED(3014,"注册失败"),
 	RELEASE_ORDER_REPEAT(3015,"您当前有未处理的订单,不能发单"),
 	DEPART_ORDER_REPEAT(3016,"您已接单,不能抢单！"),
+	DRIVER_INVALID(3017,"司机审核未通过，不能听单上线！"),
 	PARAMETER_WRONG(4000,"参数不完整"),
 	NO_DATA(4004,"暂无数据"),
 	NO_USER(4005,"用户不存在");
-	
 	
 	private Integer value;
 	private String message;

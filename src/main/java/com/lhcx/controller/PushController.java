@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lhcx.model.DriverInfo;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.PushNotification;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
+import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IPushNotificationService;
 import com.lhcx.utils.Utils;
@@ -42,6 +44,8 @@ public class PushController {
 	private IDriverLocationService driverLocationService;
 	@Autowired
 	private HttpSession session;
+	@Autowired
+	private IDriverInfoService driverInfoService;
 
 	@ResponseBody
 	@RequestMapping(value = "/List", method = RequestMethod.POST)
@@ -97,14 +101,22 @@ public class PushController {
 		}else {
 			try {
 				User user = (User) session.getAttribute("CURRENT_USER");
-				if (driverLocationService.setButton(jsonRequest,
-						user.getUserphone())) {
-					resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-							ResponseCode.SUCCESS.message());
-				} else {
-					resultBean = new ResultBean<Object>(ResponseCode.PUSH_BUTTON_FAILED.value(),
-							ResponseCode.PUSH_BUTTON_FAILED.message());
+				DriverInfo driverInfo = driverInfoService.selectByPhone(user.getUserphone());
+				if(driverInfo == null || driverInfo.getState() != 0){
+					//司机信息审核未通过
+					resultBean = new ResultBean<Object>(ResponseCode.DRIVER_INVALID.value(),
+							ResponseCode.DRIVER_INVALID.message());
+				}else {
+					if (driverLocationService.setButton(jsonRequest,
+							user.getUserphone())) {
+						resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+								ResponseCode.SUCCESS.message());
+					} else {
+						resultBean = new ResultBean<Object>(ResponseCode.PUSH_BUTTON_FAILED.value(),
+								ResponseCode.PUSH_BUTTON_FAILED.message());
+					}
 				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
