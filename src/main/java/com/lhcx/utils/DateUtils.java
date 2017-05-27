@@ -27,6 +27,12 @@ public class DateUtils {
 	   return dateFormat.format(date);
 	}
     
+    public static String dateFormat2(Date date) {
+ 	   SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+ 	   return dateFormat.format(date);
+ 	}
+    
     public static Date toDate(Long longDate) throws ParseException {
  	  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
  	  if (longDate == null) {
