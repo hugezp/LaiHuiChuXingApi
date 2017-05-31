@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.lhcx.model.ResultBean;
 
 public class Utils {
@@ -70,12 +71,13 @@ public class Utils {
 
     //接口返回结果处理
     public static ResponseEntity<String> resultResponseJson(ResultBean<?> resultBean, String callBack){
+    	Gson gson = new Gson();
         String resultJsonStr = "";
         if(!isNullOrEmpty(callBack) && callBack.equals(JSON_CALL_BACK)){
             resultJsonStr = JSON_CALL_BACK + "(" + JSON.toJSONString(resultBean) + ")";
         }else{
             resultJsonStr = JSON.toJSONString(resultBean);
         }
-        return new ResponseEntity<String>(resultJsonStr, responseHeaders(), HttpStatus.OK);
+        return new ResponseEntity<String>(gson.toJson(resultJsonStr), responseHeaders(), HttpStatus.OK);
     }
 }
