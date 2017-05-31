@@ -171,4 +171,20 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
+	
+	/**
+	 * 支付
+	 * @param jsonRequest
+	 * @return
+	 */
+	public static boolean payValidation(JSONObject jsonRequest) {
+		boolean flag = false;
+		String orderId = jsonRequest.getString("orderId");
+		Integer payType = jsonRequest.getInteger("payType");
+		if (StringUtils.isOrNotEmpty(orderId)
+				&& payType != null && payType >=0) {
+			flag = true;
+		}
+		return flag;
+	}
 }
