@@ -98,7 +98,7 @@ public class DriverController {
 			result.put("driverName", driverInfo.getDrivername());
 			result.put("licenseId", driverInfo.getLicenseid());
 			result.put("driverNation", driverInfo.getDrivernation());
-			result.put("driverNation", driverInfo.getDrivernationality());
+			result.put("driverNationlity", driverInfo.getDrivernationality());
 			result.put("address", driverInfo.getAddress());
 			
 			//证件信息
