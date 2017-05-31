@@ -1,6 +1,8 @@
 package com.lhcx.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverInfo;
+import com.lhcx.model.DriverInfoType;
 import com.lhcx.model.Order;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
@@ -36,13 +39,13 @@ public class DriverController {
 	private static Logger log = Logger.getLogger(DriverController.class);
 	@Autowired
 	private IOrderService orderService;
-	
+
 	@Autowired
 	private HttpSession session;
-	
+
 	@Autowired
 	private IDriverInfoService driverInfoService;
-	
+
 	/**
 	 * 获取乘客未完成的订单
 	 * 
@@ -57,9 +60,9 @@ public class DriverController {
 		ResultBean<?> resultBean = null;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			User user = (User)session.getAttribute("CURRENT_USER");
-			Order newOrder = orderService
-					.selectNewOrderByDriverPhone(user.getUserphone());
+			User user = (User) session.getAttribute("CURRENT_USER");
+			Order newOrder = orderService.selectNewOrderByDriverPhone(user
+					.getUserphone());
 			if (newOrder != null) {
 				result.put("OrderId", newOrder.getOrderid());
 				result.put("Status", newOrder.getStatus());
@@ -76,6 +79,7 @@ public class DriverController {
 
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
+
 	/**
 	 * 获取司机基本信息
 	 * 
@@ -83,47 +87,71 @@ public class DriverController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	@RequestMapping(value = "/verification", method = RequestMethod.POST)
 	public ResponseEntity<String> info() {
 		// 取得参数值
 		String jsonpCallback = "";
 		ResultBean<?> resultBean = null;
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> info = new HashMap<String, Object>();
+		List<Map<String, Object>> error = new ArrayList<Map<String, Object>>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			DriverInfo driverInfo = driverInfoService.selectByPhone(user.getUserphone());
-			result.put("phone", user.getUserphone());
-			result.put("photo", driverInfo.getPhoto());
-			result.put("addressName", driverInfo.getAddressname());
-			result.put("driverName", driverInfo.getDrivername());
-			result.put("licenseId", driverInfo.getLicenseid());
-			result.put("driverNation", driverInfo.getDrivernation());
-			result.put("driverNationlity", driverInfo.getDrivernationality());
-			result.put("address", driverInfo.getAddress());
-			
-			//证件信息
-			result.put("licensePhoto", driverInfo.getLicensephoto());
-			result.put("getDriverLicenseDate", DateUtils.dateFormat2(driverInfo.getGetdriverlicensedate()));
-			result.put("driverLicenseOn",  DateUtils.dateFormat2(driverInfo.getDriverlicenseon()));
-			result.put("driverLicenseOff", DateUtils.dateFormat2(driverInfo.getDriverlicenseoff()));
-			result.put("fullTimeDriver", driverInfo.getFulltimedriver());
-			result.put("VehicleNo", driverInfo.getVehicleNo());
-						
+			DriverInfo driverInfo = driverInfoService.selectByPhone(user
+					.getUserphone());
+
+			info.put("phone", user.getUserphone());
+			info.put("photo", driverInfo.getPhoto());
+			info.put("addressName", driverInfo.getAddressname());
+			info.put("driverName", driverInfo.getDrivername());
+			info.put("licenseId", driverInfo.getLicenseid());
+			info.put("driverNation", driverInfo.getDrivernation());
+			info.put("driverNationlity", driverInfo.getDrivernationality());
+			info.put("address", driverInfo.getAddress());
+
+			// 证件信息
+			info.put("licensePhoto", driverInfo.getLicensephoto());
+			info.put("getDriverLicenseDate",
+					DateUtils.dateFormat2(driverInfo.getGetdriverlicensedate()));
+			info.put("driverLicenseOn",
+					DateUtils.dateFormat2(driverInfo.getDriverlicenseon()));
+			info.put("driverLicenseOff",
+					DateUtils.dateFormat2(driverInfo.getDriverlicenseoff()));
+			info.put("fullTimeDriver", driverInfo.getFulltimedriver());
+			info.put("VehicleNo", driverInfo.getVehicleNo());
+
+			// 假设有两条
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("codeIndex", DriverInfoType.LICENSEID.value());
+			map.put("codeName", DriverInfoType.LICENSEID.codeName());
+			map.put("message", DriverInfoType.LICENSEID.message());
+			Map<String, Object> map1 = new HashMap<String, Object>();
+			map1.put("codeIndex", DriverInfoType.DRIVERNAME.value());
+			map1.put("codeName", DriverInfoType.DRIVERNAME.codeName());
+			map1.put("message", DriverInfoType.DRIVERNAME.message());
+			error.add(map);
+			error.add(map1);
+
+			data.put("status", 1);
+			data.put("info", info);
+			data.put("error", error);
+
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-					"获取成功！",result);
-			
+					"获取成功！", data);
+
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"获取失败！");
 		}
-		
+
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
+
 	/**
 	 * 司机端更新
+	 * 
 	 * @return
 	 */
 	@ResponseBody
@@ -139,7 +167,7 @@ public class DriverController {
 			driverInfo.setFlag(2);
 			driverInfo.setUpdatetime(DateUtils.currentTimestamp());
 			driverInfoService.updateByPhoneSelective(driverInfo);
-			
+
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 					"更新成功！");
 
@@ -150,5 +178,5 @@ public class DriverController {
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
+
 }

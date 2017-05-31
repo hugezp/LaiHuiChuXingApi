@@ -4,10 +4,12 @@ package com.lhcx.utils;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,9 +36,23 @@ public class OssUtil {
         this.accessKeySecret = ossConfigure.getAccessKeySecret();
         this.endpoint = ossConfigure.getEndpoint();
         this.bucketName = ossConfigure.getBucketName();
-        this.client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-
+        //this.client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
     }
+    
+    /**
+	 * 初始化
+	 */
+	public void init() {
+		this.client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+	}
+    
+    /**
+     * 销毁
+     */
+    public void destory() {
+    	this.client.shutdown();
+    }
+    
     public OssConfigure getOssConfigure()
     {
         return ossConfigure;
@@ -44,6 +60,7 @@ public class OssUtil {
 
     public  Boolean uploadFileWithResult(HttpServletRequest request,String key, String filePath) throws FileNotFoundException
     {
+    	init();
         Boolean uploadOK=false;
         filePath=request.getSession().getServletContext().getRealPath("")+filePath;
         filePath=filePath.replace("/","\\").replace("\\\\","\\");
@@ -59,6 +76,7 @@ public class OssUtil {
                 uploadOK=true;
             }
         }
+        destory();
         return uploadOK;
 
     }
