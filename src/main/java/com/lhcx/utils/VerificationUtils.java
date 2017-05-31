@@ -84,6 +84,27 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
+	
+	/**
+	 * 获取价格
+	 * 
+	 * @return
+	 */
+	public static boolean getFee(JSONObject jsonRequest) {
+		boolean flag = false;
+		// 乘客出发地
+		String depLongitude = jsonRequest.getString("DepLongitude");
+		String depLatitude = jsonRequest.getString("DepLatitude");
+		String destLongitude = jsonRequest.getString("DestpLongitude");
+		String destLatitude = jsonRequest.getString("DestpLatitude");
+		if (StringUtils.isOrNotEmpty(depLongitude)
+				&& StringUtils.isOrNotEmpty(depLatitude)
+				&& StringUtils.isOrNotEmpty(destLongitude)
+				&& StringUtils.isOrNotEmpty(destLatitude)) {
+			flag = true;
+		}
+		return flag;
+	}
 
 	/**
 	 * 撤销订单

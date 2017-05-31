@@ -41,6 +41,7 @@ import com.lhcx.utils.ConfigUtils;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.PointToDistance;
+import com.lhcx.utils.PriceUtil;
 import com.lhcx.utils.StringUtils;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
@@ -137,17 +138,22 @@ public class OrderController {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			result.put("Fee", "123.50");
+		if(!VerificationUtils.getFee(jsonRequest)){
+			resultBean = new ResultBean<Object>(
+					ResponseCode.PARAMETER_WRONG.value(),
+					ResponseCode.PARAMETER_WRONG.message());
+		}else {
+			Map<String, Object> result = new HashMap<String, Object>();
+			String depLongitude = String.valueOf(Double.parseDouble(jsonRequest.getString("DepLongitude"))/1000000);
+			String depLatitude = String.valueOf(Double.parseDouble(jsonRequest.getString("DepLatitude"))/1000000);
+			String destLongitude = String.valueOf(Double.parseDouble(jsonRequest.getString("DestpLongitude"))/1000000);
+			String destLatitude = String.valueOf(Double.parseDouble(jsonRequest.getString("DestpLatitude"))/1000000);
+			String origin_location = depLongitude + "," + depLatitude;
+	        String destination_location = destLongitude + "," + destLatitude;
+	        double price = PriceUtil.getPessengerPrice(origin_location, destination_location, 1);
+			result.put("Fee", price);
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 					ResponseCode.SUCCESS.message(), result);
-
-		} catch (Exception e) {
-			log.error("create order error by :" + e.getMessage());
-			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-					ResponseCode.ERROR.message());
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
