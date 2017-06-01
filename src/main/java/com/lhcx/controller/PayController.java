@@ -69,11 +69,14 @@ public class PayController {
 	        if (payType == 0) {
 				//微信支付
 	        	result = payService.payForWX(order);
-	        	resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+	        	resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 						"微信下单成功！",result);
 			} else if (payType == 1){
 				//支付宝支付
-				
+				String json = payService.payForAlipay(order);
+				result.put("AlipayData", json);
+				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+						"支付宝下单成功！",result);
 			}else{
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						"支付失败，支付类型错误！");
@@ -87,4 +90,5 @@ public class PayController {
 		
 		return Utils.resultResponseJson(resultBean, null);
 	}
+	
 }

@@ -1,5 +1,6 @@
 package com.lhcx.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.lhcx.model.AlipayLog;
@@ -11,4 +12,6 @@ public interface IAlipayLogService {
     AlipayLog selectByOutTradeNo(String outTradeNo);
     
     Order alipayNotify(Map<String, String> parameterMap);
+    
+    List<AlipayLog> selectList(AlipayLog alipayLog);
 }
