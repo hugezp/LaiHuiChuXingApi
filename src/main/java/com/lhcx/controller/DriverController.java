@@ -174,7 +174,6 @@ public class DriverController {
 			error.add(map6);
 			error.add(map7);
 			error.add(map8);
-			error.add(map9);
 			error.add(map10);
 
 			data.put("status", 1);

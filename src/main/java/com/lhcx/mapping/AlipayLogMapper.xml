@@ -27,6 +27,14 @@
     receipt_amount, buyer_pay_amount, point_amount, notify_type, notify_time, notify_id, 
     trade_status, pay_source, order_id, create_time, update_time
   </sql>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.lhcx.model.AlipayLog">
+  	select
+  	<include refid="Base_Column_List" />
+  	from alipay_logs
+  	where where out_trade_no = #{outTradeNo,jdbcType=VARCHAR} and (trade_status ='TRADE_SUCCESS' or trade_status ='TRADE_FINISHED')
+  </select>
+  
   <select id="selectByOutTradeNo" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />

@@ -1,5 +1,7 @@
 package com.lhcx.dao;
 
+import java.util.List;
+
 import com.lhcx.model.AlipayLog;
 
 public interface AlipayLogMapper {
@@ -9,5 +11,7 @@ public interface AlipayLogMapper {
     AlipayLog selectByOutTradeNo(String outTradeNo);
 
     int updateByOutTradeNoSelective(AlipayLog record);
+    
+    List<AlipayLog> selectList(AlipayLog alipayLog);
 
 }

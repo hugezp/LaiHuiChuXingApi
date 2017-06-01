@@ -2,6 +2,7 @@ package com.lhcx.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,11 @@ public class AlipayLogServiceImpl implements IAlipayLogService{
 			
 		}
 		return order;
+	}
+
+	@Override
+	public List<AlipayLog> selectList(AlipayLog alipayLog) {
+		return alipayLogMapper.selectList(alipayLog);
 	}
 
 }
