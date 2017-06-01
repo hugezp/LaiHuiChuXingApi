@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lhcx.service.IAlipayLogService;
 import com.lhcx.utils.MD5Kit;
 import com.lhcx.utils.PayConfigUtils;
 import com.lhcx.utils.XmlParse;
@@ -34,14 +35,16 @@ public class AlipayNotifyController {
 	private static Logger log = Logger.getLogger(AlipayNotifyController.class);
 	@Autowired
 	private HttpServletRequest request;
+	@Autowired
+	private IAlipayLogService alipayLogService;
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/wxpay/pay.action", method = RequestMethod.POST)
     public void wxPay(HttpServletResponse response) {
 		String response_content="<xml> \n" +
-                "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
-                "  <return_msg><![CDATA[OK]]></return_msg>\n" +
-                "</xml> \n";
+                "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+                "  <return_msg><![CDATA[ERROR]]></return_msg>\n" +
+                "</xml> \n"; 
 		PrintWriter out = null;
 		try {
             out=response.getWriter();
@@ -51,7 +54,7 @@ public class AlipayNotifyController {
             String return_xml=null;
             is = request.getInputStream();
             return_xml= IOUtils.toString(is, "utf-8");
-            boolean is_success = true;
+            boolean is_success = false;
             Document doc ;
             Map<String, String> parameterMap = new HashMap<>();
             doc = DocumentHelper.parseText(return_xml); // 将字符串转为XML
@@ -65,15 +68,12 @@ public class AlipayNotifyController {
                 {
                     is_success=true;
                     break;
-                }else {
-                	is_success = false;
-				}                
+                }              
             }
             if(is_success){
                 parameterMap= XmlParse.parse(return_xml);
                 String sign = parameterMap.get("sign");
-                String result_code = parameterMap.get("result_code");
-                String out_trade_no = parameterMap.get("out_trade_no");
+                String result_code = parameterMap.get("result_code");               
                 List<String> keys=new ArrayList<>(parameterMap.keySet());
                 keys.remove("sign");
                 String result_parameter = "";
@@ -93,9 +93,19 @@ public class AlipayNotifyController {
 
                 if(is_success){
                     if(result_code.equals("SUCCESS")){
-                    	//TODO：查询是否已经收到异步通知,如果已收到则停止执行
-                    	
-                    	//TODO：未收到通知开始创建支付log
+                    	//1：查询是否已经收到异步通知,如果已收到则停止执行                    	
+                    	//2：未收到通知开始创建支付log
+                    	if (alipayLogService.alipayNotify(parameterMap)) {
+							
+						}
+                    }else{
+                    	//直接停止执行
+                    	response.reset();
+                        out = response.getWriter();
+                        response_content="<xml> \n" +
+                                "  <return_code><![CDATA[FAIL]]></return_code>\n" +
+                                "  <return_msg><![CDATA[result code fail]]></return_msg>\n" +
+                                "</xml> \n";
                     }
                 }else {
                     //直接停止执行
@@ -113,16 +123,15 @@ public class AlipayNotifyController {
                 out = response.getWriter();
                 response_content="<xml> \n" +
                         "  <return_code><![CDATA[FAIL]]></return_code>\n" +
-                        "  <return_msg><![CDATA[ERROR]]></return_msg>\n" +
-                        "</xml> \n";
-                
+                        "  <return_msg><![CDATA[return code fail]]></return_msg>\n" +
+                        "</xml> \n";                
             }
         } catch (IOException e) {
             e.printStackTrace();
         }catch (DocumentException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();                         
         }finally {
         	out.write(response_content);
             out.close();
