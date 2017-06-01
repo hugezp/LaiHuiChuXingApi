@@ -351,6 +351,37 @@ public class AlipayNotifyController {
 					cashLog.setActiontype(PayActionType.income.value());//司机收入
 					cashLog.setDescription("司机支付宝收入记录");
 					payCashLogService.insertSelective(cashLog);
+					
+					// 3：推送给司机
+					String orderId = order.getOrderid();
+					String driverPhone = order.getDriverphone();
+					String passengerPhone = order.getPassengerphone();
+					String content = "【来回出行】手机号为"
+							+ passengerPhone
+							+ "的乘客通过支付宝支付了"
+							+ new BigDecimal(price)
+							+ "元。请查验，订单编号为：" + orderId;
+
+					Map<String, String> extrasParam = new HashMap<String, String>();
+					extrasParam.put("OrderId", orderId);
+
+					int count = JpushClientUtil.getInstance(
+							ConfigUtils.JPUSH_APP_KEY,
+							ConfigUtils.JPUSH_MASTER_SECRET)
+							.sendToRegistrationId("11", driverPhone,
+									content, content, content, extrasParam);
+
+					if (count == 1) {
+						PushNotification pushNotification = new PushNotification();
+						pushNotification.setPushPhone(driverPhone);
+						pushNotification.setReceivePhone(passengerPhone);
+						pushNotification.setOrderId(orderId);
+						pushNotification.setAlert(content);
+						pushNotification.setPushType(1);
+						pushNotification.setData(extrasParam.toString());
+						pushNotificationService
+								.insertSelective(pushNotification);
+					}
 					PrintWriter out = null;
 					try {
 						response.reset();
