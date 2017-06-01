@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.PayCashLogMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.PayCashLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
+    <result column="PassengerPhone" property="passengerphone" jdbcType="VARCHAR" />
+    <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
+    <result column="Cash" property="cash" jdbcType="DECIMAL" />
+    <result column="ActionType" property="actiontype" jdbcType="INTEGER" />
+    <result column="PayAccount" property="payaccount" jdbcType="VARCHAR" />
+    <result column="PayType" property="paytype" jdbcType="INTEGER" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Description" property="description" jdbcType="VARCHAR" />
+    <result column="ErrorDesc" property="errordesc" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, OrderId, PassengerPhone, DriverPhone, Cash, ActionType, PayAccount, PayType, 
+    Status, Description, ErrorDesc, CreateTime, UpdateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_cash_logs
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pay_cash_logs
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lhcx.model.PayCashLog" >
+    insert into pay_cash_logs (id, OrderId, PassengerPhone, 
+      DriverPhone, Cash, ActionType, 
+      PayAccount, PayType, Status, 
+      Description, ErrorDesc, CreateTime, 
+      UpdateTime)
+    values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{passengerphone,jdbcType=VARCHAR}, 
+      #{driverphone,jdbcType=VARCHAR}, #{cash,jdbcType=DECIMAL}, #{actiontype,jdbcType=INTEGER}, 
+      #{payaccount,jdbcType=VARCHAR}, #{paytype,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{errordesc,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lhcx.model.PayCashLog" >
+    insert into pay_cash_logs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderid != null" >
+        OrderId,
+      </if>
+      <if test="passengerphone != null" >
+        PassengerPhone,
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone,
+      </if>
+      <if test="cash != null" >
+        Cash,
+      </if>
+      <if test="actiontype != null" >
+        ActionType,
+      </if>
+      <if test="payaccount != null" >
+        PayAccount,
+      </if>
+      <if test="paytype != null" >
+        PayType,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="description != null" >
+        Description,
+      </if>
+      <if test="errordesc != null" >
+        ErrorDesc,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="passengerphone != null" >
+        #{passengerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="driverphone != null" >
+        #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="cash != null" >
+        #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="actiontype != null" >
+        #{actiontype,jdbcType=INTEGER},
+      </if>
+      <if test="payaccount != null" >
+        #{payaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="paytype != null" >
+        #{paytype,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="errordesc != null" >
+        #{errordesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.PayCashLog" >
+    update pay_cash_logs
+    <set >
+      <if test="orderid != null" >
+        OrderId = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="passengerphone != null" >
+        PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
+      </if>
+      <if test="driverphone != null" >
+        DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="cash != null" >
+        Cash = #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="actiontype != null" >
+        ActionType = #{actiontype,jdbcType=INTEGER},
+      </if>
+      <if test="payaccount != null" >
+        PayAccount = #{payaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="paytype != null" >
+        PayType = #{paytype,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        Description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="errordesc != null" >
+        ErrorDesc = #{errordesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.PayCashLog" >
+    update pay_cash_logs
+    set OrderId = #{orderid,jdbcType=VARCHAR},
+      PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
+      DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      Cash = #{cash,jdbcType=DECIMAL},
+      ActionType = #{actiontype,jdbcType=INTEGER},
+      PayAccount = #{payaccount,jdbcType=VARCHAR},
+      PayType = #{paytype,jdbcType=INTEGER},
+      Status = #{status,jdbcType=INTEGER},
+      Description = #{description,jdbcType=VARCHAR},
+      ErrorDesc = #{errordesc,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

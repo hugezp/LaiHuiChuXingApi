@@ -84,6 +84,27 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
+	
+	/**
+	 * 获取价格
+	 * 
+	 * @return
+	 */
+	public static boolean getFee(JSONObject jsonRequest) {
+		boolean flag = false;
+		// 乘客出发地
+		String depLongitude = jsonRequest.getString("DepLongitude");
+		String depLatitude = jsonRequest.getString("DepLatitude");
+		String destLongitude = jsonRequest.getString("DestpLongitude");
+		String destLatitude = jsonRequest.getString("DestpLatitude");
+		if (StringUtils.isOrNotEmpty(depLongitude)
+				&& StringUtils.isOrNotEmpty(depLatitude)
+				&& StringUtils.isOrNotEmpty(destLongitude)
+				&& StringUtils.isOrNotEmpty(destLatitude)) {
+			flag = true;
+		}
+		return flag;
+	}
 
 	/**
 	 * 撤销订单
@@ -167,6 +188,22 @@ public class VerificationUtils {
 		if (StringUtils.isOrNotEmpty(phone)
 				&& StringUtils.isOrNotEmpty(userType)
 				&&StringUtils.isOrNotEmpty(code)) {
+			flag = true;
+		}
+		return flag;
+	}
+	
+	/**
+	 * 支付
+	 * @param jsonRequest
+	 * @return
+	 */
+	public static boolean payValidation(JSONObject jsonRequest) {
+		boolean flag = false;
+		String orderId = jsonRequest.getString("orderId");
+		Integer payType = jsonRequest.getInteger("payType");
+		if (StringUtils.isOrNotEmpty(orderId)
+				&& payType != null && payType >=0) {
 			flag = true;
 		}
 		return flag;
