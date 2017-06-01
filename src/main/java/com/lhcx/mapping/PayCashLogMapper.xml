@@ -26,28 +26,9 @@
     from pay_cash_logs
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from pay_cash_logs
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.lhcx.model.PayCashLog" >
-    insert into pay_cash_logs (id, OrderId, PassengerPhone, 
-      DriverPhone, Cash, ActionType, 
-      PayAccount, PayType, Status, 
-      Description, ErrorDesc, CreateTime, 
-      UpdateTime)
-    values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{passengerphone,jdbcType=VARCHAR}, 
-      #{driverphone,jdbcType=VARCHAR}, #{cash,jdbcType=DECIMAL}, #{actiontype,jdbcType=INTEGER}, 
-      #{payaccount,jdbcType=VARCHAR}, #{paytype,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{errordesc,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP})
-  </insert>
   <insert id="insertSelective" parameterType="com.lhcx.model.PayCashLog" >
     insert into pay_cash_logs
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
       <if test="orderid != null" >
         OrderId,
       </if>
@@ -86,9 +67,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="orderid != null" >
         #{orderid,jdbcType=VARCHAR},
       </if>
@@ -167,22 +145,6 @@
         UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.PayCashLog" >
-    update pay_cash_logs
-    set OrderId = #{orderid,jdbcType=VARCHAR},
-      PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
-      DriverPhone = #{driverphone,jdbcType=VARCHAR},
-      Cash = #{cash,jdbcType=DECIMAL},
-      ActionType = #{actiontype,jdbcType=INTEGER},
-      PayAccount = #{payaccount,jdbcType=VARCHAR},
-      PayType = #{paytype,jdbcType=INTEGER},
-      Status = #{status,jdbcType=INTEGER},
-      Description = #{description,jdbcType=VARCHAR},
-      ErrorDesc = #{errordesc,jdbcType=VARCHAR},
-      CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

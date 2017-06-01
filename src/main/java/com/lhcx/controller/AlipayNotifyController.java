@@ -3,6 +3,7 @@ package com.lhcx.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,7 +25,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lhcx.model.Order;
+import com.lhcx.model.PushNotification;
 import com.lhcx.service.IAlipayLogService;
+import com.lhcx.service.IPushNotificationService;
+import com.lhcx.utils.ConfigUtils;
+import com.lhcx.utils.JpushClientUtil;
 import com.lhcx.utils.MD5Kit;
 import com.lhcx.utils.PayConfigUtils;
 import com.lhcx.utils.XmlParse;
@@ -37,6 +43,8 @@ public class AlipayNotifyController {
 	private HttpServletRequest request;
 	@Autowired
 	private IAlipayLogService alipayLogService;
+	@Autowired
+	private IPushNotificationService pushNotificationService;
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/wxpay/pay.action", method = RequestMethod.POST)
@@ -95,11 +103,42 @@ public class AlipayNotifyController {
                     if(result_code.equals("SUCCESS")){
                     	//1：查询是否已经收到异步通知,如果已收到则停止执行                    	
                     	//2：未收到通知开始创建支付log
-                    	if (alipayLogService.alipayNotify(parameterMap)) {
-							
-						}
+                    	Order order = alipayLogService.alipayNotify(parameterMap);
+                    	response.reset();
+                		out = response.getWriter();
+                		response_content="<xml> \n" +
+                                 "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
+                                 "  <return_msg><![CDATA[OK]]></return_msg>\n" +
+                                 "</xml> \n";
+                		
+                		//3：推送给司机     		
+    					String orderId = order.getOrderid();
+    					String driverPhone = order.getDriverphone();
+    					String passengerPhone = order.getPassengerphone();
+    					String content = "【来回出行】手机号为" + passengerPhone + "的乘客通过微信支付了" 
+    							+new BigDecimal(Integer.parseInt(parameterMap.get("total_fee"))/100d)
+    							+"元。请查验，订单编号为：" + orderId;
+    					
+    					Map<String, String> extrasParam= new HashMap<String, String>();
+    					extrasParam.put("OrderId", orderId);				
+    					
+    					int flag = JpushClientUtil.getInstance(ConfigUtils.JPUSH_APP_KEY,ConfigUtils.JPUSH_MASTER_SECRET)
+    							.sendToRegistrationId("11", driverPhone,
+    									content, content, content,
+    									extrasParam);
+    					
+    					if (flag == 1) {
+    						PushNotification pushNotification = new PushNotification();
+    						pushNotification.setPushPhone(driverPhone);
+    						pushNotification.setReceivePhone(passengerPhone);
+    						pushNotification.setOrderId(orderId);
+    						pushNotification.setAlert(content);
+    						pushNotification.setPushType(1);
+    						pushNotification.setData(extrasParam.toString());
+    						pushNotificationService.insertSelective(pushNotification);
+    					}
+                		
                     }else{
-                    	//直接停止执行
                     	response.reset();
                         out = response.getWriter();
                         response_content="<xml> \n" +

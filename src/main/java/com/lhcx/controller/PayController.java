@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,6 @@ import com.lhcx.utils.VerificationUtils;
 @Controller
 @RequestMapping(value = "/pay")
 public class PayController {
-	private static Logger log = Logger.getLogger(PayController.class);
 	@Autowired
 	private IOrderService orderService;
 	@Autowired
@@ -54,8 +52,7 @@ public class PayController {
 		try {
 			String orderId = jsonRequest.getString("orderId");
 	        int payType = jsonRequest.getInteger("payType");
-	        String flag = jsonRequest.getString("flag");
-	        
+ 
 	        if (!VerificationUtils.payValidation(jsonRequest)) {
 	        	resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						"支付请求参数错误！");
