@@ -22,4 +22,5 @@ public interface IOrderService {
 	Order selectNewOrderByDriverPhone(String driverPhone);
 	List<Order> selectOrderByPassengerPhone(String passengerPhone,int page,int pageSize);
 	List<Order> selectOrderByDriverPhone(String driverPhone,int page,int pageSize);
+	int selectTotalCountByDriverPhone(String driverPhone,Integer status);
 }

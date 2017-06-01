@@ -26,6 +26,20 @@
     from pay_cash_logs
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByDriverPhone" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_cash_logs
+    where DriverPhone = #{driverPhone} and Status = 2
+    order by UpdateTime desc
+ 	 limit #{startPro},#{pageSize}
+  </select>
+  <select id="selectCashByDriverPhoneToday" >
+    select
+    sum(Cash) as totalCash
+    from pay_cash_logs
+    where DriverPhone = #{driverphone,jdbcType=VARCHAR} and Status = 2 and UpdateTime > CURDATE()
+  </select>
   <insert id="insertSelective" parameterType="com.lhcx.model.PayCashLog" >
     insert into pay_cash_logs
     <trim prefix="(" suffix=")" suffixOverrides="," >
