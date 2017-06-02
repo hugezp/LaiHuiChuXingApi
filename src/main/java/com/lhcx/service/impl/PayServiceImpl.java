@@ -45,7 +45,9 @@ public class PayServiceImpl implements IPayService {
 		double inputFee = order.getFee().doubleValue();
 
 		inputFee = order.getFee().doubleValue() * 100;
-
+		//TODO:微信测试支付
+		inputFee = 1.00;
+		
 		String total_fee = (int) inputFee + "";
 		String body = "出行费用";
 		String description = "出行费用";
@@ -97,19 +99,19 @@ public class PayServiceImpl implements IPayService {
 				String current_noncestr = Utils.getCharAndNum(32);
 				String current_sign = null;
 				long current_timestamp = System.currentTimeMillis() / 1000;
-				result.put("appid", PayConfigUtils.getWx_app_id());
-				result.put("partnerid", PayConfigUtils.getWx_mch_id());
+				result.put("appid", PayConfigUtils.getWx_laihui_app_id());
+				result.put("partnerid", PayConfigUtils.getWx_laihui_mch_id());
 				result.put("prepayid", prepay_id);
 				result.put("package", "Sign=WXPay");
 				result.put("noncestr", current_noncestr);
 				result.put("timestamp", current_timestamp);
 				// 加密算法
-				String nowStringA = "appid=" + PayConfigUtils.getWx_app_id()
+				String nowStringA = "appid=" + PayConfigUtils.getWx_laihui_app_id()
 						+ "&noncestr=" + current_noncestr
 						+ "&package=Sign=WXPay&partnerid="
-						+ PayConfigUtils.getWx_mch_id() + "&prepayid="
+						+ PayConfigUtils.getWx_laihui_mch_id() + "&prepayid="
 						+ prepay_id + "&timestamp=" + current_timestamp
-						+ "&key=" + PayConfigUtils.getWx_app_secret_key();
+						+ "&key=" + PayConfigUtils.getWx_laihui_app_secret_key();
 				current_sign = MD5Kit.encode(nowStringA).toUpperCase();
 				result.put("sign", current_sign);
 			}
@@ -156,6 +158,8 @@ public class PayServiceImpl implements IPayService {
 		String body = "出行费用";
 		String description = "出行费用";
 		double fee = order.getFee().doubleValue();
+		//TODO:测试支付
+		fee = 0.01;
 		result.put("app_id", PayConfigUtils.getApp_id());
 		result.put(
 				"biz_content",
