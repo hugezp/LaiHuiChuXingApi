@@ -481,4 +481,9 @@ public class OrderServiceImpl implements IOrderService {
 		return orderMapper.selectOrderByDriverPhone(driverPhone, (page-1)*pageSize, pageSize);
 	}
 
+	@Override
+	public int selectTotalCountByDriverPhone(String driverPhone, Integer status) {
+		return orderMapper.selectTotalCountByDriverPhone(driverPhone, status);
+	}
+
 }

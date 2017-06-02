@@ -27,7 +27,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from driver_location
-		where Phone = #{phone,jdbcType=INTEGER}
+		where Phone = #{phone}
 	</select>
 	<select id="selectOnTimeDistance" resultType="com.lhcx.model.DriverLocation">
 		select id,phone,Latitude,Longitude,

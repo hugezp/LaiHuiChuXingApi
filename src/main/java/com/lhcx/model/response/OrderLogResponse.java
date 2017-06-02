@@ -5,89 +5,89 @@ import com.lhcx.utils.DateUtils;
 
 public class OrderLogResponse {
 	
-	private String OperatorPhone;
+	private String operatorPhone;
 
-    private String OperatorTime;
+    private String operatorTime;
 
-    private String OperatorDescription;
+    private String operatorDescription;
 
-    private Integer CurrentStatus;
+    private Integer currentStatus;
 
-    private Integer OldStatus;
+    private Integer oldStatus;
 
-    private Integer CancelTypeCode;
+    private Integer cancelTypeCode;
 
-    private String Description;
+    private String description;
     
     public OrderLogResponse() {
 	}
     
     public OrderLogResponse(OrderLog log) {
     	if (log != null) {
-    		this.OperatorPhone = log.getOperatorphone();
-    		this.OperatorTime = DateUtils.dateFormat(log.getOperatortime()) ;
-    		this.OperatorDescription = log.getOperatordescription();
-    		this.CurrentStatus = log.getOperatorstatus();
-    		this.OldStatus = log.getOldstatus();
-    		this.CancelTypeCode = log.getCanceltypecode();
-    		this.Description = log.getDescription();
+    		this.operatorPhone = log.getOperatorphone();
+    		this.operatorTime = DateUtils.dateFormat(log.getOperatortime()) ;
+    		this.operatorDescription = log.getOperatordescription();
+    		this.currentStatus = log.getOperatorstatus();
+    		this.oldStatus = log.getOldstatus();
+    		this.cancelTypeCode = log.getCanceltypecode();
+    		this.description = log.getDescription();
 		}
 	}
 
 	public String getOperatorPhone() {
-		return OperatorPhone;
+		return operatorPhone;
 	}
 
 	public void setOperatorPhone(String operatorPhone) {
-		OperatorPhone = operatorPhone;
+		this.operatorPhone = operatorPhone;
 	}
 
 	public String getOperatorTime() {
-		return OperatorTime;
+		return operatorTime;
 	}
 
 	public void setOperatorTime(String operatorTime) {
-		OperatorTime = operatorTime;
+		this.operatorTime = operatorTime;
 	}
 
 	public String getOperatorDescription() {
-		return OperatorDescription;
+		return operatorDescription;
 	}
 
 	public void setOperatorDescription(String operatorDescription) {
-		OperatorDescription = operatorDescription;
+		this.operatorDescription = operatorDescription;
 	}
 
 	public Integer getCurrentStatus() {
-		return CurrentStatus;
+		return currentStatus;
 	}
 
 	public void setCurrentStatus(Integer currentStatus) {
-		CurrentStatus = currentStatus;
+		this.currentStatus = currentStatus;
 	}
 
 	public Integer getOldStatus() {
-		return OldStatus;
+		return oldStatus;
 	}
 
 	public void setOldStatus(Integer oldStatus) {
-		OldStatus = oldStatus;
+		this.oldStatus = oldStatus;
 	}
 	
 	public Integer getCancelTypeCode() {
-		return CancelTypeCode;
+		return cancelTypeCode;
 	}
 
 	public void setCancelTypeCode(Integer cancelTypeCode) {
-		CancelTypeCode = cancelTypeCode;
+		this.cancelTypeCode = cancelTypeCode;
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
 
 }

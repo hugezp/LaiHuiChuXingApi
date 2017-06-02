@@ -1,6 +1,8 @@
 package com.lhcx.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +20,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverInfo;
+import com.lhcx.model.DriverLocation;
 import com.lhcx.model.Order;
+import com.lhcx.model.OrderStatus;
+import com.lhcx.model.PayCashLog;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.model.VerificationLogs;
+import com.lhcx.model.response.PaycashLogResponse;
 import com.lhcx.service.IDriverInfoService;
+import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IVerificationLogsService;
+import com.lhcx.service.IPayCashLogService;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.Utils;
 
@@ -40,15 +48,17 @@ public class DriverController {
 	private static Logger log = Logger.getLogger(DriverController.class);
 	@Autowired
 	private IOrderService orderService;
-
 	@Autowired
 	private HttpSession session;
-
 	@Autowired
 	private IDriverInfoService driverInfoService;
 	
 	@Autowired
 	private IVerificationLogsService verificationLogsService;
+	@Autowired
+	private IPayCashLogService payCashLogService;
+	@Autowired
+	private IDriverLocationService driverLocationService;
 
 	/**
 	 * 获取乘客未完成的订单
@@ -181,6 +191,64 @@ public class DriverController {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"更新失败！");
 		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	/**
+	 * 司机端流水线
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/cash", method = RequestMethod.POST)
+	public ResponseEntity<String> cash(@RequestBody JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
+		// 取得参数值
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			User user = (User)session.getAttribute("CURRENT_USER");
+			String driverPhone = user.getUserphone();
+			//当日流水
+			BigDecimal cashToday = payCashLogService.selectCashByDriverPhoneToday(driverPhone);
+			result.put("cashToday", cashToday);
+			//总接单数
+			int totalCount = orderService.selectTotalCountByDriverPhone(driverPhone, null);
+			int cancelCount = orderService.selectTotalCountByDriverPhone(driverPhone, OrderStatus.CANCEL.value());
+			result.put("orderTotalCount", totalCount);
+			result.put("orderSuccessCount", totalCount - cancelCount);
+			//听单
+			long onTime = 0;//毫秒
+			DriverLocation driverLocation = driverLocationService.selectByPhone(driverPhone);
+			Date startTime = driverLocation.getLoginTime();
+			if ( startTime != null) {
+				Date endTime = driverLocation.getLogoutTime() != null ? driverLocation.getLogoutTime():new Date();
+				onTime = endTime.getTime() - startTime.getTime();
+			}
+			result.put("onTime", onTime);
+			
+			//支付列表
+			List<PayCashLog> cashLogs = payCashLogService.selectByDriverPhone(driverPhone, 1, 5);
+			if (cashLogs.size() > 0) {
+				List<PaycashLogResponse> cashResponseList = new ArrayList<PaycashLogResponse>();
+				for (PayCashLog payCashLog : cashLogs) {
+					PaycashLogResponse cashResponse = new PaycashLogResponse(payCashLog);
+					if (cashResponse != null) {
+						cashResponseList.add(cashResponse);
+					}
+				}
+				result.put("payCashLog", cashLogs);
+			}
+			
+			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+					ResponseCode.SUCCESS.message(),result);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+					ResponseCode.ERROR.message());
+		}
+		
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 

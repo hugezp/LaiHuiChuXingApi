@@ -58,6 +58,15 @@
   	select OrderId,status from orders where PassengerPhone = #{passengerPhone} and (Status > 0 and Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
+   
+  <select id="selectTotalCountByDriverPhone" >
+  	select count(*) as totalCount
+  	from orders 
+  	where DriverPhone = #{driverPhone} 
+  	<if test="status != null" >
+       and Status = #{status}
+     </if>
+  </select>
   
    <select id="selectOrderByPassengerPhone" resultType="com.lhcx.model.Order">
   	select 

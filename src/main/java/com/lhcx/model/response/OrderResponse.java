@@ -14,197 +14,197 @@ import com.lhcx.utils.DateUtils;
  *
  */
 public class OrderResponse {
-	private String OrderId;
+	private String orderId;
 	
-	private String PassengerPhone;
+	private String passengerPhone;
 	
-	private String DepartTime;
+	private String departTime;
 	
-	private String PassengerNote;
+	private String passengerNote;
 	
-	private String Departure;
+	private String departure;
 
-    private String DepLongitude;
+    private String depLongitude;
 
-    private String DepLatitude;
+    private String depLatitude;
 
-    private String Destination;
+    private String destination;
 
-    private String DestLongitude;
+    private String destLongitude;
 
-    private String DestLatitude;
+    private String destLatitude;
     
-    private BigDecimal Fee;
+    private BigDecimal fee;
 
-    private String DriverPhone;
+    private String driverPhone;
 
-    private Integer Status;
+    private Integer status;
     
-    private Integer OrderType;
+    private Integer orderType;
     
-    private Integer CarType;
+    private Integer carType;
     
     //订单行程总距离
-    private double TotalDistance;
+    private double totalDistance;
     
     //司机据目的地实时距离
-    private double OnTimeTotalDistance;
+    private double onTimeTotalDistance;
     
     //司机据乘客上车地实时距离
-    private double OnTimeDistance;
+    private double onTimeDistance;
     
-    private List<OrderLogResponse> OrderLogs;
+    private List<OrderLogResponse> orderLogs;
 
 	public String getOrderId() {
-		return OrderId;
+		return orderId;
 	}
 
 	public void setOrderId(String orderId) {
-		OrderId = orderId;
+		this.orderId = orderId;
 	}
 
 	public String getPassengerPhone() {
-		return PassengerPhone;
+		return passengerPhone;
 	}
 
 	public void setPassengerPhone(String passengerPhone) {
-		PassengerPhone = passengerPhone;
+		this.passengerPhone = passengerPhone;
 	}
 
 	public String getDepartTime() {
-		return DepartTime;
+		return departTime;
 	}
 
 	public void setDepartTime(String departTime) {
-		DepartTime = departTime;
+		this.departTime = departTime;
 	}
 
 	public String getPassengerNote() {
-		return PassengerNote;
+		return passengerNote;
 	}
 
 	public void setPassengerNote(String passengerNote) {
-		PassengerNote = passengerNote;
+		this.passengerNote = passengerNote;
 	}
 
 	public String getDeparture() {
-		return Departure;
+		return departure;
 	}
 
 	public void setDeparture(String departure) {
-		Departure = departure;
+		this.departure = departure;
 	}
 
 	public String getDepLongitude() {
-		return DepLongitude;
+		return depLongitude;
 	}
 
 	public void setDepLongitude(String depLongitude) {
-		DepLongitude = depLongitude;
+		this.depLongitude = depLongitude;
 	}
 
 	public String getDepLatitude() {
-		return DepLatitude;
+		return depLatitude;
 	}
 
 	public void setDepLatitude(String depLatitude) {
-		DepLatitude = depLatitude;
+		this.depLatitude = depLatitude;
 	}
 
 	public String getDestination() {
-		return Destination;
+		return destination;
 	}
 
 	public void setDestination(String destination) {
-		Destination = destination;
+		this.destination = destination;
 	}
 
 	public String getDestLongitude() {
-		return DestLongitude;
+		return destLongitude;
 	}
 
 	public void setDestLongitude(String destLongitude) {
-		DestLongitude = destLongitude;
+		this.destLongitude = destLongitude;
 	}
 
 	public String getDestLatitude() {
-		return DestLatitude;
+		return destLatitude;
 	}
 
 	public void setDestLatitude(String destLatitude) {
-		DestLatitude = destLatitude;
+		this.destLatitude = destLatitude;
 	}
 
 	public BigDecimal getFee() {
-		return Fee;
+		return fee;
 	}
 
 	public void setFee(BigDecimal fee) {
-		Fee = fee;
+		this.fee = fee;
 	}
 
 	public String getDriverPhone() {
-		return DriverPhone;
+		return driverPhone;
 	}
 
 	public void setDriverPhone(String driverPhone) {
-		DriverPhone = driverPhone;
+		this.driverPhone = driverPhone;
 	}
 
 	public Integer getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(Integer status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public Integer getOrderType() {
-		return OrderType;
+		return orderType;
 	}
 
 	public void setOrderType(Integer orderType) {
-		OrderType = orderType;
+		this.orderType = orderType;
 	}
 
 	public Integer getCarType() {
-		return CarType;
+		return carType;
 	}
 
 	public void setCarType(Integer carType) {
-		CarType = carType;
+		this.carType = carType;
 	}
 
 	public double getTotalDistance() {
-		return TotalDistance;
+		return totalDistance;
 	}
 
 	public void setTotalDistance(double totalDistance) {
-		TotalDistance = totalDistance;
+		this.totalDistance = totalDistance;
 	}
 
 	public double getOnTimeTotalDistance() {
-		return OnTimeTotalDistance;
+		return onTimeTotalDistance;
 	}
 
 	public void setOnTimeTotalDistance(double onTimeTotalDistance) {
-		OnTimeTotalDistance = onTimeTotalDistance;
+		this.onTimeTotalDistance = onTimeTotalDistance;
 	}
 
 	public double getOnTimeDistance() {
-		return OnTimeDistance;
+		return onTimeDistance;
 	}
 
 	public void setOnTimeDistance(double onTimeDistance) {
-		OnTimeDistance = onTimeDistance;
+		this.onTimeDistance = onTimeDistance;
 	}
 
 	public List<OrderLogResponse> getOrderLogs() {
-		return OrderLogs;
+		return orderLogs;
 	}
 
 	public void setOrderLogs(List<OrderLogResponse> orderLogs) {
-		OrderLogs = orderLogs;
+		this.orderLogs = orderLogs;
 	}
 	
 	public OrderResponse() {
@@ -212,28 +212,28 @@ public class OrderResponse {
 	
 	public OrderResponse(Order order) {
 		if (order != null) {
-			this.OrderId = order.getOrderid();
-			this.PassengerPhone = order.getPassengerphone();
-			this.DepartTime = DateUtils.dateFormat(order.getDeparttime()) ;
-			this.PassengerNote = order.getPassengernote();
-			this.Departure = order.getDeparture();
-			this.DepLongitude = order.getDeplongitude();
-			this.DepLatitude = order.getDeplatitude();
-			this.Destination = order.getDestination();
-			this.DestLongitude = order.getDestlongitude();
-			this.DestLatitude = order.getDestlatitude();
-		    this.Fee = order.getFee();
-		    this.DriverPhone = order.getDriverphone();
-		    this.Status = order.getStatus();
-		    this.OrderType = order.getOrderType();
-		    this.CarType = order.getCarType();
-		    this.TotalDistance = order.getTotalDistance();
-		    this.OnTimeTotalDistance = order.getOnTimeTotalDistance();
-		    this.OnTimeDistance = order.getOnTimeDistance();
-		    this.OrderLogs = new ArrayList<OrderLogResponse>();
+			this.orderId = order.getOrderid();
+			this.passengerPhone = order.getPassengerphone();
+			this.departTime = DateUtils.dateFormat(order.getDeparttime()) ;
+			this.passengerNote = order.getPassengernote();
+			this.departure = order.getDeparture();
+			this.depLongitude = order.getDeplongitude();
+			this.depLatitude = order.getDeplatitude();
+			this.destination = order.getDestination();
+			this.destLongitude = order.getDestlongitude();
+			this.destLatitude = order.getDestlatitude();
+		    this.fee = order.getFee();
+		    this.driverPhone = order.getDriverphone();
+		    this.status = order.getStatus();
+		    this.orderType = order.getOrderType();
+		    this.carType = order.getCarType();
+		    this.totalDistance = order.getTotalDistance();
+		    this.onTimeTotalDistance = order.getOnTimeTotalDistance();
+		    this.onTimeDistance = order.getOnTimeDistance();
+		    this.orderLogs = new ArrayList<OrderLogResponse>();
 		    for (OrderLog orderLog : order.getOrderLogs()) {
 		    	OrderLogResponse orderLogResponse = new OrderLogResponse(orderLog);
-		    	this.OrderLogs.add(orderLogResponse );
+		    	this.orderLogs.add(orderLogResponse );
 			}
 
 		}
