@@ -231,10 +231,12 @@
       activity_id = #{activityId,jdbcType=INTEGER}
     where _id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectAll" parameterType="com.lhcx.model.PushNotification">
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.lhcx.model.PushNotification">
    select 
     <include refid="Base_Column_List" />
     from pc_push_notification 
-	where receive_phone = #{receive_phone,jdbcType=VARCHAR} 
+	where receive_phone = #{receivePhone,jdbcType=VARCHAR} and push_type = #{pushType,jdbcType=INTEGER} and is_enable = 1
+	order by time desc
+	limit #{page},#{size}
   </select>
 </mapper>
