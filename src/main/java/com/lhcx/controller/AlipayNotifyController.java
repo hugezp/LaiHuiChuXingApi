@@ -74,7 +74,7 @@ public class AlipayNotifyController {
 	private IPayCashLogService payCashLogService;
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/wxpay/pay.action", method = RequestMethod.POST)
+	@RequestMapping(value = "/wxpay/notify", method = RequestMethod.POST)
 	public void wxPay(HttpServletResponse response) {
 		String response_content = "<xml> \n"
 				+ "  <return_code><![CDATA[FAIL]]></return_code>\n"
