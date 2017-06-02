@@ -117,8 +117,8 @@ public class AlipayNotifyController {
 							+ parameterMap.get(str) + "&";
 				}
 				result_parameter = result_parameter + "key="
-						+ PayConfigUtils.getWx_app_secret_key();
-				String current_sign = MD5Kit.encode(result_parameter)
+						+ PayConfigUtils.getWx_laihui_app_secret_key();
+				String current_sign = MD5Kit.encode("MD5",result_parameter)
 						.toUpperCase();
 				if (current_sign.equals(sign)) {
 					is_success = true;

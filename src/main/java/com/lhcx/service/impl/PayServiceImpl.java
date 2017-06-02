@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ import com.lhcx.utils.Utils;
 @Transactional(rollbackFor = Exception.class)
 @Service
 public class PayServiceImpl implements IPayService {
+	private static Logger log = Logger.getLogger(PayServiceImpl.class);
 
 	@Autowired
 	private HttpServletRequest request;
@@ -75,7 +77,7 @@ public class PayServiceImpl implements IPayService {
 				+ paraMap.get(keys.get(keys.size() - 1)));
 		String stringA = authInfo.toString() + "&key="
 				+ PayConfigUtils.getWx_laihui_app_secret_key();
-		String sign = MD5Kit.encode(stringA).toUpperCase();
+		String sign = MD5Kit.encode("MD5",stringA).toUpperCase();
 		// 封装xml
 		String paras = "<xml>\n" + "   <appid>"
 				+ PayConfigUtils.getWx_laihui_app_id() + "</appid>\n"
@@ -95,6 +97,9 @@ public class PayServiceImpl implements IPayService {
 			if (content != null) {
 				prepay_id = Utils.readStringXml(content);
 			}
+			log.info("参数："+paras);
+			log.info("微信支付content：" + content);
+			log.info("微信支付prepay_id：" + prepay_id);
 			if (prepay_id != null) {
 				String current_noncestr = Utils.getCharAndNum(32);
 				String current_sign = null;
@@ -112,7 +117,7 @@ public class PayServiceImpl implements IPayService {
 						+ PayConfigUtils.getWx_laihui_mch_id() + "&prepayid="
 						+ prepay_id + "&timestamp=" + current_timestamp
 						+ "&key=" + PayConfigUtils.getWx_laihui_app_secret_key();
-				current_sign = MD5Kit.encode(nowStringA).toUpperCase();
+				current_sign = MD5Kit.encode("MD5",nowStringA).toUpperCase();
 				result.put("sign", current_sign);
 			}
 		} catch (Exception e) {
