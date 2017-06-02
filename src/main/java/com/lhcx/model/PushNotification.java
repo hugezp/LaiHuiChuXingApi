@@ -36,6 +36,10 @@ public class PushNotification {
     private String title;
 
     private Integer activityId;
+    
+    private Integer page;
+    
+    private Integer size;
 
     public Integer getId() {
         return id;
@@ -174,4 +178,21 @@ public class PushNotification {
     public void setActivityId(Integer activityId) {
         this.activityId = activityId;
     }
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
+    
 }

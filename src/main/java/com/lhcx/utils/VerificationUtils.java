@@ -84,7 +84,7 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 获取价格
 	 * 
@@ -158,9 +158,10 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 更新经纬度
+	 * 
 	 * @param jsonRequest
 	 * @return
 	 */
@@ -174,27 +175,29 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 登录
+	 * 
 	 * @param jsonRequest
 	 * @return
 	 */
 	public static boolean loginValidation(JSONObject jsonRequest) {
 		boolean flag = false;
 		String phone = jsonRequest.getString("phone");
-	    String userType = jsonRequest.getString("userType");
-	    String code = jsonRequest.getString("code");
+		String userType = jsonRequest.getString("userType");
+		String code = jsonRequest.getString("code");
 		if (StringUtils.isOrNotEmpty(phone)
 				&& StringUtils.isOrNotEmpty(userType)
-				&&StringUtils.isOrNotEmpty(code)) {
+				&& StringUtils.isOrNotEmpty(code)) {
 			flag = true;
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 支付
+	 * 
 	 * @param jsonRequest
 	 * @return
 	 */
@@ -202,8 +205,27 @@ public class VerificationUtils {
 		boolean flag = false;
 		String orderId = jsonRequest.getString("orderId");
 		Integer payType = jsonRequest.getInteger("payType");
-		if (StringUtils.isOrNotEmpty(orderId)
-				&& payType != null && payType >=0) {
+		if (StringUtils.isOrNotEmpty(orderId) && payType != null
+				&& payType >= 0) {
+			flag = true;
+		}
+		return flag;
+	}
+
+	/**
+	 * 全部消息
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	public static boolean pushList(JSONObject jsonRequest) {
+		boolean flag = false;
+		String pushType = jsonRequest.getString("pushType");
+		String page = jsonRequest.getString("page");
+		String size = jsonRequest.getString("size");
+		if (StringUtils.isOrNotEmpty(pushType)
+				&& StringUtils.isOrNotEmpty(page)
+				&& StringUtils.isOrNotEmpty(size)) {
 			flag = true;
 		}
 		return flag;
