@@ -156,6 +156,14 @@
             <scope>system</scope >
             <systemPath>${project.basedir}/src/main//webapp/WEB-INF/lib/json-20160212.jar</systemPath >
         </dependency>
+        
+        <dependency>
+            <groupId>alipay-sdk-java</groupId>
+            <artifactId>alipay</artifactId>
+            <version>20161129201425</version>
+            <scope>system</scope >
+            <systemPath>${project.basedir}/src/main//webapp/WEB-INF/lib/alipay-sdk-java20161129201425.jar</systemPath >
+        </dependency>
 
         <!--Druid配置-->
         <!--<dependency>-->
