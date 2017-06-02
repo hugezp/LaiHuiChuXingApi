@@ -6,7 +6,7 @@ import com.lhcx.model.PushNotification;
 
 public interface IPushNotificationService {
 	
-	List<PushNotification> selectAll(String receive_phone);
+	List<PushNotification> selectAll(PushNotification pushNotification);
 	
 	int insertSelective(PushNotification record);
 }

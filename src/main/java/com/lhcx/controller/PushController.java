@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,6 +28,7 @@ import com.lhcx.model.User;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IPushNotificationService;
+import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
 
@@ -47,43 +49,6 @@ public class PushController {
 	@Autowired
 	private IDriverInfoService driverInfoService;
 
-	@ResponseBody
-	@RequestMapping(value = "/List", method = RequestMethod.POST)
-	public ResponseEntity<String> PushList(@RequestBody JSONObject jsonRequest,
-			HttpServletRequest request) {
-		String jsonpCallback = jsonRequest.getString("jsonpCallback");
-		ResultBean<?> resultBean = null;
-
-		try {
-			User user = (User) session.getAttribute("CURRENT_USER");
-			String phone = user.getUserphone();
-			List<PushNotification> pushs = pushNotificationService
-					.selectAll(phone);
-			ArrayList<HashMap<String, Object>> jsonArray = new ArrayList<HashMap<String, Object>>();
-			if (pushs.size() > 0) {
-				for (PushNotification push : pushs) {
-					HashMap<String, Object> receive = new HashMap<String, Object>();
-					receive.put("pushId", push.getId());
-					receive.put("content", push.getAlert());
-					receive.put("orderId", push.getOrderId());
-					jsonArray.add(receive);
-				}
-				resultBean = new ResultBean<Object>(
-						ResponseCode.SUCCESS.value(),
-						ResponseCode.SUCCESS.message(), jsonArray);
-			} else {
-				resultBean = new ResultBean<Object>(
-						ResponseCode.NO_DATA.value(),
-						ResponseCode.NO_DATA.message());
-			}
-		} catch (Exception e) {
-			log.error("create order error by :" + e.getMessage());
-			e.printStackTrace();
-			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-					ResponseCode.ERROR.message());
-		}
-		return Utils.resultResponseJson(resultBean, jsonpCallback);
-	}
 
 	/**
 	 * 推送开关
@@ -98,27 +63,31 @@ public class PushController {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
-		}else {
+		} else {
 			try {
 				User user = (User) session.getAttribute("CURRENT_USER");
-				DriverInfo driverInfo = driverInfoService.selectByPhone(user.getUserphone());
-				if(driverInfo == null || driverInfo.getState() != 2){
-					//司机信息审核未通过
-					resultBean = new ResultBean<Object>(ResponseCode.DRIVER_INVALID.value(),
+				DriverInfo driverInfo = driverInfoService.selectByPhone(user
+						.getUserphone());
+				if (driverInfo == null || driverInfo.getState() != 2) {
+					// 司机信息审核未通过
+					resultBean = new ResultBean<Object>(
+							ResponseCode.DRIVER_INVALID.value(),
 							ResponseCode.DRIVER_INVALID.message());
-				}else {
+				} else {
 					if (driverLocationService.setButton(jsonRequest,
 							user.getUserphone())) {
-						resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+						resultBean = new ResultBean<Object>(
+								ResponseCode.SUCCESS.value(),
 								ResponseCode.SUCCESS.message());
 					} else {
-						resultBean = new ResultBean<Object>(ResponseCode.PUSH_BUTTON_FAILED.value(),
+						resultBean = new ResultBean<Object>(
+								ResponseCode.PUSH_BUTTON_FAILED.value(),
 								ResponseCode.PUSH_BUTTON_FAILED.message());
 					}
 				}
-				
+
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error(e.getMessage());
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						ResponseCode.ERROR.message());
 			}
@@ -138,7 +107,7 @@ public class PushController {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
-		}else {
+		} else {
 			try {
 				String longitude = jsonRequest.getString("Longitude");
 				String latitude = jsonRequest.getString("Latitude");
@@ -148,19 +117,63 @@ public class PushController {
 				driverLocation.setLongitude(longitude);
 				driverLocation.setLatitude(latitude);
 				driverLocation.setPositiontime(new Date());
-				int flag = driverLocationService
-						.updateLocation(driverLocation);
+				int flag = driverLocationService.updateLocation(driverLocation);
 				if (flag > 0) {
 					resultBean = new ResultBean<Object>(
 							ResponseCode.SUCCESS.value(),
 							ResponseCode.SUCCESS.message());
 				} else {
-					resultBean = new ResultBean<Object>(ResponseCode.PUSH_UPDATE_FAILED.value(),
+					resultBean = new ResultBean<Object>(
+							ResponseCode.PUSH_UPDATE_FAILED.value(),
 							ResponseCode.PUSH_UPDATE_FAILED.message());
 				}
 			} catch (Exception e) {
+				log.error(e.getMessage());
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						ResponseCode.ERROR.message());
+			}
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+
+	/**
+	 * 获取推送列表
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	public ResponseEntity<String> list(@RequestBody JSONObject jsonRequest) {
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		if (!VerificationUtils.pushList(jsonRequest)) {
+			resultBean = new ResultBean<Object>(ResponseCode.PARAMETER_WRONG.value(),
+					ResponseCode.PARAMETER_WRONG.message(),resultList);
+		}else {
+			User user = (User) session.getAttribute("CURRENT_USER");
+			String userphone = user.getUserphone();
+			String pushType = jsonRequest.getString("pushType");
+			String page = jsonRequest.getString("page");
+			String size = jsonRequest.getString("size");
+			PushNotification pushNotification = new PushNotification();
+			pushNotification.setReceivePhone(userphone);
+			pushNotification.setPage(Integer.parseInt(page));
+			pushNotification.setSize(Integer.parseInt(size));
+			pushNotification.setPushType(Integer.parseInt(pushType));
+			List<PushNotification> pushList = pushNotificationService.selectAll(pushNotification);
+			if (pushList.size()>0) {
+				for (PushNotification push : pushList) {
+					resultMap.put("alert", push.getAlert());
+					resultMap.put("time", DateUtils.pushDate(push.getTime()));
+					resultMap.put("flag", push.getFlag());
+					resultMap.put("linkUrl",push.getLinkUrl() == null?"":push.getLinkUrl());
+					resultList.add(resultMap);
+				}
+				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+						ResponseCode.SUCCESS.message(),resultList);
+			}else {
+				resultBean = new ResultBean<Object>(ResponseCode.NO_DATA.value(),
+						ResponseCode.NO_DATA.message(),resultList);
 			}
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);

@@ -18,8 +18,8 @@ public class PushNotificationImpl implements IPushNotificationService {
 	private PushNotificationMapper pushNotificationMapper;
 	
 	@Override
-	public List<PushNotification> selectAll(String receive_phone) {
-		return pushNotificationMapper.selectAll(receive_phone);
+	public List<PushNotification> selectAll(PushNotification pushNotification) {
+		return pushNotificationMapper.selectAll(pushNotification);
 	}
 	
 	public int insertSelective(PushNotification record) {
