@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.Order;
+import com.lhcx.model.OrderStatus;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.service.IOrderService;
@@ -60,9 +61,9 @@ public class PayController {
 			}
 	        
 	        Order order = orderService.selectByOrderId(orderId);
-	        if (order == null ) {
+	        if (order == null || order.getStatus() == OrderStatus.PAY.value()) {
 	        	resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
-						"支付失败，支付订单不存在！");
+						"支付失败，支付订单不存在或订单已支付！");
 	        	return Utils.resultResponseJson(resultBean, null);
 			}
 	        
