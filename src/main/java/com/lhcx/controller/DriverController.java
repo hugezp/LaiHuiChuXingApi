@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.DriverInfo;
-import com.lhcx.model.DriverInfoType;
 import com.lhcx.model.Order;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
+import com.lhcx.model.VerificationLogs;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IOrderService;
+import com.lhcx.service.IVerificationLogsService;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.Utils;
 
@@ -45,6 +46,9 @@ public class DriverController {
 
 	@Autowired
 	private IDriverInfoService driverInfoService;
+	
+	@Autowired
+	private IVerificationLogsService verificationLogsService;
 
 	/**
 	 * 获取乘客未完成的订单
@@ -92,14 +96,13 @@ public class DriverController {
 		// 取得参数值
 		String jsonpCallback = "";
 		ResultBean<?> resultBean = null;
-		Map<String, Object> data = new HashMap<String, Object>();
 		Map<String, Object> info = new HashMap<String, Object>();
-		List<Map<String, Object>> error = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> verification = new ArrayList<Map<String, Object>>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
 			DriverInfo driverInfo = driverInfoService.selectByPhone(user
 					.getUserphone());
-
 			info.put("phone", user.getUserphone());
 			info.put("photo", driverInfo.getPhoto());
 			info.put("addressName", driverInfo.getAddressname());
@@ -120,69 +123,27 @@ public class DriverController {
 			info.put("fullTimeDriver", driverInfo.getFulltimedriver());
 			info.put("VehicleNo", driverInfo.getVehicleNo());
 
-			// 假数据错误信息
-			Map<String, Object> map0 = new HashMap<String, Object>();
-			map0.put("codeIndex", DriverInfoType.PHOTO.value());
-			map0.put("codeName", DriverInfoType.PHOTO.codeName());
-			map0.put("message", DriverInfoType.PHOTO.message());
-			Map<String, Object> map1 = new HashMap<String, Object>();
-			map1.put("codeIndex", DriverInfoType.DRIVERNAME.value());
-			map1.put("codeName", DriverInfoType.DRIVERNAME.codeName());
-			map1.put("message", DriverInfoType.DRIVERNAME.message());
-			Map<String, Object> map2 = new HashMap<String, Object>();
-			map2.put("codeIndex", DriverInfoType.LICENSEID.value());
-			map2.put("codeName", DriverInfoType.LICENSEID.codeName());
-			map2.put("message", DriverInfoType.LICENSEID.message());
-			Map<String, Object> map3 = new HashMap<String, Object>();
-			map3.put("codeIndex", DriverInfoType.DRIVERNATIONALITY.value());
-			map3.put("codeName", DriverInfoType.DRIVERNATIONALITY.codeName());
-			map3.put("message", DriverInfoType.DRIVERNATIONALITY.message());
-			Map<String, Object> map4 = new HashMap<String, Object>();
-			map4.put("codeIndex", DriverInfoType.DRIVERNATION.value());
-			map4.put("codeName", DriverInfoType.DRIVERNATION.codeName());
-			map4.put("message", DriverInfoType.DRIVERNATION.message());
-			Map<String, Object> map5 = new HashMap<String, Object>();
-			map5.put("codeIndex", DriverInfoType.ADDRESSNAME.value());
-			map5.put("codeName", DriverInfoType.ADDRESSNAME.codeName());
-			map5.put("message", DriverInfoType.ADDRESSNAME.message());
-			Map<String, Object> map6 = new HashMap<String, Object>();
-			map6.put("codeIndex", DriverInfoType.LICENSEPHOTO.value());
-			map6.put("codeName", DriverInfoType.LICENSEPHOTO.codeName());
-			map6.put("message", DriverInfoType.LICENSEPHOTO.message());
-			Map<String, Object> map7 = new HashMap<String, Object>();
-			map7.put("codeIndex", DriverInfoType.GETDRIVERLICENSEDATE.value());
-			map7.put("codeName", DriverInfoType.GETDRIVERLICENSEDATE.codeName());
-			map7.put("message", DriverInfoType.GETDRIVERLICENSEDATE.message());
-			Map<String, Object> map8 = new HashMap<String, Object>();
-			map8.put("codeIndex", DriverInfoType.DRIVERLICENSEON.value());
-			map8.put("codeName", DriverInfoType.DRIVERLICENSEON.codeName());
-			map8.put("message", DriverInfoType.DRIVERLICENSEON.message());
-			Map<String, Object> map9 = new HashMap<String, Object>();
-			map9.put("codeIndex", DriverInfoType.DRIVERLICENSEOFF.value());
-			map9.put("codeName", DriverInfoType.DRIVERLICENSEOFF.codeName());
-			map9.put("message", DriverInfoType.DRIVERLICENSEOFF.message());
-			Map<String, Object> map10 = new HashMap<String, Object>();
-			map10.put("codeIndex", DriverInfoType.FULLTIMEDRIVER.value());
-			map10.put("codeName", DriverInfoType.FULLTIMEDRIVER.codeName());
-			map10.put("message", DriverInfoType.FULLTIMEDRIVER.message());
-			error.add(map0);
-			error.add(map1);
-			error.add(map2);
-			error.add(map3);
-			error.add(map4);
-			error.add(map5);
-			error.add(map6);
-			error.add(map7);
-			error.add(map8);
-			error.add(map10);
-
-			data.put("status", 1);
-			data.put("info", info);
-			data.put("error", error);
-
-			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-					"获取成功！", data);
-
+			// 认证信息
+			List<VerificationLogs> verLogsList = verificationLogsService.selectByDriverPhone(user.getUserphone());
+			if (verLogsList.size() == 0) {
+				resultBean = new ResultBean<Object>(ResponseCode.NO_DATA.value(),
+						"暂无认证信息！", info);
+			}else {
+				if (verLogsList.get(0).getVerificationStatus() == 1) {
+					for (VerificationLogs verificationLogs : verLogsList) {
+						Map<String, Object> error = new HashMap<String, Object>();
+						error.put("codeName", verificationLogs.getVerificationName());
+						error.put("message", verificationLogs.getVerificationContent());
+						error.put("codeIndex", verificationLogs.getErrorCode());
+						verification.add(error);
+					}
+				}
+				data.put("status", verLogsList.get(0).getVerificationStatus());
+				data.put("info", info);
+				data.put("error", verification);
+				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+						"获取成功！", data);
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			e.printStackTrace();

@@ -102,7 +102,7 @@ public class PushController {
 			try {
 				User user = (User) session.getAttribute("CURRENT_USER");
 				DriverInfo driverInfo = driverInfoService.selectByPhone(user.getUserphone());
-				if(driverInfo == null || driverInfo.getState() != 0){
+				if(driverInfo == null || driverInfo.getState() != 2){
 					//司机信息审核未通过
 					resultBean = new ResultBean<Object>(ResponseCode.DRIVER_INVALID.value(),
 							ResponseCode.DRIVER_INVALID.message());
