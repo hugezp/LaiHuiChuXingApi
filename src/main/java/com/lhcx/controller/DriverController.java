@@ -221,9 +221,14 @@ public class DriverController {
 			long onTime = 0;//毫秒
 			DriverLocation driverLocation = driverLocationService.selectByPhone(driverPhone);
 			Date startTime = driverLocation.getLoginTime();
+			Date endTime = driverLocation.getLogoutTime();
 			if ( startTime != null) {
-				Date endTime = driverLocation.getLogoutTime() != null ? driverLocation.getLogoutTime():new Date();
-				onTime = endTime.getTime() - startTime.getTime();
+				long startTimeMil =  startTime.getTime();
+				long endTimeMil = endTime != null ? endTime.getTime():System.currentTimeMillis();				
+				if (startTimeMil > endTimeMil) {
+					endTimeMil = System.currentTimeMillis();
+				}
+				onTime = endTimeMil - startTimeMil;
 			}
 			result.put("onTime", onTime);
 			

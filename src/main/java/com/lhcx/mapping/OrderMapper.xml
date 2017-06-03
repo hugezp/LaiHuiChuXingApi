@@ -59,7 +59,7 @@
   	order by OrderTime desc limit 1
   </select>
    
-  <select id="selectTotalCountByDriverPhone" >
+  <select id="selectTotalCountByDriverPhone" resultType="int">
   	select count(*) as totalCount
   	from orders 
   	where DriverPhone = #{driverPhone} 

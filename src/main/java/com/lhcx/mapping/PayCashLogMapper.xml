@@ -34,9 +34,9 @@
     order by UpdateTime desc
  	 limit #{startPro},#{pageSize}
   </select>
-  <select id="selectCashByDriverPhoneToday" >
+  <select id="selectCashByDriverPhoneToday" resultType="java.math.BigDecimal">
     select
-    sum(Cash) as totalCash
+    case when sum(Cash) is null then 0.00 else sum(Cash) end as totalCash
     from pay_cash_logs
     where DriverPhone = #{driverphone,jdbcType=VARCHAR} and Status = 2 and UpdateTime > CURDATE()
   </select>
