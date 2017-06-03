@@ -69,10 +69,11 @@ public class AlipayLogServiceImpl implements IAlipayLogService{
 			order.setOldstatus(order.getStatus());
 			order.setStatus(OrderStatus.PAY.value());
 			orderService.updateByOrderIdSelective(order);
-			OrderLog orderLog = new OrderLog();
 			
+			OrderLog orderLog = new OrderLog();
 			orderLog.setOrderid(out_trade_no);
 			orderLog.setOperatorphone(order.getPassengerphone());
+			orderLog.setIdentityToken(order.getPassengerIdentityToken());
 			orderLog.setOperatortime(new Date());
 			orderLog.setOperatorstatus(OrderStatus.PAY.value());
 			orderLog.setOperatordescription(OrderStatus.PAY.message());
@@ -82,6 +83,8 @@ public class AlipayLogServiceImpl implements IAlipayLogService{
 			cashLog.setOrderid(out_trade_no);
 			cashLog.setPassengerphone(order.getPassengerphone());
 			cashLog.setDriverphone(order.getDriverphone());
+			cashLog.setPassengerIdentityToken(order.getPassengerIdentityToken());
+			cashLog.setDriverIdentityToken(order.getDriverIdentityToken());
 			cashLog.setCash(price);
 			cashLog.setPaytype(1);//微信支付
 			cashLog.setStatus(2);//支付完成

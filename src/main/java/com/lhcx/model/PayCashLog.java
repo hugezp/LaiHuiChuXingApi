@@ -11,6 +11,10 @@ public class PayCashLog {
     private String passengerphone;
 
     private String driverphone;
+    
+    private String driverIdentityToken;
+    
+    private String passengerIdentityToken;
 
     private BigDecimal cash;
 
@@ -133,4 +137,20 @@ public class PayCashLog {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
+	public String getDriverIdentityToken() {
+		return driverIdentityToken;
+	}
+
+	public void setDriverIdentityToken(String driverIdentityToken) {
+		this.driverIdentityToken = driverIdentityToken;
+	}
+
+	public String getPassengerIdentityToken() {
+		return passengerIdentityToken;
+	}
+
+	public void setPassengerIdentityToken(String passengerIdentityToken) {
+		this.passengerIdentityToken = passengerIdentityToken;
+	}
 }

@@ -15,36 +15,38 @@
     <result column="ErrorDesc" property="errordesc" jdbcType="VARCHAR" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="PassengerIdentityToken" property="passengerIdentityToken" jdbcType="VARCHAR" />
+    <result column="DriverIdentityToken" property="driverIdentityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, OrderId, PassengerPhone, DriverPhone, Cash, ActionType, PayAccount, PayType, 
-    Status, Description, ErrorDesc, CreateTime, UpdateTime
+    Status, Description, ErrorDesc, CreateTime, UpdateTime,PassengerIdentityToken,DriverIdentityToken
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByDriverIdentityToken" resultMap="BaseResultMap"  >
     select 
     <include refid="Base_Column_List" />
     from pay_cash_logs
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectByDriverPhone" resultMap="BaseResultMap"  >
-    select 
-    <include refid="Base_Column_List" />
-    from pay_cash_logs
-    where DriverPhone = #{driverPhone} and Status = 2
+    where DriverIdentityToken = #{driverIdentityToken} and Status = 2
     order by UpdateTime desc
  	 limit #{startPro},#{pageSize}
   </select>
-  <select id="selectCashByDriverPhoneToday" resultType="java.math.BigDecimal">
+  <select id="selectCashByDriverIdentityTokenToday" resultType="java.math.BigDecimal">
     select
     case when sum(Cash) is null then 0.00 else sum(Cash) end as totalCash
     from pay_cash_logs
-    where DriverPhone = #{driverphone,jdbcType=VARCHAR} and Status = 2 and UpdateTime > CURDATE()
+    where DriverIdentityToken = #{driverIdentityToken,jdbcType=VARCHAR} and Status = 2 and UpdateTime > CURDATE()
   </select>
   <insert id="insertSelective" parameterType="com.lhcx.model.PayCashLog" >
     insert into pay_cash_logs
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="orderid != null" >
         OrderId,
+      </if>
+      <if test="passengerIdentityToken != null" >
+        PassengerIdentityToken,
+      </if>
+      <if test="driverIdentityToken != null" >
+        DriverIdentityToken,
       </if>
       <if test="passengerphone != null" >
         PassengerPhone,
@@ -84,6 +86,12 @@
       <if test="orderid != null" >
         #{orderid,jdbcType=VARCHAR},
       </if>
+      <if test="passengerIdentityToken != null" >
+        #{passengerIdentityToken,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdentityToken != null" >
+        #{driverIdentityToken,jdbcType=VARCHAR},
+      </if>
       <if test="passengerphone != null" >
         #{passengerphone,jdbcType=VARCHAR},
       </if>
@@ -119,46 +127,5 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lhcx.model.PayCashLog" >
-    update pay_cash_logs
-    <set >
-      <if test="orderid != null" >
-        OrderId = #{orderid,jdbcType=VARCHAR},
-      </if>
-      <if test="passengerphone != null" >
-        PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
-      </if>
-      <if test="driverphone != null" >
-        DriverPhone = #{driverphone,jdbcType=VARCHAR},
-      </if>
-      <if test="cash != null" >
-        Cash = #{cash,jdbcType=DECIMAL},
-      </if>
-      <if test="actiontype != null" >
-        ActionType = #{actiontype,jdbcType=INTEGER},
-      </if>
-      <if test="payaccount != null" >
-        PayAccount = #{payaccount,jdbcType=VARCHAR},
-      </if>
-      <if test="paytype != null" >
-        PayType = #{paytype,jdbcType=INTEGER},
-      </if>
-      <if test="status != null" >
-        Status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="description != null" >
-        Description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="errordesc != null" >
-        ErrorDesc = #{errordesc,jdbcType=VARCHAR},
-      </if>
-      <if test="createtime != null" >
-        CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatetime != null" >
-        UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+  
 </mapper>

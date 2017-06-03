@@ -12,5 +12,5 @@ public interface OrderLogMapper {
 
     List<OrderLog> selectByOrderId(String orderid);
     
-    OrderLog selectByOrderPhone(@Param("operatorPhone") String operatorPhone);
+    OrderLog selectByIdentityToken(@Param("identityToken") String identityToken);
 }

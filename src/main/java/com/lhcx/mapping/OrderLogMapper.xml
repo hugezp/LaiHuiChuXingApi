@@ -14,10 +14,11 @@
     <result column="Description" property="description" jdbcType="VARCHAR" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, OrderId, OperatorPhone, OperatorTime, OperatorDescription, OperatorStatus, OldStatus, 
-    OperatorType, CancelTypeCode, Description, CreateTime, UpdateTime
+    OperatorType, CancelTypeCode, Description, CreateTime, UpdateTime,IdentityToken
   </sql>
   <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -26,10 +27,10 @@
     where OrderId = #{orderid,jdbcType=VARCHAR} order by OperatorTime desc;
   </select>
   
-  <select id="selectByOrderPhone" resultType="com.lhcx.model.OrderLog" parameterType="java.lang.String" >
+  <select id="selectByIdentityToken" resultType="com.lhcx.model.OrderLog" parameterType="java.lang.String" >
     select OperatorStatus
     from order_logs
-    where OperatorPhone = #{operatorPhone} order by OperatorTime desc limit 1;
+    where IdentityToken = #{identityToken} order by OperatorTime desc limit 1;
   </select>
 
   <insert id="insertSelective" parameterType="com.lhcx.model.OrderLog" >
@@ -43,6 +44,9 @@
       </if>
       <if test="operatorphone != null" >
         OperatorPhone,
+      </if>
+      <if test="identityToken != null" >
+        IdentityToken,
       </if>
       <if test="operatortime != null" >
         OperatorTime,
@@ -81,6 +85,9 @@
       </if>
       <if test="operatorphone != null" >
         #{operatorphone,jdbcType=VARCHAR},
+      </if>
+      <if test="identityToken != null" >
+        #{identityToken,jdbcType=VARCHAR},
       </if>
       <if test="operatortime != null" >
         #{operatortime,jdbcType=TIMESTAMP},

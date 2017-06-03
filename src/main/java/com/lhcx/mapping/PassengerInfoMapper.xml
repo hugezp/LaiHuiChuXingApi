@@ -12,37 +12,18 @@
     <result column="Flag" property="flag" jdbcType="INTEGER" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, CompanyId, RegisterDate, PassengerPhone, PassengerName, PassengerGeender, State, 
-    Flag, CreateTime, UpdateTime
+    Flag, CreateTime, UpdateTime,IdentityToken
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByIdentityToken" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from passenger_infos
-    where id = #{id,jdbcType=INTEGER}
+    where IdentityToken = #{identityToken,jdbcType=INTEGER}
   </select>
-  <select id="selectByPhone" resultMap="BaseResultMap" >
-    select 
-    <include refid="Base_Column_List" />
-    from passenger_infos
-    where PassengerPhone = #{phone,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPhone" parameterType="java.lang.Integer" >
-    delete from passenger_infos
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.lhcx.model.PassengerInfo" >
-    insert into passenger_infos (id, CompanyId, RegisterDate, 
-      PassengerPhone, PassengerName, PassengerGeender, 
-      State, Flag, CreateTime, 
-      UpdateTime)
-    values (#{id,jdbcType=INTEGER}, #{companyid,jdbcType=VARCHAR}, #{registerdate,jdbcType=TIMESTAMP}, 
-      #{passengerphone,jdbcType=VARCHAR}, #{passengername,jdbcType=VARCHAR}, #{passengergeender,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
-      #{updatetime,jdbcType=TIMESTAMP})
-  </insert>
   <insert id="insertSelective" parameterType="com.lhcx.model.PassengerInfo" >
     insert into passenger_infos
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -57,6 +38,9 @@
       </if>
       <if test="passengerphone != null" >
         PassengerPhone,
+      </if>
+      <if test="identityToken != null" >
+        IdentityToken,
       </if>
       <if test="passengername != null" >
         PassengerName,
@@ -90,6 +74,9 @@
       <if test="passengerphone != null" >
         #{passengerphone,jdbcType=VARCHAR},
       </if>
+      <if test="identityToken != null" >
+        #{identityToken,jdbcType=VARCHAR},
+      </if>
       <if test="passengername != null" >
         #{passengername,jdbcType=VARCHAR},
       </if>
@@ -110,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPhoneSelective" parameterType="com.lhcx.model.PassengerInfo" >
+  <update id="updateByIdentityTokenSelective" parameterType="com.lhcx.model.PassengerInfo" >
     update passenger_infos
     <set >
       <if test="companyid != null" >
@@ -118,6 +105,9 @@
       </if>
       <if test="registerdate != null" >
         RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="passengerphone != null" >
+        #{Passengerphone,jdbcType=VARCHAR},
       </if>
       <if test="passengername != null" >
         PassengerName = #{passengername,jdbcType=VARCHAR},
@@ -138,19 +128,6 @@
         UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where PassengerPhone = #{passengerphone,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPhone" parameterType="com.lhcx.model.PassengerInfo" >
-    update passenger_infos
-    set CompanyId = #{companyid,jdbcType=VARCHAR},
-      RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
-      PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
-      PassengerName = #{passengername,jdbcType=VARCHAR},
-      PassengerGeender = #{passengergeender,jdbcType=VARCHAR},
-      State = #{state,jdbcType=INTEGER},
-      Flag = #{flag,jdbcType=INTEGER},
-      CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      UpdateTime = #{updatetime,jdbcType=TIMESTAMP}
-    where PassengerPhone = #{passengerphone,jdbcType=VARCHAR},
+    where IdentityToken = #{identityToken,jdbcType=VARCHAR}
   </update>
 </mapper>

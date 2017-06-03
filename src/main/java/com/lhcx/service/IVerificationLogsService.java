@@ -11,5 +11,5 @@ import com.lhcx.model.VerificationLogs;
  */
 public interface IVerificationLogsService {
 
-    List<VerificationLogs> selectByDriverPhone(String driverPhone);
+    List<VerificationLogs> selectByDriverIdentityToken(String driverIdentityToken);
 }

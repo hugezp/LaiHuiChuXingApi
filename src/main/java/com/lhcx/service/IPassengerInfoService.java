@@ -3,9 +3,9 @@ package com.lhcx.service;
 import com.lhcx.model.PassengerInfo;
 
 public interface IPassengerInfoService {
-	 PassengerInfo selectByPhone(String phone);
+	 PassengerInfo selectByIdentityToken(String identityToken);
 
 	 int insertSelective(PassengerInfo passengerInfo);
 	 
-	 int updateByPhoneSelective(PassengerInfo record);
+	 int updateByIdentityTokenSelective(PassengerInfo record);
  }

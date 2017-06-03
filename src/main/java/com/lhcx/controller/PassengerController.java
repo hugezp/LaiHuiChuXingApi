@@ -55,8 +55,7 @@ public class PassengerController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			Order newOrder = orderService.selectNewOrderByPhone(user
-					.getUserphone());
+			Order newOrder = orderService.selectNewOrderByPassengerIdentityToken(user.getIdentityToken());
 			if (newOrder != null) {
 				result.put("OrderId", newOrder.getOrderid());
 				result.put("Status", newOrder.getStatus());
@@ -90,7 +89,7 @@ public class PassengerController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			PassengerInfo info = passengerInfoService.selectByPhone(user.getUserphone());
+			PassengerInfo info = passengerInfoService.selectByIdentityToken(user.getIdentityToken());
 			if (info != null) {
 				result.put("passengerName", info.getPassengername());
 				result.put("passengerGeender", info.getPassengergeender());
@@ -114,7 +113,7 @@ public class PassengerController {
 	}
 	
 	/**
-	 * 司机端更新
+	 * 乘客端更新
 	 * @return
 	 */
 	@ResponseBody
@@ -127,7 +126,8 @@ public class PassengerController {
 			String passengerName = jsonRequest.getString("passengerName");
 			String passengerGeender = jsonRequest.getString("passengerGeender");
 			User user = (User) session.getAttribute("CURRENT_USER");
-			PassengerInfo info = passengerInfoService.selectByPhone(user.getUserphone());
+			String identityToken = user.getIdentityToken();
+			PassengerInfo info = passengerInfoService.selectByIdentityToken(identityToken);
 			if (info == null) {
 				info = new PassengerInfo();
 				info.setPassengername(passengerName);
@@ -135,16 +135,18 @@ public class PassengerController {
 				info.setRegisterdate(new Date());
 				info.setCreatetime(new Date());
 				info.setPassengerphone(user.getUserphone());
+				info.setIdentityToken(identityToken);
 				info.setFlag(1);
 				info.setState(0);
 				info.setUpdatetime(new Date());
+				info.setIdentityToken(user.getIdentityToken());
 				passengerInfoService.insertSelective(info);
 			} else {
 				info.setPassengername(passengerName);
 				info.setPassengergeender(passengerGeender);
 				info.setFlag(2);
 				info.setUpdatetime(new Date());
-				passengerInfoService.updateByPhoneSelective(info);
+				passengerInfoService.updateByIdentityTokenSelective(info);
 			}
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 					"乘客信息提交成功！");

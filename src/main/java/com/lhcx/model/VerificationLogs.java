@@ -6,6 +6,8 @@ public class VerificationLogs {
     private Integer id;
 
     private String driverPhone;
+    
+    private String driverIdentityToken;
 
     private String verificationContent;
     
@@ -73,4 +75,12 @@ public class VerificationLogs {
     public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
+
+	public String getDriverIdentityToken() {
+		return driverIdentityToken;
+	}
+
+	public void setDriverIdentityToken(String driverIdentityToken) {
+		this.driverIdentityToken = driverIdentityToken;
+	}
 }

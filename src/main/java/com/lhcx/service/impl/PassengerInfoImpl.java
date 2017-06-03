@@ -15,8 +15,8 @@ public class PassengerInfoImpl implements IPassengerInfoService {
 	@Autowired
 	private PassengerInfoMapper passengerInfoMapper;
 	
-	public PassengerInfo selectByPhone(String phone){
-		return passengerInfoMapper.selectByPhone(phone);
+	public PassengerInfo selectByIdentityToken(String identityToken){
+		return passengerInfoMapper.selectByIdentityToken(identityToken);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class PassengerInfoImpl implements IPassengerInfoService {
 	}
 
 	@Override
-	public int updateByPhoneSelective(PassengerInfo record) {
-		return passengerInfoMapper.updateByPhoneSelective(record);
+	public int updateByIdentityTokenSelective(PassengerInfo record) {
+		return passengerInfoMapper.updateByIdentityTokenSelective(record);
 	}
 }

@@ -13,6 +13,6 @@ import com.lhcx.model.VerificationLogs;
  */
 public interface VerificationLogsMapper {
 
-    List<VerificationLogs> selectByDriverPhone(@Param("driverPhone")String driverPhone);
+    List<VerificationLogs> selectByDriverIdentityToken(@Param("driverIdentityToken")String driverIdentityToken);
 
 }

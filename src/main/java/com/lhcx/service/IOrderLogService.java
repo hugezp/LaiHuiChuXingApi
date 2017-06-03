@@ -9,5 +9,4 @@ public interface IOrderLogService {
 
  	List<OrderLog> selectByOrderId(String orderid);
  	
- 	OrderLog selectByOrderPhone(String operatorPhone);
 }

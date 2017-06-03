@@ -16,18 +16,19 @@
 		<result column="isDel" property="isdel" jdbcType="INTEGER" />
 		<result column="LoginTime" property="loginTime" jdbcType="TIMESTAMP" />
 		<result column="LogoutTime" property="logoutTime" jdbcType="TIMESTAMP" />
+		<result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, PositionTime, Longitude, Latitude,
 		Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId,
-		isDel,LoginTime,LogoutTime
+		isDel,LoginTime,LogoutTime,IdentityToken
 	</sql>
 
-	<select id="selectByPhone" resultMap="BaseResultMap">
+	<select id="selectByIdentityToken" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from driver_location
-		where Phone = #{phone}
+		where IdentityToken = #{identityToken}
 	</select>
 	<select id="selectOnTimeDistance" resultType="com.lhcx.model.DriverLocation">
 		select id,phone,Latitude,Longitude,
@@ -55,7 +56,7 @@
 		)
 		) * 1000
 		) AS distance from driver_location
-		where phone = #{phone}
+		where IdentityToken = #{identityToken}
 	</select>
 	<select id="selectList" resultType="com.lhcx.model.DriverLocation"
 		parameterType="com.lhcx.model.DriverLocation">
@@ -84,8 +85,8 @@
 		)
 		) * 1000
 		) AS distance from driver_location
-		where isDel = 1 and driver_location.Phone not in (
-			select orders.PassengerPhone 
+		where isDel = 1 and driver_location.IdentityToken not in (
+			select orders.PassengerIdentityToken
 			from orders 
 			where orders.Status > 1 and orders.Status &lt; 5
 		)
@@ -110,6 +111,9 @@
 			</if>
 			<if test="phone != null">
 				Phone,
+			</if>
+			<if test="identityToken != null">
+				IdentityToken,
 			</if>
 			<if test="encrypt != null">
 				Encrypt,
@@ -155,6 +159,9 @@
 			<if test="phone != null">
 				#{phone,jdbcType=VARCHAR},
 			</if>
+			<if test="identityToken != null">
+				#{identityToken,jdbcType=VARCHAR},
+			</if>
 			<if test="encrypt != null">
 				#{encrypt,jdbcType=INTEGER},
 			</if>
@@ -184,7 +191,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPhoneSelective" parameterType="com.lhcx.model.DriverLocation">
+	<update id="updateByIdentityTokenSelective" parameterType="com.lhcx.model.DriverLocation">
 		update driver_location
 		<set>
 			<if test="companyid != null">
@@ -207,6 +214,9 @@
 			</if>
 			<if test="latitude != null">
 				Latitude = #{latitude,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				Phone = #{phone,jdbcType=VARCHAR},
 			</if>
 			<if test="encrypt != null">
 				Encrypt = #{encrypt,jdbcType=INTEGER},
@@ -236,7 +246,7 @@
 				LogoutTime = #{logoutTime,jdbcType=TIMESTAMP},
 			</if>
 		</set>
-		where Phone = #{phone,jdbcType=VARCHAR}
+		where IdentityToken = #{identityToken,jdbcType=VARCHAR}
 	</update>
 
 	<update id="updateLocation" parameterType="com.lhcx.model.DriverLocation">
@@ -244,8 +254,10 @@
 		<set>
 			Longitude = #{longitude,jdbcType=VARCHAR},
 			Latitude = #{latitude,jdbcType=VARCHAR},
+			Phone = #{phone,jdbcType=VARCHAR},
+			PositionTime = #{positiontime,jdbcType=TIMESTAMP}
 		</set>
-		where Phone = #{phone,jdbcType=VARCHAR}
+		where IdentityToken = #{identityToken,jdbcType=VARCHAR}
 	</update>
 
 

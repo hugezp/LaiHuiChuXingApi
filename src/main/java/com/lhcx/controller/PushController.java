@@ -66,16 +66,15 @@ public class PushController {
 		} else {
 			try {
 				User user = (User) session.getAttribute("CURRENT_USER");
-				DriverInfo driverInfo = driverInfoService.selectByPhone(user
-						.getUserphone());
+				String identityToken = user.getIdentityToken();
+				DriverInfo driverInfo = driverInfoService.selectByIdentityToken(identityToken);
 				if (driverInfo == null || driverInfo.getState() != 2) {
 					// 司机信息审核未通过
 					resultBean = new ResultBean<Object>(
 							ResponseCode.DRIVER_INVALID.value(),
 							ResponseCode.DRIVER_INVALID.message());
 				} else {
-					if (driverLocationService.setButton(jsonRequest,
-							user.getUserphone())) {
+					if (driverLocationService.setButton(jsonRequest)) {
 						resultBean = new ResultBean<Object>(
 								ResponseCode.SUCCESS.value(),
 								ResponseCode.SUCCESS.message());
@@ -112,8 +111,10 @@ public class PushController {
 				String longitude = jsonRequest.getString("Longitude");
 				String latitude = jsonRequest.getString("Latitude");
 				User user = (User) session.getAttribute("CURRENT_USER");
+				String identityToken = user.getIdentityToken();
 				DriverLocation driverLocation = new DriverLocation();
 				driverLocation.setPhone(user.getUserphone());
+				driverLocation.setIdentityToken(identityToken);
 				driverLocation.setLongitude(longitude);
 				driverLocation.setLatitude(latitude);
 				driverLocation.setPositiontime(new Date());
@@ -151,12 +152,13 @@ public class PushController {
 					ResponseCode.PARAMETER_WRONG.message(),resultList);
 		}else {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			String userphone = user.getUserphone();
+			String userToken = user.getIdentityToken();
 			String pushType = jsonRequest.getString("pushType");
 			String page = jsonRequest.getString("page");
 			String size = jsonRequest.getString("size");
 			PushNotification pushNotification = new PushNotification();
-			pushNotification.setReceivePhone(userphone);
+			pushNotification.setReceivePhone(user.getUserphone());
+			pushNotification.setReceiveIdentityToken(userToken);
 			pushNotification.setPage(Integer.parseInt(page));
 			pushNotification.setSize(Integer.parseInt(size));
 			pushNotification.setPushType(Integer.parseInt(pushType));

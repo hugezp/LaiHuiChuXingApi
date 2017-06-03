@@ -10,13 +10,13 @@ public interface DriverLocationMapper {
 
     int insertSelective(DriverLocation record);
 
-    int updateByPhoneSelective(DriverLocation record);
+    int updateByIdentityTokenSelective(DriverLocation record);
 
     List<DriverLocation> selectList(DriverLocation driverLocation);
     
-    DriverLocation selectByPhone(@Param("phone") String phone);
+    DriverLocation selectByIdentityToken(@Param("identityToken") String identityToken);
     
-    DriverLocation selectOnTimeDistance(@Param("phone") String phone,@Param("lon") long lon,@Param("lat") long lat);
+    DriverLocation selectOnTimeDistance(@Param("identityToken") String identityToken,@Param("lon") long lon,@Param("lat") long lat);
 
 	int updateLocation(DriverLocation record);
     

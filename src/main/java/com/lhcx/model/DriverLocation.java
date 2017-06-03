@@ -41,6 +41,8 @@ public class DriverLocation {
     
     private double distance;
     
+    private String identityToken;
+    
     public double getDistance() {
 		return distance;
 	}
@@ -191,6 +193,14 @@ public class DriverLocation {
 
 	public void setLogoutTime(Date logoutTime) {
 		this.logoutTime = logoutTime;
+	}
+
+	public String getIdentityToken() {
+		return identityToken;
+	}
+
+	public void setIdentityToken(String identityToken) {
+		this.identityToken = identityToken;
 	}
     
 }

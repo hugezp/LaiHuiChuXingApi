@@ -49,19 +49,15 @@ public class UserSeriveImpl implements IUserService{
         PassengerInfo passengerInfo = null;
         if(user != null){
         	 if (userType.equals(UserType.DRIVER.value())) {
-             	driverInfo = driverInfoService.selectByPhone(phone);
+             	driverInfo = driverInfoService.selectByIdentityToken(user.getIdentityToken());
              	user.setDriverInfo(driverInfo);
      		}else if (userType.equals(UserType.PASSENGER.value())) {
-     			passengerInfo = passengerInfoService.selectByPhone(phone);
+     			passengerInfo = passengerInfoService.selectByIdentityToken(user.getIdentityToken());
      			user.setPassengerInfo(passengerInfo);
      		}
         }
        
 		return user;
-	}
-	
-	public int insert(User record){
-		return userMapper.insert(record);
 	}
 	
 	public int insertSelective(User record){
@@ -93,6 +89,7 @@ public class UserSeriveImpl implements IUserService{
 			if(verificationCodeService.checkPhoneCode(phone, userType, code)){
 				//验证成功后保存登录信息
 				if (passengerBoolean && user == null) {
+					String identityToken = token;
 					user = new User();
 					user.setUserphone(phone);
 					user.setUsertype(userType);		
@@ -101,6 +98,7 @@ public class UserSeriveImpl implements IUserService{
 					user.setLogintime(DateUtils.currentTimestamp());
 					user.setUpatetime(DateUtils.currentTimestamp());
 					user.setLoginip(Utils.getIpAddr(request));
+					user.setIdentityToken(identityToken);
 					
 					insertSelective(user);
 				}else {
@@ -139,6 +137,7 @@ public class UserSeriveImpl implements IUserService{
 			driverInfo = new DriverInfo(jsonRequest);
 			driverInfo.setCreatetime(DateUtils.currentTimestamp());
 			driverInfo.setUpdatetime(DateUtils.currentTimestamp());
+			driverInfo.setIdentityToken(token);
 			driverInfoService.insertSelective(driverInfo);
 			
 			//step2:保存user信息 
@@ -150,13 +149,14 @@ public class UserSeriveImpl implements IUserService{
 			user.setLogintime(DateUtils.currentTimestamp());
 			user.setUpatetime(DateUtils.currentTimestamp());
 			user.setLoginip(Utils.getIpAddr(request));
+			user.setIdentityToken(token);
 			insertSelective(user);
 			
 		} else {
 			//step1：更新driver 信息
 			driverInfo.setFlag(2);
 			driverInfo.setUpdatetime(DateUtils.currentTimestamp());
-			driverInfoService.updateByPhoneSelective(driverInfo);
+			driverInfoService.updateByIdentityTokenSelective(driverInfo);
 			
 			//step2:更新user信息 
 			user.setLogintime(DateUtils.currentTimestamp());

@@ -20,8 +20,6 @@ public interface IUserService {
 	
 	int updateByPrimaryKeySelective(User record);
 	
-	int insert(User record);
-	
 	int insertSelective(User record);
 	
 	/*

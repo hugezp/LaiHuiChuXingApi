@@ -21,11 +21,13 @@
     <result column="CarType" property="carType" jdbcType="INTEGER" />
     <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
     <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="PassengerIdentityToken" property="passengerIdentityToken" jdbcType="VARCHAR" />
+    <result column="DriverIdentityToken" property="driverIdentityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id,  OrderId, PassengerPhone, DepartTime, OrderTime, PassengerNote, 
     Departure, DepLongitude, DepLatitude, Destination, DestLongitude, DestLatitude, Encrypt, 
-    FareType, Fee, OrderType,CarType,DriverPhone,Status
+    FareType, Fee, OrderType,CarType,DriverPhone,Status,PassengerIdentityToken,DriverIdentityToken
   </sql>
   <select id="selectByOrderId" resultType="com.lhcx.model.Order">
     select 
@@ -54,40 +56,42 @@
     where OrderId = #{orderId}
   </select>
   
-  <select id="selectNewOrderByPhone" resultType="com.lhcx.model.Order">
-  	select OrderId,status from orders where PassengerPhone = #{passengerPhone} and (Status > 0 and Status &lt; 5)
+  <select id="selectNewOrderByPassengerIdentityToken" resultType="com.lhcx.model.Order">
+  	select OrderId,status from orders 
+  	where PassengerIdentityToken = #{passengerIdentityToken} and (Status > 0 and Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
    
-  <select id="selectTotalCountByDriverPhone" resultType="int">
+  <select id="selectTotalCountByDriverIdentityToken" resultType="int">
   	select count(*) as totalCount
   	from orders 
-  	where DriverPhone = #{driverPhone} 
+  	where DriverIdentityToken = #{driverIdentityToken} 
   	<if test="status != null" >
        and Status = #{status}
      </if>
   </select>
   
-   <select id="selectOrderByPassengerPhone" resultType="com.lhcx.model.Order">
+   <select id="selectOrderByPassengerIdentityToken" resultType="com.lhcx.model.Order">
   	select 
   	<include refid="Base_Column_List" />
   	 from orders 
-  	 where PassengerPhone = #{passengerPhone} 
+  	 where PassengerIdentityToken = #{passengerIdentityToken} 
   	 order by OrderTime desc
   	 limit #{startPro},#{pageSize}
   </select>
   
-  <select id="selectOrderByDriverPhone" resultType="com.lhcx.model.Order">
+  <select id="selectOrderByDriverIdentityToken" resultType="com.lhcx.model.Order">
   	select 
   	<include refid="Base_Column_List" />
   	 from orders 
-  	 where DriverPhone = #{driverPhone} 
+  	 where DriverIdentityToken = #{driverIdentityToken} 
   	 order by OrderTime desc
   	 limit #{startPro},#{pageSize}
   </select>
   
-   <select id="selectNewOrderByDriverPhone" resultType="com.lhcx.model.Order">
-  	select OrderId,status from orders where DriverPhone = #{driverPhone} and (Status > 1 and Status &lt; 5)
+   <select id="selectNewOrderByDriverIdentityToken" resultType="com.lhcx.model.Order">
+  	select OrderId,status from orders 
+  	where DriverIdentityToken = #{driverIdentityToken}  and (Status > 1 and Status &lt; 5)
   	order by OrderTime desc limit 1
   </select>
   
@@ -148,6 +152,12 @@
       <if test="driverphone != null" >
         DriverPhone,
       </if>
+      <if test="passengerIdentityToken != null" >
+        PassengerIdentityToken,
+      </if>
+      <if test="driverIdentityToken != null" >
+        DriverIdentityToken,
+      </if>
       <if test="status != null" >
         Status
       </if>
@@ -207,6 +217,12 @@
       <if test="driverphone != null" >
         #{driverphone,jdbcType=VARCHAR},
       </if>
+      <if test="passengerIdentityToken != null" >
+        #{passengerIdentityToken,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdentityToken != null" >
+        #{driverIdentityToken,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER}
       </if>
@@ -262,6 +278,12 @@
       </if>
       <if test="driverphone != null" >
         DriverPhone = #{driverphone,jdbcType=VARCHAR},
+      </if>
+      <if test="passengerIdentityToken != null" >
+        #{passengerIdentityToken,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdentityToken != null" >
+        #{driverIdentityToken,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         Status = #{status,jdbcType=INTEGER}

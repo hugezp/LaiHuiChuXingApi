@@ -13,15 +13,13 @@ public interface PayCashLogMapper {
 
     PayCashLog selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(PayCashLog record);
-    
     /**
      * 当日流水
      * @param driverphone
      * @return
      */
-    BigDecimal selectCashByDriverPhoneToday(String driverphone);
+    BigDecimal selectCashByDriverIdentityTokenToday(String driverIdentityToken);
     
-    List<PayCashLog> selectByDriverPhone(@Param("driverPhone") String driverPhone,@Param("startPro") int startPro,@Param("pageSize") int pageSize);;
+    List<PayCashLog> selectByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);;
 
 }

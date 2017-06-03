@@ -3,10 +3,8 @@ package com.lhcx.service;
 import com.lhcx.model.DriverInfo;
 
 public interface IDriverInfoService {
-	DriverInfo selectByPhone(String phone);
-	int insert(DriverInfo record);
+	DriverInfo selectByIdentityToken(String identityToken);
 	int insertSelective(DriverInfo record);
-	int updateByPrimaryKey(DriverInfo record);
-	int updateByPhone(DriverInfo record);
-	int updateByPhoneSelective(DriverInfo record);
+	int updateByIdentityToken(DriverInfo record);
+	int updateByIdentityTokenSelective(DriverInfo record);
 }

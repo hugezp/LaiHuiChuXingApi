@@ -92,20 +92,20 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		User user = (User)session.getAttribute("CURRENT_USER");
 		if (!VerificationUtils.createOrderValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
 		} else {
-
 			// 乘客手机号
-			String passengerPhone = jsonRequest.getString("PassengerPhone");
+			String identityToken = user.getIdentityToken();
 			Map<String, Object> result = new HashMap<String, Object>();
 			try {
 				Order newOrder = orderService
-						.selectNewOrderByPhone(passengerPhone);
+						.selectNewOrderByPassengerIdentityToken(identityToken);
 				if (newOrder == null) {
-					String orderId = orderService.create(jsonRequest);
+					String orderId = orderService.create(jsonRequest,user);
 					if (!orderId.equals("")) {
 						result.put("OrderId", orderId);
 						// 推送内容
@@ -172,8 +172,7 @@ public class OrderController {
 			SimpleDateFormat dateFormat = new SimpleDateFormat(
 					"yyyy-MM-dd HH:mm");
 			DriverLocation d = new DriverLocation();
-			String orderId = jsonRequest.getString("OrderId");
-			
+			String orderId = jsonRequest.getString("OrderId");			
 			Order order = orderService.selectByOrderId(orderId);
 			
 			if (order.getStatus() != OrderStatus.BILL.value()) {
@@ -207,6 +206,8 @@ public class OrderController {
 			// 车辆类型
 			Integer carType = order.getCarType();
 			
+			String passengerIdentityToken = order.getPassengerIdentityToken();
+			
 			// 路程距离
 			double totalDistance = PointToDistance.distanceOfTwoPoints(
 					depLatitude, depLongitude, destLatitude, destLongitude);
@@ -219,6 +220,7 @@ public class OrderController {
 				for (DriverLocation driverLocation : dLocations) {
 					double distance = driverLocation.getDistance();
 					String mobile = driverLocation.getPhone();
+					String receiveIdentityToken = driverLocation.getIdentityToken();
 					Map<String, String> extrasParam = new HashMap<String, String>();
 					extrasParam.put("mobile", passengerPhone);
 					extrasParam.put("createTime",
@@ -246,13 +248,13 @@ public class OrderController {
 									extrasParam);
 					if (flag == 1) {
 						PushNotification pushNotification = new PushNotification();
-						pushNotification
-								.setPushPhone(passengerPhone);
+						pushNotification.setPushPhone(passengerPhone);
 						pushNotification.setReceivePhone(mobile);
+						pushNotification.setPushIdentityToken(passengerIdentityToken);
+						pushNotification.setReceiveIdentityToken(receiveIdentityToken);
 						pushNotification.setOrderId(orderId);
 						pushNotification.setAlert(content);
-						pushNotification.setData(extrasParam
-								.toString());
+						pushNotification.setData(extrasParam.toString());
 						pushNotificationService
 								.insertSelective(pushNotification);
 					}
@@ -437,20 +439,20 @@ public class OrderController {
 		int page = jsonRequest.getInteger("page")==null? 1 : jsonRequest.getInteger("page");
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
-			String driverPhone = user.getUserphone();
+			String driverToken = user.getIdentityToken();
 			Map<String, Object> result = new HashMap<String, Object>();
 			List<OrderDetail> list = new ArrayList<OrderDetail>();
-			if (!StringUtils.isOrNotEmpty(driverPhone)) {
+			if (!StringUtils.isOrNotEmpty(driverToken)) {
 				resultBean = new ResultBean<Object>(
 						ResponseCode.PARAMETER_WRONG.value(),
 						ResponseCode.PARAMETER_WRONG.message(),result);
 			}else {
-				DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
+				DriverInfo driverInfo = driverInfoService.selectByIdentityToken(driverToken);
 				if (driverInfo != null) {
 					result.put("money","86.86");
 					result.put("userName",driverInfo.getDrivername());
 					result.put("userPhoto",driverInfo.getPhoto());
-					List<Order> orderList = orderService.selectOrderByDriverPhone(driverInfo.getDriverphone(),page,ConfigUtils.PAGE_SIZE);
+					List<Order> orderList = orderService.selectOrderByDriverIdentityToken(driverToken,page,ConfigUtils.PAGE_SIZE);
 					for (Order order : orderList) {
 						OrderDetail orderDetail = new OrderDetail();
 						orderDetail.setOrderId(order.getOrderid());
@@ -495,21 +497,21 @@ public class OrderController {
 		ResultBean<?> resultBean = null;
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
-			String passengerPhone = user.getUserphone();
+			String passengerToken = user.getIdentityToken();
 			Map<String, Object> result = new HashMap<String, Object>();
 			List<OrderDetail> list = new ArrayList<OrderDetail>();
-			if (!StringUtils.isOrNotEmpty(passengerPhone)) {
+			if (!StringUtils.isOrNotEmpty(passengerToken)) {
 				resultBean = new ResultBean<Object>(
 						ResponseCode.PARAMETER_WRONG.value(),
 						ResponseCode.PARAMETER_WRONG.message(),result);
 			}else {
-				PassengerInfo passenger = passengerInfoService.selectByPhone(passengerPhone);
+				PassengerInfo passenger = passengerInfoService.selectByIdentityToken(passengerToken);
 				if (passenger != null) {
 					result.put("money","86.86");
 					result.put("userName",passenger.getPassengername());
 					result.put("userPhoto",passenger.getPassengername());
 				}
-				List<Order> orderList = orderService.selectOrderByPassengerPhone(user.getUserphone(),page,ConfigUtils.PAGE_SIZE);
+				List<Order> orderList = orderService.selectOrderByPassengerIdentityToken(passengerToken,page,ConfigUtils.PAGE_SIZE);
 				for (Order order : orderList) {
 					OrderDetail orderDetail = new OrderDetail();
 					orderDetail.setOrderId(order.getOrderid());

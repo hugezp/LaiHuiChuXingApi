@@ -15,28 +15,20 @@ public class DriverInfoImpl implements IDriverInfoService {
 	@Autowired
 	private DriverInfoMapper driverInfoMapper;
 	
-	public DriverInfo selectByPhone(String phone) {
-		return driverInfoMapper.selectByPhone(phone);
-	}
-	
-	public int updateByPrimaryKey(DriverInfo record){
-		return driverInfoMapper.updateByPrimaryKey(record);
-	}
-	
-	public int insert(DriverInfo record) {
-		return driverInfoMapper.insert(record);
+	public DriverInfo selectByIdentityToken(String identityToken) {
+		return driverInfoMapper.selectByIdentityToken(identityToken);
 	}
 	
 	public int insertSelective(DriverInfo record){
 		return driverInfoMapper.insertSelective(record);
 	}
 	
-	public int updateByPhone(DriverInfo record){
-		return driverInfoMapper.updateByPhone(record);
+	public int updateByIdentityToken(DriverInfo record){
+		return driverInfoMapper.updateByIdentityToken(record);
 	}
 	
-	public int updateByPhoneSelective(DriverInfo record) {
-		return driverInfoMapper.updateByPhoneSelective(record);
+	public int updateByIdentityTokenSelective(DriverInfo record) {
+		return driverInfoMapper.updateByIdentityTokenSelective(record);
 	}
 
 }

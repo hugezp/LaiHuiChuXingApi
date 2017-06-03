@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.lhcx.model.VerificationLogs" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="driver_phone" property="driverPhone" jdbcType="VARCHAR" />
+    <result column="driver_identity_token" property="driverIdentityToken" jdbcType="VARCHAR" />
     <result column="verification_name" property="verificationName" jdbcType="VARCHAR" />
     <result column="verification_content" property="verificationContent" jdbcType="VARCHAR" />
     <result column="verification_status" property="verificationStatus" jdbcType="INTEGER" />
@@ -11,13 +12,13 @@
     <result column="error_code" property="errorCode" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, driver_phone, verification_content, verification_name, verification_status, verification_time, error_code
+    id, driver_phone, driver_identity_token,verification_content, verification_name, verification_status, verification_time, error_code
   </sql>
-  <select id="selectByDriverPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByDriverIdentityToken" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from verification_logs
-    where driver_phone = #{driverPhone}
+    where driver_identity_token = #{driverIdentityToken}
     order by error_code asc , verification_time desc
   </select>
 </mapper>

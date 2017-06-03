@@ -144,6 +144,8 @@ public class AlipayNotifyController {
 						String orderId = order.getOrderid();
 						String driverPhone = order.getDriverphone();
 						String passengerPhone = order.getPassengerphone();
+						String driverIdentityToken = order.getDriverIdentityToken();
+						String passengerIdentityToken = order.getPassengerIdentityToken();
 						String content = "【来回出行】手机号为"
 								+ passengerPhone
 								+ "的乘客通过微信支付了"
@@ -162,8 +164,10 @@ public class AlipayNotifyController {
 
 						if (flag == 1) {
 							PushNotification pushNotification = new PushNotification();
-							pushNotification.setPushPhone(driverPhone);
-							pushNotification.setReceivePhone(passengerPhone);
+							pushNotification.setPushPhone(passengerPhone);
+							pushNotification.setReceivePhone(driverPhone);
+							pushNotification.setPushIdentityToken(passengerIdentityToken);
+							pushNotification.setReceiveIdentityToken(driverIdentityToken);
 							pushNotification.setOrderId(orderId);
 							pushNotification.setAlert(content);
 							pushNotification.setPushType(1);
@@ -329,9 +333,11 @@ public class AlipayNotifyController {
 					order.setOldstatus(order.getStatus());
 					order.setStatus(OrderStatus.PAY.value());
 					orderService.updateByOrderIdSelective(order);
+					
 					OrderLog orderLog = new OrderLog();
 					orderLog.setOrderid(out_trade_no);
 					orderLog.setOperatorphone(order.getPassengerphone());
+					orderLog.setIdentityToken(order.getPassengerIdentityToken());
 					orderLog.setOperatortime(new Date());
 					orderLog.setOperatorstatus(OrderStatus.PAY.value());
 					orderLog.setOperatordescription(OrderStatus.PAY.message());
@@ -341,6 +347,8 @@ public class AlipayNotifyController {
 					cashLog.setOrderid(out_trade_no);
 					cashLog.setPassengerphone(order.getPassengerphone());
 					cashLog.setDriverphone(order.getDriverphone());
+					cashLog.setPassengerIdentityToken(order.getPassengerIdentityToken());
+					cashLog.setDriverIdentityToken(order.getDriverIdentityToken());
 					cashLog.setCash(new BigDecimal(price));
 					cashLog.setPaytype(0);//支付宝支付
 					cashLog.setStatus(2);//支付完成
@@ -356,6 +364,8 @@ public class AlipayNotifyController {
 					String orderId = order.getOrderid();
 					String driverPhone = order.getDriverphone();
 					String passengerPhone = order.getPassengerphone();
+					String driverIdentityToken = order.getDriverIdentityToken();
+					String passengerIdentityToken = order.getPassengerIdentityToken();
 					String content = "【来回出行】手机号为"
 							+ passengerPhone
 							+ "的乘客通过支付宝支付了"
@@ -375,6 +385,8 @@ public class AlipayNotifyController {
 						PushNotification pushNotification = new PushNotification();
 						pushNotification.setPushPhone(driverPhone);
 						pushNotification.setReceivePhone(passengerPhone);
+						pushNotification.setPushIdentityToken(passengerIdentityToken);
+						pushNotification.setReceiveIdentityToken(driverIdentityToken);
 						pushNotification.setOrderId(orderId);
 						pushNotification.setAlert(content);
 						pushNotification.setPushType(1);

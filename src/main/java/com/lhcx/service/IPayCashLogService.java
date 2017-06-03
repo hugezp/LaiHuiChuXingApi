@@ -7,6 +7,6 @@ import com.lhcx.model.PayCashLog;
 
 public interface IPayCashLogService {
 	int insertSelective(PayCashLog record);
-	BigDecimal selectCashByDriverPhoneToday(String driverphone);
-	List<PayCashLog> selectByDriverPhone(String driverphone,int page,int pageSize);
+	BigDecimal selectCashByDriverIdentityTokenToday(String driverIdentityToken);
+	List<PayCashLog> selectByDriverIdentityToken(String driverIdentityToken,int page,int pageSize);
 }

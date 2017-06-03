@@ -53,6 +53,10 @@ public class Order {
     
     private Integer carType;
     
+    private String passengerIdentityToken;
+    
+    private String driverIdentityToken;
+    
     //订单行程总距离
     private double totalDistance;
     
@@ -300,5 +304,21 @@ public class Order {
 
 	public void setOldstatus(Integer oldstatus) {
 		this.oldstatus = oldstatus;
+	}
+
+	public String getPassengerIdentityToken() {
+		return passengerIdentityToken;
+	}
+
+	public void setPassengerIdentityToken(String passengerIdentityToken) {
+		this.passengerIdentityToken = passengerIdentityToken;
+	}
+
+	public String getDriverIdentityToken() {
+		return driverIdentityToken;
+	}
+
+	public void setDriverIdentityToken(String driverIdentityToken) {
+		this.driverIdentityToken = driverIdentityToken;
 	}
 }

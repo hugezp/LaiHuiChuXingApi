@@ -32,8 +32,8 @@ import com.lhcx.model.response.PaycashLogResponse;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
-import com.lhcx.service.IVerificationLogsService;
 import com.lhcx.service.IPayCashLogService;
+import com.lhcx.service.IVerificationLogsService;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.Utils;
 
@@ -75,8 +75,8 @@ public class DriverController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			Order newOrder = orderService.selectNewOrderByDriverPhone(user
-					.getUserphone());
+			Order newOrder = orderService.selectNewOrderByDriverIdentityToken(user
+					.getIdentityToken());
 			if (newOrder != null) {
 				result.put("OrderId", newOrder.getOrderid());
 				result.put("Status", newOrder.getStatus());
@@ -111,8 +111,7 @@ public class DriverController {
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			DriverInfo driverInfo = driverInfoService.selectByPhone(user
-					.getUserphone());
+			DriverInfo driverInfo = driverInfoService.selectByIdentityToken(user.getIdentityToken());
 			info.put("phone", user.getUserphone());
 			info.put("photo", driverInfo.getPhoto());
 			info.put("addressName", driverInfo.getAddressname());
@@ -134,7 +133,7 @@ public class DriverController {
 			info.put("VehicleNo", driverInfo.getVehicleNo());
 
 			// 认证信息
-			List<VerificationLogs> verLogsList = verificationLogsService.selectByDriverPhone(user.getUserphone());
+			List<VerificationLogs> verLogsList = verificationLogsService.selectByDriverIdentityToken(user.getIdentityToken());
 			if (verLogsList.size() == 0) {
 				resultBean = new ResultBean<Object>(ResponseCode.NO_DATA.value(),
 						"暂无认证信息！", info);
@@ -179,9 +178,10 @@ public class DriverController {
 			User user = (User) session.getAttribute("CURRENT_USER");
 			DriverInfo driverInfo = new DriverInfo(jsonRequest);
 			driverInfo.setDriverphone(user.getUserphone());
+			driverInfo.setIdentityToken(user.getIdentityToken());
 			driverInfo.setFlag(2);
 			driverInfo.setUpdatetime(DateUtils.currentTimestamp());
-			driverInfoService.updateByPhoneSelective(driverInfo);
+			driverInfoService.updateByIdentityTokenSelective(driverInfo);
 
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 					"更新成功！");
@@ -208,18 +208,18 @@ public class DriverController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
-			String driverPhone = user.getUserphone();
+			String driverIdentityToken = user.getIdentityToken();
 			//当日流水
-			BigDecimal cashToday = payCashLogService.selectCashByDriverPhoneToday(driverPhone);
+			BigDecimal cashToday = payCashLogService.selectCashByDriverIdentityTokenToday(driverIdentityToken);
 			result.put("cashToday", cashToday);
 			//总接单数
-			int totalCount = orderService.selectTotalCountByDriverPhone(driverPhone, null);
-			int cancelCount = orderService.selectTotalCountByDriverPhone(driverPhone, OrderStatus.CANCEL.value());
+			int totalCount = orderService.selectTotalCountByDriverIdentityToken(driverIdentityToken, null);
+			int cancelCount = orderService.selectTotalCountByDriverIdentityToken(driverIdentityToken, OrderStatus.CANCEL.value());
 			result.put("orderTotalCount", totalCount);
 			result.put("orderSuccessCount", totalCount - cancelCount);
 			//听单
 			long onTime = 0;//毫秒
-			DriverLocation driverLocation = driverLocationService.selectByPhone(driverPhone);
+			DriverLocation driverLocation = driverLocationService.selectByIdentityToken(driverIdentityToken);
 			Date startTime = driverLocation.getLoginTime();
 			Date endTime = driverLocation.getLogoutTime();
 			if ( startTime != null) {
@@ -233,7 +233,7 @@ public class DriverController {
 			result.put("onTime", onTime);
 			
 			//支付列表
-			List<PayCashLog> cashLogs = payCashLogService.selectByDriverPhone(driverPhone, 1, 5);
+			List<PayCashLog> cashLogs = payCashLogService.selectByDriverIdentityToken(driverIdentityToken, 1, 5);
 			if (cashLogs.size() > 0) {
 				List<PaycashLogResponse> cashResponseList = new ArrayList<PaycashLogResponse>();
 				for (PayCashLog payCashLog : cashLogs) {

@@ -22,8 +22,4 @@ public class OrderLogServiceImpl implements IOrderLogService {
 		 return orderLogMapper.selectByOrderId(orderid);
 	 }
 
-	@Override
-	public OrderLog selectByOrderPhone(String operatorPhone) {
-		return orderLogMapper.selectByOrderPhone(operatorPhone);
-	}
 }

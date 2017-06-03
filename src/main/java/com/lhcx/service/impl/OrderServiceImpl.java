@@ -78,6 +78,7 @@ public class OrderServiceImpl implements IOrderService {
 			orderLog.setOperatorstatus(OrderStatus.FAILURE.value());
 			orderLog.setOperatordescription(OrderStatus.FAILURE.message());
 			orderLog.setOperatorphone("");
+			orderLog.setIdentityToken("");
 			orderLog.setDescription("由于长时间没有司机接单，订单自动失效。");
 			orderLog.setOperatortime(new Date());
 			orderLog.setOperatortype(3);//操作人员类型:：1-乘客，2-驾驶员，3-平台公司			
@@ -96,9 +97,10 @@ public class OrderServiceImpl implements IOrderService {
 		return order;
 	}
 	
-	public String create(JSONObject jsonRequest) throws ParseException {
+	public String create(JSONObject jsonRequest, User user) throws ParseException {
 		String result = "";
 		Order order = new Order(jsonRequest);
+		order.setPassengerIdentityToken(user.getIdentityToken());
 		String orderId = MD5Kit.encode(String.valueOf(System.currentTimeMillis()));
 		order.setOrderid(orderId);
 		order.setStatus(OrderStatus.BILL.value());
@@ -107,6 +109,7 @@ public class OrderServiceImpl implements IOrderService {
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(order.getPassengerphone());
+		orderLog.setIdentityToken(user.getIdentityToken());
 		orderLog.setOperatortime(new Date());
 		orderLog.setOperatorstatus(OrderStatus.BILL.value());
 		orderLog.setOperatordescription(OrderStatus.BILL.message());
@@ -122,13 +125,16 @@ public class OrderServiceImpl implements IOrderService {
 	public ResultBean<?> match(JSONObject jsonRequest) throws Exception {
 		ResultBean<?> resultBean = null;
 		Map<String,Object> result = new HashMap<String, Object>();		
-		
+				
 		User user = (User)session.getAttribute("CURRENT_USER");
-		String driverPhone = user.getUserphone();
-		DriverLocation driverLocation = driverLocationService.selectByPhone(driverPhone);
+		
+		String driverToken = user.getIdentityToken();
+		String driverPhone = user.getUserphone();		
+		
+		DriverLocation driverLocation = driverLocationService.selectByIdentityToken(driverToken);
 		String orderId = jsonRequest.getString("OrderId");
 		Order order = selectByOrderId(orderId);
-		Order olBean = selectNewOrderByDriverPhone(driverPhone);
+		Order olBean = selectNewOrderByDriverIdentityToken(driverToken);
 		if (user.getFlag() != 2) {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"您未通过司机认证,不能接单！");
@@ -148,6 +154,7 @@ public class OrderServiceImpl implements IOrderService {
 						OrderLog orderLog = new OrderLog();
 						orderLog.setOrderid(orderId);
 						orderLog.setOperatorphone(driverPhone);
+						orderLog.setIdentityToken(driverToken);
 						orderLog.setOperatortime(distributeTime);
 						orderLog.setOperatorstatus(OrderStatus.Receiving.value());
 						orderLog.setOperatordescription(OrderStatus.Receiving.message());
@@ -157,17 +164,19 @@ public class OrderServiceImpl implements IOrderService {
 						
 						//step1.1：保存订单最终状态
 						order.setDriverphone(driverPhone);
+						order.setDriverIdentityToken(driverToken);
 						order.setStatus(OrderStatus.Receiving.value());
 						updateByOrderIdSelective(order);
 						
 						//step2：推送给发单乘客
-						DriverInfo driverInfo = driverInfoService.selectByPhone(driverPhone);
+						DriverInfo driverInfo = driverInfoService.selectByIdentityToken(driverToken);
 						String vehicleNo = driverInfo.getVehicleNo();
 						String distributeTimeString =  DateUtils.dateFormat(distributeTime);
 						
 						String content = "【来回出行】您的行程订单已被接单，请查看!";
 						
 						String passengerPhone = order.getPassengerphone();
+						String passengerToken = order.getPassengerIdentityToken();
 						
 						Map<String, String> extrasParam= new HashMap<String, String>();
 						extrasParam.put("OrderId", orderId);
@@ -184,6 +193,8 @@ public class OrderServiceImpl implements IOrderService {
 							PushNotification pushNotification = new PushNotification();
 							pushNotification.setPushPhone(driverPhone);
 							pushNotification.setReceivePhone(passengerPhone);
+							pushNotification.setPushIdentityToken(driverToken);
+							pushNotification.setReceiveIdentityToken(passengerToken);
 							pushNotification.setOrderId(orderId);
 							pushNotification.setAlert(content);
 							pushNotification.setPushType(1);
@@ -226,11 +237,14 @@ public class OrderServiceImpl implements IOrderService {
 		User user = (User)session.getAttribute("CURRENT_USER");
 		Order order = selectByOrderId(orderId);
 		
-		String userPhone = user.getUserphone();
+		String userToken = user.getIdentityToken();
 		String passenegerPhone = order.getPassengerphone();
 		String driverPhone = order.getDriverphone();
 		
-		if ( !userPhone.equals(passenegerPhone)  && !userPhone.equals(driverPhone)) {
+		String passengerToken = order.getPassengerIdentityToken();
+		String driverToken = order.getDriverIdentityToken();
+		
+		if ( !userToken.equals(passengerToken)  && !userToken.equals(driverToken)) {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"您没有权限取消该订单！");
 			return resultBean;
@@ -250,6 +264,7 @@ public class OrderServiceImpl implements IOrderService {
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
 		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setIdentityToken(userToken);
 		orderLog.setOperatorstatus(OrderStatus.CANCEL.value());
 		orderLog.setOperatordescription(OrderStatus.CANCEL.message());
 		orderLog.setOldstatus(order.getStatus());
@@ -286,6 +301,8 @@ public class OrderServiceImpl implements IOrderService {
 							extrasParam);
 			pushNotification.setPushPhone(passenegerPhone);
 			pushNotification.setReceivePhone(driverPhone);
+			pushNotification.setPushIdentityToken(passengerToken);
+			pushNotification.setReceiveIdentityToken(driverToken);
 		}else if(userType.equals(UserType.DRIVER.value())){
 			//已接单司机取消推给乘客
 			flag = JpushClientUtil.getInstance(ConfigUtils.PASSENGER_JPUSH_APP_KEY,ConfigUtils.PASSENGER_JPUSH_MASTER_SECRET)
@@ -294,6 +311,8 @@ public class OrderServiceImpl implements IOrderService {
 							extrasParam);
 			pushNotification.setPushPhone(driverPhone);
 			pushNotification.setReceivePhone(passenegerPhone);
+			pushNotification.setPushIdentityToken(driverToken);
+			pushNotification.setReceiveIdentityToken(passengerToken);
 		}else {
 			//未接单
 			flag = 2;
@@ -324,9 +343,10 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = selectByOrderId(orderId);
 
 		String userPhone = user.getUserphone();
-		String driverPhone = order.getDriverphone();		
+		String userToken = user.getIdentityToken();
+		String driverToken = order.getDriverIdentityToken();
 		
-		if ( !userPhone.equals(driverPhone)) {
+		if ( !userToken.equals(driverToken)) {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"您没有权限操作该订单！");
 			return resultBean;
@@ -340,7 +360,8 @@ public class OrderServiceImpl implements IOrderService {
 		//更新订单日志
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
-		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setOperatorphone(userPhone);
+		orderLog.setIdentityToken(userToken);;
 		orderLog.setOperatorstatus(OrderStatus.REACHED.value());
 		orderLog.setOperatordescription(OrderStatus.REACHED.message());
 		orderLog.setOldstatus(order.getStatus());
@@ -368,9 +389,10 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = selectByOrderId(orderId);
 		
 		String userPhone = user.getUserphone();
-		String driverPhone = order.getDriverphone();
+		String userToken = user.getIdentityToken();
+		String driverToken = order.getDriverIdentityToken();
 		
-		if ( !userPhone.equals(driverPhone)) {
+		if ( !userToken.equals(driverToken)) {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"您没有权限操作该订单！");
 			return resultBean;
@@ -383,7 +405,8 @@ public class OrderServiceImpl implements IOrderService {
 		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
-		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setOperatorphone(userPhone);
+		orderLog.setIdentityToken(driverToken);;
 		orderLog.setOperatorstatus(OrderStatus.ABORAD.value());
 		orderLog.setOperatordescription(OrderStatus.ABORAD.message());
 		orderLog.setOldstatus(order.getStatus());
@@ -411,9 +434,10 @@ public class OrderServiceImpl implements IOrderService {
 		Order order = selectByOrderId(orderId);
 		
 		String userPhone = user.getUserphone();
-		String driverPhone = order.getDriverphone();
+		String userToken = user.getIdentityToken();
+		String driverToken = order.getDriverIdentityToken();
 		
-		if ( !userPhone.equals(driverPhone)) {
+		if ( !userToken.equals(driverToken)) {
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					"您没有权限操作该订单！");
 			return resultBean;
@@ -426,7 +450,8 @@ public class OrderServiceImpl implements IOrderService {
 		
 		OrderLog orderLog = new OrderLog();
 		orderLog.setOrderid(orderId);
-		orderLog.setOperatorphone(user.getUserphone());
+		orderLog.setOperatorphone(userPhone);
+		orderLog.setIdentityToken(driverToken);
 		orderLog.setOperatorstatus(OrderStatus.ARRIVE.value());
 		orderLog.setOperatordescription(OrderStatus.ARRIVE.message());
 		orderLog.setOldstatus(order.getStatus());
@@ -448,16 +473,16 @@ public class OrderServiceImpl implements IOrderService {
 	
 	public Order info(String orderId) {
 		Order order = selectByOrderId(orderId); 
-		String driverPhone =  order.getDriverphone();
-		if (!Utils.isNullOrEmpty(driverPhone) ) {
+		String driverToken =  order.getDriverIdentityToken();
+		if (!Utils.isNullOrEmpty(driverToken) ) {
 			if (order.getStatus() == OrderStatus.Receiving.value() ) {
 				//接单后距离乘客上车实时位置
-				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverPhone,Long.parseLong(order.getDeplongitude()) ,Long.parseLong(order.getDeplatitude()));
+				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverToken,Long.parseLong(order.getDeplongitude()) ,Long.parseLong(order.getDeplatitude()));
 				order.setOnTimeDistance(driverLocation.getDistance());
 				
 			}else if (order.getStatus() == OrderStatus.ABORAD.value()) {
 				//接到乘客后距离目的地实时位置
-				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverPhone,Long.parseLong(order.getDestlongitude()) ,Long.parseLong(order.getDestlatitude()));
+				DriverLocation driverLocation = driverLocationService.selectOnTimeDistance(driverToken,Long.parseLong(order.getDestlongitude()) ,Long.parseLong(order.getDestlatitude()));
 				order.setOnTimeTotalDistance(driverLocation.getDistance());
 			}
 		}
@@ -465,25 +490,25 @@ public class OrderServiceImpl implements IOrderService {
 		return order;
 	}
 
-	public Order selectNewOrderByPhone(String passengerPhone) {
-		return orderMapper.selectNewOrderByPhone(passengerPhone);
+	public Order selectNewOrderByPassengerIdentityToken(String passengerIdentityToken) {
+		return orderMapper.selectNewOrderByPassengerIdentityToken(passengerIdentityToken);
 	}
 	
-	public Order selectNewOrderByDriverPhone(String driverPhone) {
-		return orderMapper.selectNewOrderByDriverPhone(driverPhone);
+	public Order selectNewOrderByDriverIdentityToken(String driverIdentityToken) {
+		return orderMapper.selectNewOrderByDriverIdentityToken(driverIdentityToken);
 	}
 
-	public List<Order> selectOrderByPassengerPhone(String passengerPhone,int page,int pageSize) {
-		return orderMapper.selectOrderByPassengerPhone(passengerPhone,(page-1)*pageSize, pageSize);
+	public List<Order> selectOrderByPassengerIdentityToken(String passengerIdentityToken,int page,int pageSize) {
+		return orderMapper.selectOrderByPassengerIdentityToken(passengerIdentityToken,(page-1)*pageSize, pageSize);
 	}
 	
-	public List<Order> selectOrderByDriverPhone(String driverPhone, int page, int pageSize) {
-		return orderMapper.selectOrderByDriverPhone(driverPhone, (page-1)*pageSize, pageSize);
+	public List<Order> selectOrderByDriverIdentityToken(String driverIdentityToken, int page, int pageSize) {
+		return orderMapper.selectOrderByDriverIdentityToken(driverIdentityToken, (page-1)*pageSize, pageSize);
 	}
 
 	@Override
-	public int selectTotalCountByDriverPhone(String driverPhone, Integer status) {
-		return orderMapper.selectTotalCountByDriverPhone(driverPhone, status);
+	public int selectTotalCountByDriverIdentityToken(String driverIdentityToken, Integer status) {
+		return orderMapper.selectTotalCountByDriverIdentityToken(driverIdentityToken, status);
 	}
 
 }

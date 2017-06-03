@@ -8,6 +8,10 @@ public class PushNotification {
     private String pushPhone;
 
     private String receivePhone;
+    
+    private String pushIdentityToken;
+    
+    private String receiveIdentityToken;
 
     private String orderId;
 
@@ -193,6 +197,22 @@ public class PushNotification {
 
 	public void setSize(Integer size) {
 		this.size = size;
+	}
+
+	public String getPushIdentityToken() {
+		return pushIdentityToken;
+	}
+
+	public void setPushIdentityToken(String pushIdentityToken) {
+		this.pushIdentityToken = pushIdentityToken;
+	}
+
+	public String getReceiveIdentityToken() {
+		return receiveIdentityToken;
+	}
+
+	public void setReceiveIdentityToken(String receiveIdentityToken) {
+		this.receiveIdentityToken = receiveIdentityToken;
 	}
     
 }

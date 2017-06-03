@@ -22,6 +22,8 @@ public class PassengerInfo {
     private Date createtime;
 
     private Date updatetime;
+    
+    private String identityToken;
 
     public Integer getId() {
         return id;
@@ -102,4 +104,12 @@ public class PassengerInfo {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
+	public String getIdentityToken() {
+		return identityToken;
+	}
+
+	public void setIdentityToken(String identityToken) {
+		this.identityToken = identityToken;
+	}
 }

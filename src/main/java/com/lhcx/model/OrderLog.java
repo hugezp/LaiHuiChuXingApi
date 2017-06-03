@@ -8,6 +8,8 @@ public class OrderLog {
     private String orderid;
 
     private String operatorphone;
+    
+    private String identityToken;
 
     private Date operatortime;
 
@@ -122,4 +124,12 @@ public class OrderLog {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
+	public String getIdentityToken() {
+		return identityToken;
+	}
+
+	public void setIdentityToken(String identityToken) {
+		this.identityToken = identityToken;
+	}
 }

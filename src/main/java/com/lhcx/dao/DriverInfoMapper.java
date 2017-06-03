@@ -5,21 +5,12 @@ import org.apache.ibatis.annotations.Param;
 import com.lhcx.model.DriverInfo;
 
 public interface DriverInfoMapper {
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(DriverInfo record);
 
     int insertSelective(DriverInfo record);
-
-    DriverInfo selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(DriverInfo record);
-
-    int updateByPrimaryKey(DriverInfo record);
     
-    DriverInfo selectByPhone(@Param("phone") String phone);
+    DriverInfo selectByIdentityToken(@Param("identityToken") String identityToken);
     
-    int updateByPhone(DriverInfo record);
+    int updateByIdentityToken(DriverInfo record);
     
-    int updateByPhoneSelective(DriverInfo record);
+    int updateByIdentityTokenSelective(DriverInfo record);
 }

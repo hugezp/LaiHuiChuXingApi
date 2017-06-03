@@ -14,13 +14,13 @@ public interface OrderMapper {
     
     int updateByOrderIdSelective(Order record);
     
-    Order selectNewOrderByPhone(@Param("passengerPhone") String passengerPhone);
+    Order selectNewOrderByPassengerIdentityToken(@Param("passengerIdentityToken") String passengerIdentityToken);
     
-    Order selectNewOrderByDriverPhone(@Param("driverPhone") String driverPhone);
+    Order selectNewOrderByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken);
     
-    List<Order> selectOrderByPassengerPhone(@Param("passengerPhone") String passengerPhone,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
+    List<Order> selectOrderByPassengerIdentityToken(@Param("passengerIdentityToken") String passengerIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
     
-    List<Order> selectOrderByDriverPhone(@Param("driverPhone") String driverPhone,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
+    List<Order> selectOrderByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
 
-    int selectTotalCountByDriverPhone(@Param("driverPhone") String driverPhone,@Param("status") Integer status);
+    int selectTotalCountByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("status") Integer status);
 }

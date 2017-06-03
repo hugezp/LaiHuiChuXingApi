@@ -96,6 +96,8 @@ public class DriverInfo {
     private Date updatetime;
     
     private String vehicleNo;
+    
+    private String identityToken;
 
     public Integer getId() {
         return id;
@@ -483,5 +485,13 @@ public class DriverInfo {
 			this.vehicleNo = jsonRequest.getString("VehicleNo");
 			
 		}
+	}
+
+	public String getIdentityToken() {
+		return identityToken;
+	}
+
+	public void setIdentityToken(String identityToken) {
+		this.identityToken = identityToken;
 	}
 }

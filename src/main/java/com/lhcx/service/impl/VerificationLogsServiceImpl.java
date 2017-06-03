@@ -17,8 +17,8 @@ public class VerificationLogsServiceImpl implements IVerificationLogsService {
 	@Autowired
 	private VerificationLogsMapper verificationLogsMapper;
 	
-	public List<VerificationLogs> selectByDriverPhone(String driverPhone) {
-		return verificationLogsMapper.selectByDriverPhone(driverPhone);
+	public List<VerificationLogs> selectByDriverIdentityToken(String driverIdentityToken) {
+		return verificationLogsMapper.selectByDriverIdentityToken(driverIdentityToken);
 	}
 
 }

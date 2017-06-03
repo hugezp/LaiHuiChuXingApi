@@ -21,6 +21,8 @@ public class User {
     
     private Integer flag;
     
+    private String identityToken;
+    
     private DriverInfo driverInfo;
     
     private PassengerInfo passengerInfo;
@@ -111,5 +113,13 @@ public class User {
 
 	public void setPassengerInfo(PassengerInfo passengerInfo) {
 		this.passengerInfo = passengerInfo;
+	}
+
+	public String getIdentityToken() {
+		return identityToken;
+	}
+
+	public void setIdentityToken(String identityToken) {
+		this.identityToken = identityToken;
 	}
 }

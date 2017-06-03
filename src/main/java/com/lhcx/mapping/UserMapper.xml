@@ -11,16 +11,11 @@
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpateTime" property="upatetime" jdbcType="TIMESTAMP" />
     <result column="Flag" property="flag" jdbcType="INTEGER" />
+    <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime,Flag
+    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime,Flag,IdentityToken
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from users
-    where id = #{id,jdbcType=INTEGER}
-  </select>
   <select id="selectByToken" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
@@ -33,18 +28,12 @@
     from users
     where UserPhone = #{phone} and UserType = #{userType}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    update users set Flag = 1 
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.lhcx.model.User" >
-    insert into users (id, UserPhone, UserType, 
-      Token, LoginIp, LoginTime, 
-      CreateTime, UpateTime)
-    values (#{id,jdbcType=INTEGER}, #{userphone,jdbcType=INTEGER}, #{usertype,jdbcType=VARCHAR}, 
-      #{token,jdbcType=VARCHAR}, #{loginip,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{upatetime,jdbcType=TIMESTAMP})
-  </insert>
+  <select id="selectUserByIdentityToken" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where IdentityToken = #{identityToken}
+  </select>
   <insert id="insertSelective" parameterType="com.lhcx.model.User" >
     insert into users
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -59,6 +48,9 @@
       </if>
       <if test="token != null" >
         Token,
+      </if>
+      <if test="identityToken != null" >
+        IdentityToken,
       </if>
       <if test="loginip != null" >
         LoginIp,
@@ -85,6 +77,9 @@
       </if>
       <if test="token != null" >
         #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="identityToken != null" >
+        #{identityToken,jdbcType=VARCHAR},
       </if>
       <if test="loginip != null" >
         #{loginip,jdbcType=VARCHAR},
@@ -125,17 +120,6 @@
         UpateTime = #{upatetime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.lhcx.model.User" >
-    update users
-    set UserPhone = #{userphone,jdbcType=INTEGER},
-      UserType = #{usertype,jdbcType=VARCHAR},
-      Token = #{token,jdbcType=VARCHAR},
-      LoginIp = #{loginip,jdbcType=VARCHAR},
-      LoginTime = #{logintime,jdbcType=TIMESTAMP},
-      CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      UpateTime = #{upatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

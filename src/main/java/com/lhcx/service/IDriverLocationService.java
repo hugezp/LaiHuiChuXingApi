@@ -13,17 +13,17 @@ public interface IDriverLocationService {
 
 	List<DriverLocation> selectList(DriverLocation driverLocation);
 	
-    DriverLocation selectByPhone(String phone);
+    DriverLocation selectByIdentityToken(String identityToken);
 
-	int updateByPhoneSelective(DriverLocation record);
+	int updateByIdentityTokenSelective(DriverLocation record);
 	
 	int updateLocation(DriverLocation record);
 	
 	int insertSelective(DriverLocation record);
 	
-	boolean setButton(JSONObject jsonRequest,String phone);
+	boolean setButton(JSONObject jsonRequest);
 	
-	DriverLocation selectOnTimeDistance(String phone,long lon,long lat);
+	DriverLocation selectOnTimeDistance(String identityToken,long lon,long lat);
 	
 	
 
