@@ -201,10 +201,10 @@ public class DriverController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/cash", method = RequestMethod.POST)
-	public ResponseEntity<String> cash(@RequestBody JSONObject jsonRequest) {
+	public ResponseEntity<String> cash() {
 		ResultBean<?> resultBean = null;
 		// 取得参数值
-		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		String jsonpCallback = null;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
