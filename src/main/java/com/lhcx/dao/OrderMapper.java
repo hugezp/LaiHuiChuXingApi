@@ -22,5 +22,5 @@ public interface OrderMapper {
     
     List<Order> selectOrderByDriverPhone(@Param("driverPhone") String driverPhone,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
 
-    int selectTotalCountByDriverPhone(@Param("driverPhone") String driverPhone,@Param("status") int status);
+    int selectTotalCountByDriverPhone(@Param("driverPhone") String driverPhone,@Param("status") Integer status);
 }
