@@ -19,12 +19,12 @@ public interface IDriverLocationService {
 	
 	int updateLocation(DriverLocation record);
 	
+	int updatePush(DriverLocation record);
+	
 	int insertSelective(DriverLocation record);
 	
 	boolean setButton(JSONObject jsonRequest,String phone);
 	
 	DriverLocation selectOnTimeDistance(String phone,long lon,long lat);
-	
-	
 
 }

@@ -230,4 +230,20 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
+	
+	/**
+	 * 听单设置
+	 * @param jsonRequest
+	 * @return
+	 */
+	public static boolean setPush(JSONObject jsonRequest) {
+		boolean flag = false;
+		String preference = jsonRequest.getString("preference");
+		String scope = jsonRequest.getString("scope");
+		if (StringUtils.isOrNotEmpty(preference)
+				&& StringUtils.isOrNotEmpty(scope)) {
+			flag = true;
+		}
+		return flag;
+	}
 }

@@ -33,9 +33,10 @@ import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
 
 /**
- * @author dp 通过获取车主的token,查出关于车主的列表信息
- * */
-
+ * 推送相关
+ * @author YangGuang
+ *
+ */
 @Controller
 @RequestMapping(value = "/push")
 public class PushController {
@@ -144,7 +145,6 @@ public class PushController {
 	public ResponseEntity<String> list(@RequestBody JSONObject jsonRequest) {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
-		Map<String, Object> resultMap = new HashMap<String, Object>();
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 		if (!VerificationUtils.pushList(jsonRequest)) {
 			resultBean = new ResultBean<Object>(ResponseCode.PARAMETER_WRONG.value(),
@@ -163,6 +163,7 @@ public class PushController {
 			List<PushNotification> pushList = pushNotificationService.selectAll(pushNotification);
 			if (pushList.size()>0) {
 				for (PushNotification push : pushList) {
+					Map<String, Object> resultMap = new HashMap<String, Object>();
 					resultMap.put("alert", push.getAlert());
 					resultMap.put("time", DateUtils.pushDate(push.getTime()));
 					resultMap.put("flag", push.getFlag());
@@ -174,6 +175,35 @@ public class PushController {
 			}else {
 				resultBean = new ResultBean<Object>(ResponseCode.NO_DATA.value(),
 						ResponseCode.NO_DATA.message(),resultList);
+			}
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
+	}
+	
+	/**
+	 * 听单设置
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/setPush", method = RequestMethod.POST)
+	public ResponseEntity<String> setPush(@RequestBody JSONObject jsonRequest) {
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		if (!VerificationUtils.setPush(jsonRequest)) {
+			resultBean = new ResultBean<Object>(ResponseCode.PARAMETER_WRONG.value(),
+					ResponseCode.PARAMETER_WRONG.message());
+		}else {
+			User user = (User) session.getAttribute("CURRENT_USER");
+			DriverLocation driverLocation = new DriverLocation();
+			driverLocation.setPhone(user.getUserphone());
+			driverLocation.setPreference(Integer.parseInt(jsonRequest.getString("preference")));
+			driverLocation.setScope(Integer.parseInt(jsonRequest.getString("scope")));
+			int count = driverLocationService.updatePush(driverLocation);
+			if (count > 0) {
+				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+						ResponseCode.SUCCESS.message());
+			}else {
+				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
+						ResponseCode.ERROR.message());
 			}
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);

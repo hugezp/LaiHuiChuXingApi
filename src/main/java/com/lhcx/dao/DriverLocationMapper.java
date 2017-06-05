@@ -19,5 +19,7 @@ public interface DriverLocationMapper {
     DriverLocation selectOnTimeDistance(@Param("phone") String phone,@Param("lon") long lon,@Param("lat") long lat);
 
 	int updateLocation(DriverLocation record);
+	
+	int updatePush(DriverLocation record);
     
 }

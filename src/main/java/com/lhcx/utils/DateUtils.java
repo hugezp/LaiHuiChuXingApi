@@ -79,7 +79,7 @@ public class DateUtils {
     }
     
     public static String pushDate(Date date){
-    	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd hh:mm");  
+    	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");  
     	return sdf.format(date);
     }
     

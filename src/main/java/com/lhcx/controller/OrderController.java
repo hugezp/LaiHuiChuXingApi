@@ -213,6 +213,7 @@ public class OrderController {
 
 			d.setLatitude(order.getDeplatitude());
 			d.setLongitude(order.getDeplongitude());
+			d.setPreference(orderType);
 			List<DriverLocation> dLocations = driverLocationService
 					.selectList(d);
 			if (dLocations.size() > 0) {

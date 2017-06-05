@@ -16,6 +16,8 @@
 		<result column="isDel" property="isdel" jdbcType="INTEGER" />
 		<result column="LoginTime" property="loginTime" jdbcType="TIMESTAMP" />
 		<result column="LogoutTime" property="logoutTime" jdbcType="TIMESTAMP" />
+		<result column="Preference" property="preference" jdbcType="INTEGER" />
+		<result column="Scope" property="scope" jdbcType="INTEGER" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, PositionTime, Longitude, Latitude,
@@ -59,7 +61,7 @@
 	</select>
 	<select id="selectList" resultType="com.lhcx.model.DriverLocation"
 		parameterType="com.lhcx.model.DriverLocation">
-		select driver_location.id,phone,Latitude,Longitude,
+		select driver_location.id,phone,Latitude,Longitude,Scope,
 		ROUND(
 		6378.138 * 2 * ASIN(
 		SQRT(
@@ -84,12 +86,12 @@
 		)
 		) * 1000
 		) AS distance from driver_location
-		where isDel = 1 and driver_location.Phone not in (
-			select orders.PassengerPhone 
+		where isDel = 1 and (Preference = -1 or Preference = #{preference,jdbcType=INTEGER}) and Phone not in (
+			select PassengerPhone 
 			from orders 
-			where orders.Status > 1 and orders.Status &lt; 5
+			where Status > 1 and Status &lt; 5
 		)
-		having distance &lt; 50000
+		having distance &lt; Scope
 		order by distance
 	</select>
 
@@ -244,6 +246,15 @@
 		<set>
 			Longitude = #{longitude,jdbcType=VARCHAR},
 			Latitude = #{latitude,jdbcType=VARCHAR},
+		</set>
+		where Phone = #{phone,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updatePush" parameterType="com.lhcx.model.DriverLocation">
+		update driver_location
+		<set>
+			Preference = #{preference,jdbcType=INTEGER},
+			Scope = #{scope,jdbcType=INTEGER},
 		</set>
 		where Phone = #{phone,jdbcType=VARCHAR}
 	</update>
