@@ -43,6 +43,10 @@ public class DriverLocation {
     
     private String identityToken;
     
+    private Integer preference;
+    
+    private Integer scope;
+    
     public double getDistance() {
 		return distance;
 	}
@@ -195,12 +199,28 @@ public class DriverLocation {
 		this.logoutTime = logoutTime;
 	}
 
+
 	public String getIdentityToken() {
 		return identityToken;
 	}
 
 	public void setIdentityToken(String identityToken) {
 		this.identityToken = identityToken;
+	}
+	public Integer getPreference() {
+		return preference;
+	}
+
+	public void setPreference(Integer preference) {
+		this.preference = preference;
+	}
+
+	public Integer getScope() {
+		return scope;
+	}
+
+	public void setScope(Integer scope) {
+		this.scope = scope;
 	}
     
 }

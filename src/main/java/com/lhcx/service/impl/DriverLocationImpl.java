@@ -84,6 +84,11 @@ public class DriverLocationImpl implements IDriverLocationService {
 	public int updateLocation(DriverLocation record) {
 		return driverLocationMapper.updateLocation(record);
 	}
+
+	@Override
+	public int updatePush(DriverLocation record) {
+		return driverLocationMapper.updatePush(record);
+	}
 	
 
 }

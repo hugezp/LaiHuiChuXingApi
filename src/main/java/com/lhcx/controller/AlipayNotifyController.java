@@ -172,6 +172,7 @@ public class AlipayNotifyController {
 							pushNotification.setAlert(content);
 							pushNotification.setPushType(1);
 							pushNotification.setData(extrasParam.toString());
+							pushNotification.setFlag(3);
 							pushNotificationService
 									.insertSelective(pushNotification);
 						}
@@ -391,6 +392,7 @@ public class AlipayNotifyController {
 						pushNotification.setAlert(content);
 						pushNotification.setPushType(1);
 						pushNotification.setData(extrasParam.toString());
+						pushNotification.setFlag(3);
 						pushNotificationService
 								.insertSelective(pushNotification);
 					}
