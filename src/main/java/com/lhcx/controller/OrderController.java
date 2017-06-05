@@ -438,6 +438,7 @@ public class OrderController {
 		// 取得参数值
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		int page = jsonRequest.getInteger("page")==null? 1 : jsonRequest.getInteger("page");
+		Integer status = jsonRequest.getInteger("status");//订单状态
 		try {
 			User user = (User)session.getAttribute("CURRENT_USER");
 			String driverToken = user.getIdentityToken();
@@ -453,7 +454,7 @@ public class OrderController {
 					result.put("money","86.86");
 					result.put("userName",driverInfo.getDrivername());
 					result.put("userPhoto",driverInfo.getPhoto());
-					List<Order> orderList = orderService.selectOrderByDriverIdentityToken(driverToken,page,ConfigUtils.PAGE_SIZE);
+					List<Order> orderList = orderService.selectOrderByDriverIdentityToken(driverToken,page,ConfigUtils.PAGE_SIZE,status);
 					for (Order order : orderList) {
 						OrderDetail orderDetail = new OrderDetail();
 						orderDetail.setOrderId(order.getOrderid());

@@ -502,8 +502,8 @@ public class OrderServiceImpl implements IOrderService {
 		return orderMapper.selectOrderByPassengerIdentityToken(passengerIdentityToken,(page-1)*pageSize, pageSize);
 	}
 	
-	public List<Order> selectOrderByDriverIdentityToken(String driverIdentityToken, int page, int pageSize) {
-		return orderMapper.selectOrderByDriverIdentityToken(driverIdentityToken, (page-1)*pageSize, pageSize);
+	public List<Order> selectOrderByDriverIdentityToken(String driverIdentityToken, int page, int pageSize,Integer status) {
+		return orderMapper.selectOrderByDriverIdentityToken(driverIdentityToken, (page-1)*pageSize, pageSize,status);
 	}
 
 	@Override

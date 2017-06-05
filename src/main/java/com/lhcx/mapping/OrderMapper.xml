@@ -85,6 +85,9 @@
   	<include refid="Base_Column_List" />
   	 from orders 
   	 where DriverIdentityToken = #{driverIdentityToken} 
+  	 <if test="status != null" >
+       and Status = #{status}
+     </if>
   	 order by OrderTime desc
   	 limit #{startPro},#{pageSize}
   </select>

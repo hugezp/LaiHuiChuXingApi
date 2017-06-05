@@ -22,6 +22,6 @@ public interface IOrderService {
 	Order selectNewOrderByPassengerIdentityToken(String passengerIdentityToken);
 	Order selectNewOrderByDriverIdentityToken(String driverIdentityToken);
 	List<Order> selectOrderByPassengerIdentityToken(String passengerIdentityToken,int page,int pageSize);
-	List<Order> selectOrderByDriverIdentityToken(String driverIdentityToken,int page,int pageSize);
+	List<Order> selectOrderByDriverIdentityToken(String driverIdentityToken,int page,int pageSize,Integer status);
 	int selectTotalCountByDriverIdentityToken(String driverIdentityToken,Integer status);
 }

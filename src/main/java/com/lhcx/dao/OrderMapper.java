@@ -20,7 +20,7 @@ public interface OrderMapper {
     
     List<Order> selectOrderByPassengerIdentityToken(@Param("passengerIdentityToken") String passengerIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
     
-    List<Order> selectOrderByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
+    List<Order> selectOrderByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize,@Param("status") Integer status);
 
     int selectTotalCountByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("status") Integer status);
 }
