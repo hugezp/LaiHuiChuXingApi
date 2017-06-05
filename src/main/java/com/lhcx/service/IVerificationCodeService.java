@@ -16,7 +16,7 @@ public interface IVerificationCodeService {
     /**
      * code有效期:半个小时
      */
-    boolean checkPhoneCode(String phone,String userType,String code);
+    boolean checkPhoneCode(String phone,String userType,String code,String type);
     
     int updateByPrimaryKeySelective(VerificationCode record);
     

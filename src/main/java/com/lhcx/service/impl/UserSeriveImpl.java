@@ -86,7 +86,7 @@ public class UserSeriveImpl implements IUserService{
 		boolean passengerBoolean = userType.equals(UserType.PASSENGER.value());
 		
 		if( driverBoolean || passengerBoolean){
-			if(verificationCodeService.checkPhoneCode(phone, userType, code)){
+			if(verificationCodeService.checkPhoneCode(phone, userType, code,null)){
 				//验证成功后保存登录信息
 				if (passengerBoolean && user == null) {
 					String identityToken = token;

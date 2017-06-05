@@ -33,7 +33,6 @@ import com.lhcx.utils.VerificationUtils;
  */
 
 @Controller
-@RequestMapping(value = "/api/user")
 public class UserController {
 	private static Logger log = Logger.getLogger(UserController.class);
 	@Autowired
@@ -53,7 +52,7 @@ public class UserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/user/login", method = RequestMethod.POST)
 	public ResponseEntity<String> sendPhoneCode(
 			@RequestBody JSONObject jsonRequest) {
 		// 取得参数值
@@ -86,7 +85,7 @@ public class UserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "registerForDriver", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/user/registerForDriver", method = RequestMethod.POST)
 	public ResponseEntity<String> registerForDriver(HttpServletRequest request,
 			@RequestBody JSONObject jsonRequest) {
 		ResultBean<?> resultBean = null;
@@ -127,7 +126,7 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/noLogin", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/user/noLogin", method = RequestMethod.GET)
 	public ResponseEntity<String> noLogin1() {
 		ResultBean<?> resultBean = new ResultBean<Object>(
 				ResponseCode.LOGIN_FAILED.value(), "未登录或登录已失效，请重新登录！");
@@ -135,10 +134,60 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/noLogin", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/user/noLogin", method = RequestMethod.POST)
 	public ResponseEntity<String> noLogin2() {
 		ResultBean<?> resultBean = new ResultBean<Object>(
 				ResponseCode.LOGIN_FAILED.value(), "未登录或登录已失效，请重新登录！");
+		return Utils.resultResponseJson(resultBean, null);
+	}
+	
+	/**
+	 * 更新手机号
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/user/changePhone", method = RequestMethod.POST)
+	public ResponseEntity<String> changePhone(@RequestBody JSONObject jsonRequest) {
+		ResultBean<?> resultBean = null;
+		try {
+			String newPhone = jsonRequest.getString("newPhone");
+			String oldPhone = jsonRequest.getString("oldPhone");
+			User user = (User)session.getAttribute("CURRENT_USER");
+
+			if(user.getUserphone().equals(oldPhone)){
+				String userType = user.getUsertype();
+				String checkOldSession = (String) session
+						.getAttribute("check@OldPhone");
+				String checkNewSession = (String) session
+						.getAttribute("check@NewPhone");
+				String oldSession = userType + "@" + oldPhone;
+				String newSession = userType + "@" + newPhone;
+				if (!oldSession.equals(checkOldSession)) {
+					resultBean = new ResultBean<Object>(
+							ResponseCode.ERROR.value(), "旧手机号验证失败！");
+					return Utils.resultResponseJson(resultBean, null);
+				}
+				if (!newSession.equals(checkNewSession)) {
+					resultBean = new ResultBean<Object>(
+							ResponseCode.ERROR.value(), "新手机号验证失败！");
+					return Utils.resultResponseJson(resultBean, null);
+				}
+				
+				user.setUserphone(newPhone);
+				userSerive.updateByPrimaryKeySelective(user);
+				resultBean = new ResultBean<Object>(
+						ResponseCode.SUCCESS.value(), "更新手机号码成功！");
+			}else {
+				resultBean = new ResultBean<Object>(
+						ResponseCode.ERROR.value(), "无权修改手机号！");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultBean = new ResultBean<Object>(
+					ResponseCode.ERROR.value(), ResponseCode.ERROR.message());
+		}
+		
 		return Utils.resultResponseJson(resultBean, null);
 	}
 

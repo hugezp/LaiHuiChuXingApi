@@ -199,6 +199,7 @@ public class VerificationCodeController {
 		String mobile = jsonRequest.getString("phone");
 		String userType = jsonRequest.getString("userType");
 		String code = jsonRequest.getString("code");
+		String actionType = jsonRequest.getString("actionType");
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
 		int count = VerificationUtils.checkPhoneCodeValidation(jsonRequest);
@@ -212,7 +213,10 @@ public class VerificationCodeController {
 			return Utils.resultResponseJson(resultBean,jsonpCallback);
 		}
 		try {
-			if (verificationCodeService.checkPhoneCode(mobile, userType, code)) {
+			if (actionType==null) {
+				actionType= "register";
+			}
+			if (verificationCodeService.checkPhoneCode(mobile, userType, code,actionType)) {
 				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 						ResponseCode.SUCCESS.message());
 				return Utils.resultResponseJson(resultBean,jsonpCallback);

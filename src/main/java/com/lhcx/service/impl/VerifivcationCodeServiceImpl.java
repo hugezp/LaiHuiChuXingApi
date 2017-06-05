@@ -77,13 +77,23 @@ public class VerifivcationCodeServiceImpl implements IVerificationCodeService{
     /**
      * 验证码有效期30分钟
      */
-    public boolean checkPhoneCode(String phone,String userType,String code) {
+    public boolean checkPhoneCode(String phone,String userType,String code,String type) {
     	boolean result = false;
     	VerificationCode verificationCode = selectLastByPhone(phone,userType);
     	if (verificationCode != null && verificationCode.getCode().equals(code)) {
     		verificationCode.setVerificationtime(DateUtils.currentTimestamp());
         	updateByPrimaryKeySelective(verificationCode);
-        	session.setAttribute(Utils.REGISTER_PHONE_SESSION, userType+"@"+phone);
+        	if ("register".equals(type)) {
+        		//注册司机
+        		session.setAttribute(Utils.REGISTER_PHONE_SESSION, userType+"@"+phone);
+			}else if ("checkOldPhone".equals(type)) {
+				//验证老的手机号
+        		session.setAttribute("check@OldPhone", userType+"@"+phone);
+			}else if("checkNewPhone".equals(type)){
+				//验证新的手机号
+        		session.setAttribute("check@NewPhone", userType+"@"+phone);
+			}
+        	
         	result = true;
 		}
 
