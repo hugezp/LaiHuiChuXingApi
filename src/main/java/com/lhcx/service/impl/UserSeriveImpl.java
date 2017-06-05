@@ -111,6 +111,7 @@ public class UserSeriveImpl implements IUserService{
 				result.put("phone", phone);
 				result.put("userType", userType);
 				result.put("token", user.getToken());
+				result.put("status", user.getFlag());
 				
 				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),ResponseCode.SUCCESS.message(),result);
 			}else{
