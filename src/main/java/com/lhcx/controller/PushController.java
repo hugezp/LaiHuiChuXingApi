@@ -69,7 +69,7 @@ public class PushController {
 				User user = (User) session.getAttribute("CURRENT_USER");
 				String identityToken = user.getIdentityToken();
 				DriverInfo driverInfo = driverInfoService.selectByIdentityToken(identityToken);
-				if (driverInfo == null || driverInfo.getState() != 2) {
+				if (driverInfo == null || user.getFlag() != 2) {
 					// 司机信息审核未通过
 					resultBean = new ResultBean<Object>(
 							ResponseCode.DRIVER_INVALID.value(),
@@ -131,6 +131,7 @@ public class PushController {
 				}
 			} catch (Exception e) {
 				log.error(e.getMessage());
+				e.printStackTrace();
 				resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 						ResponseCode.ERROR.message());
 			}

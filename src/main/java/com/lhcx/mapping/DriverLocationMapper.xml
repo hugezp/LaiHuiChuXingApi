@@ -268,7 +268,7 @@
 			Preference = #{preference,jdbcType=INTEGER},
 			Scope = #{scope,jdbcType=INTEGER},
 		</set>
-		where Phone = #{phone,jdbcType=VARCHAR}
+		where IdentityToken = #{identityToken,jdbcType=VARCHAR}
 	</update>
 
 

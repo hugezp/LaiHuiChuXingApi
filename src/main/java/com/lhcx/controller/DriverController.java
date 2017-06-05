@@ -131,12 +131,14 @@ public class DriverController {
 					DateUtils.dateFormat2(driverInfo.getDriverlicenseoff()));
 			info.put("fullTimeDriver", driverInfo.getFulltimedriver());
 			info.put("VehicleNo", driverInfo.getVehicleNo());
-
+			
+			data.put("status", user.getFlag());	
+			data.put("info", info);
 			// 认证信息
 			List<VerificationLogs> verLogsList = verificationLogsService.selectByDriverIdentityToken(user.getIdentityToken());
-			if (verLogsList.size() == 0) {
-				resultBean = new ResultBean<Object>(ResponseCode.NO_DATA.value(),
-						"暂无认证信息！", info);
+			if (verLogsList.size() == 0) {				
+				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
+						"认证中！", data);
 			}else {
 				if (verLogsList.get(0).getVerificationStatus() == 1) {
 					for (VerificationLogs verificationLogs : verLogsList) {
@@ -147,8 +149,6 @@ public class DriverController {
 						verification.add(error);
 					}
 				}
-				data.put("status", verLogsList.get(0).getVerificationStatus());
-				data.put("info", info);
 				data.put("error", verification);
 				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
 						"获取成功！", data);
@@ -220,16 +220,19 @@ public class DriverController {
 			//听单
 			long onTime = 0;//毫秒
 			DriverLocation driverLocation = driverLocationService.selectByIdentityToken(driverIdentityToken);
-			Date startTime = driverLocation.getLoginTime();
-			Date endTime = driverLocation.getLogoutTime();
-			if ( startTime != null) {
-				long startTimeMil =  startTime.getTime();
-				long endTimeMil = endTime != null ? endTime.getTime():System.currentTimeMillis();				
-				if (startTimeMil > endTimeMil) {
-					endTimeMil = System.currentTimeMillis();
+			if (driverLocation != null) {
+				Date startTime = driverLocation.getLoginTime();
+				Date endTime = driverLocation.getLogoutTime();
+				if ( startTime != null) {
+					long startTimeMil =  startTime.getTime();
+					long endTimeMil = endTime != null ? endTime.getTime():System.currentTimeMillis();				
+					if (startTimeMil > endTimeMil) {
+						endTimeMil = System.currentTimeMillis();
+					}
+					onTime = endTimeMil - startTimeMil;
 				}
-				onTime = endTimeMil - startTimeMil;
 			}
+			
 			result.put("onTime", onTime);
 			
 			//支付列表

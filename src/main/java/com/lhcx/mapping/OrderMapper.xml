@@ -280,10 +280,10 @@
         DriverPhone = #{driverphone,jdbcType=VARCHAR},
       </if>
       <if test="passengerIdentityToken != null" >
-        #{passengerIdentityToken,jdbcType=VARCHAR},
+        PassengerIdentityToken = #{passengerIdentityToken,jdbcType=VARCHAR},
       </if>
       <if test="driverIdentityToken != null" >
-        #{driverIdentityToken,jdbcType=VARCHAR},
+        DriverIdentityToken = #{driverIdentityToken,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         Status = #{status,jdbcType=INTEGER}
