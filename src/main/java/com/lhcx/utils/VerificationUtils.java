@@ -246,4 +246,22 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
+	
+	/**
+	 * 投诉与建议
+	 * @param jsonRequest
+	 * @return
+	 */
+	public static boolean suggest(JSONObject jsonRequest) {
+		boolean flag = false;
+		String contactinformation = jsonRequest.getString("contactinformation");
+		String suggest = jsonRequest.getString("suggest");
+		String source = jsonRequest.getString("source");
+		if (StringUtils.isOrNotEmpty(contactinformation)
+				&& StringUtils.isOrNotEmpty(suggest)
+				&& StringUtils.isOrNotEmpty(source)) {
+			flag = true;
+		}
+		return flag;
+	}
 }

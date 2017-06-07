@@ -197,7 +197,7 @@ public class PushController {
 		}else {
 			User user = (User) session.getAttribute("CURRENT_USER");
 			DriverLocation driverLocation = new DriverLocation();
-			driverLocation.setPhone(user.getUserphone());
+			driverLocation.setIdentityToken(user.getIdentityToken());
 			driverLocation.setPreference(Integer.parseInt(jsonRequest.getString("preference")));
 			driverLocation.setScope(Integer.parseInt(jsonRequest.getString("scope")));
 			int count = driverLocationService.updatePush(driverLocation);

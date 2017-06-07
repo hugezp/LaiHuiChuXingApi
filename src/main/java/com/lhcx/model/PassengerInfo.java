@@ -24,6 +24,18 @@ public class PassengerInfo {
     private Date updatetime;
     
     private String identityToken;
+    
+    private String photo;
+    
+    private Date birthDay;
+    
+    private String homeAddress;
+    
+    private String contactAddress;
+    
+    private String company;
+    
+    private String description;
 
     public Integer getId() {
         return id;
@@ -111,5 +123,53 @@ public class PassengerInfo {
 
 	public void setIdentityToken(String identityToken) {
 		this.identityToken = identityToken;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public Date getBirthDay() {
+		return birthDay;
+	}
+
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+
+	public String getHomeAddress() {
+		return homeAddress;
+	}
+
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
+	}
+
+	public String getContactAddress() {
+		return contactAddress;
+	}
+
+	public void setContactAddress(String contactAddress) {
+		this.contactAddress = contactAddress;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.model.Suggests;
 import com.lhcx.model.User;
 import com.lhcx.model.UserType;
+import com.lhcx.service.ISuggestsService;
 import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.Utils;
@@ -43,6 +45,8 @@ public class UserController {
 	private HttpSession session;
 	@Autowired
 	private HttpServletRequest request;
+	@Autowired
+	private ISuggestsService suggestsService;
 
 	/**
 	 * 获取验证码 content-type:application/json
@@ -153,27 +157,24 @@ public class UserController {
 		try {
 			String newPhone = jsonRequest.getString("newPhone");
 			String oldPhone = jsonRequest.getString("oldPhone");
+			String newCode = jsonRequest.getString("newCode");
 			User user = (User)session.getAttribute("CURRENT_USER");
 
 			if(user.getUserphone().equals(oldPhone)){
 				String userType = user.getUsertype();
 				String checkOldSession = (String) session
 						.getAttribute("check@OldPhone");
-				String checkNewSession = (String) session
-						.getAttribute("check@NewPhone");
 				String oldSession = userType + "@" + oldPhone;
-				String newSession = userType + "@" + newPhone;
 				if (!oldSession.equals(checkOldSession)) {
 					resultBean = new ResultBean<Object>(
 							ResponseCode.ERROR.value(), "旧手机号验证失败！");
 					return Utils.resultResponseJson(resultBean, null);
 				}
-				if (!newSession.equals(checkNewSession)) {
-					resultBean = new ResultBean<Object>(
-							ResponseCode.ERROR.value(), "新手机号验证失败！");
-					return Utils.resultResponseJson(resultBean, null);
+				if (!verificationCodeService.checkPhoneCode(newPhone, userType, newCode,null)) {
+						resultBean = new ResultBean<Object>(
+								ResponseCode.ERROR.value(), "新手机号验证失败！");
+						return Utils.resultResponseJson(resultBean, null);
 				}
-				
 				user.setUserphone(newPhone);
 				userSerive.updateByPrimaryKeySelective(user);
 				resultBean = new ResultBean<Object>(
@@ -189,6 +190,53 @@ public class UserController {
 		}
 		
 		return Utils.resultResponseJson(resultBean, null);
+	}
+	
+	/**
+	 * 投诉与建议
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/user/suggest", method = RequestMethod.POST)
+	public ResponseEntity<String> suggest(@RequestBody JSONObject jsonRequest) {
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		if (!VerificationUtils.suggest(jsonRequest)) {
+			resultBean = new ResultBean<Object>(
+					ResponseCode.PARAMETER_WRONG.value(),
+					ResponseCode.PARAMETER_WRONG.message());
+		}else {
+			try {
+				User user = (User) session.getAttribute("CURRENT_USER");
+				String identityToken = user.getIdentityToken();
+				String contactinformation = jsonRequest.getString("contactinformation");
+				String suggest = jsonRequest.getString("suggest");
+				String source = jsonRequest.getString("source");
+				String photo = jsonRequest.getString("photo");
+				Suggests suggests = new Suggests();
+				suggests.setIdentitytoken(identityToken);
+				suggests.setContactinformation(contactinformation);
+				suggests.setSuggest(suggest);
+				suggests.setSource(Integer.parseInt(source));
+				suggests.setPhoto(photo);
+				int count = suggestsService.insertSelective(suggests);
+				if (count > 0) {
+					resultBean = new ResultBean<Object>(
+							ResponseCode.SUCCESS.value(),
+							ResponseCode.SUCCESS.message());
+				}else {
+					resultBean = new ResultBean<Object>(
+							ResponseCode.ERROR.value(),
+							ResponseCode.ERROR.message());
+				}
+			} catch (Exception e) {
+				log.error(e.getMessage());
+				resultBean = new ResultBean<Object>(
+						ResponseCode.ERROR.value(),
+						ResponseCode.ERROR.message());
+			}
+			
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 
 }

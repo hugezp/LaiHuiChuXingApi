@@ -23,6 +23,7 @@ import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPassengerInfoService;
+import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.Utils;
 /**
  * 乘客模块
@@ -83,7 +84,6 @@ public class PassengerController {
 	@RequestMapping(value = "/info", method = RequestMethod.POST)
 	public ResponseEntity<String> info() {
 		// 取得参数值
-		// 取得参数值
 		String jsonpCallback = "";
 		ResultBean<?> resultBean = null;
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -93,9 +93,28 @@ public class PassengerController {
 			if (info != null) {
 				result.put("passengerName", info.getPassengername());
 				result.put("passengerGeender", info.getPassengergeender());
+				result.put("photo", info.getPhoto());
+				result.put("description", info.getDescription());
+				Date birthDay = info.getBirthDay();
+				String birthDayFormat = "";
+				if (birthDay != null) {
+					birthDayFormat = DateUtils.dateFormat(birthDay);
+				}
+				result.put("birthDay", birthDayFormat);
+				result.put("homeAddress", info.getHomeAddress());
+				result.put("contactAddress", info.getContactAddress());
+				result.put("company", info.getCompany());
 			}else {
 				result.put("passengerName", "");
 				result.put("passengerGeender", "");
+				result.put("passengerName", "");
+				result.put("passengerGeender", "");
+				result.put("photo", "");
+				result.put("description", "");
+				result.put("birthDay", "");
+				result.put("homeAddress", "");
+				result.put("contactAddress", "");
+				result.put("company", "");
 			}
 			result.put("phone", user.getUserphone());
 						
@@ -125,6 +144,13 @@ public class PassengerController {
 		try {
 			String passengerName = jsonRequest.getString("passengerName");
 			String passengerGeender = jsonRequest.getString("passengerGeender");
+			String photo = jsonRequest.getString("photo");
+			Long birthDay =  jsonRequest.getLong("birthDay");
+			String description =  jsonRequest.getString("description");
+			String contactAddress =  jsonRequest.getString("contactAddress");
+			String homeAddress =  jsonRequest.getString("homeAddress");
+			String company =  jsonRequest.getString("company");
+			
 			User user = (User) session.getAttribute("CURRENT_USER");
 			String identityToken = user.getIdentityToken();
 			PassengerInfo info = passengerInfoService.selectByIdentityToken(identityToken);
@@ -132,20 +158,27 @@ public class PassengerController {
 				info = new PassengerInfo();
 				info.setPassengername(passengerName);
 				info.setPassengergeender(passengerGeender);
-				info.setRegisterdate(new Date());
-				info.setCreatetime(new Date());
 				info.setPassengerphone(user.getUserphone());
 				info.setIdentityToken(identityToken);
 				info.setFlag(1);
 				info.setState(0);
-				info.setUpdatetime(new Date());
-				info.setIdentityToken(user.getIdentityToken());
+				info.setPhoto(photo);
+				info.setCompany(company);
+				info.setBirthDay(DateUtils.toDate(birthDay));
+				info.setContactAddress(contactAddress);
+				info.setHomeAddress(homeAddress);
+				info.setDescription(description);
 				passengerInfoService.insertSelective(info);
 			} else {
+				info.setPhoto(photo);
+				info.setCompany(company);
+				info.setBirthDay(DateUtils.toDate(birthDay));
+				info.setContactAddress(contactAddress);
+				info.setHomeAddress(homeAddress);
+				info.setDescription(description);
 				info.setPassengername(passengerName);
 				info.setPassengergeender(passengerGeender);
 				info.setFlag(2);
-				info.setUpdatetime(new Date());
 				passengerInfoService.updateByIdentityTokenSelective(info);
 			}
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),

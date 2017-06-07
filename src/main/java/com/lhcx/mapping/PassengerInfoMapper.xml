@@ -13,10 +13,17 @@
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
+    <result column="Photo" property="photo" jdbcType="VARCHAR" />
+    <result column="BirthDay" property="birthDay" jdbcType="TIMESTAMP" />
+    <result column="HomeAddress" property="homeAddress" jdbcType="VARCHAR" />
+    <result column="ContactAddress" property="contactAddress" jdbcType="VARCHAR" />
+    <result column="Company" property="company" jdbcType="VARCHAR" />
+    <result column="Description" property="description" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, CompanyId, RegisterDate, PassengerPhone, PassengerName, PassengerGeender, State, 
-    Flag, CreateTime, UpdateTime,IdentityToken
+    Flag, CreateTime, UpdateTime,IdentityToken,Photo,BirthDay,HomeAddress,ContactAddress,
+    Company,Description
   </sql>
   <select id="selectByIdentityToken" resultMap="BaseResultMap" >
     select 
@@ -60,6 +67,24 @@
       <if test="updatetime != null" >
         UpdateTime,
       </if>
+       <if test="photo != null" >
+        Photo,
+      </if>
+       <if test="description != null" >
+        Description,
+      </if>
+       <if test="birthDay != null" >
+        BirthDay,
+      </if>
+       <if test="homeAddress != null" >
+        HomeAddress,
+      </if>
+       <if test="contactAddress != null" >
+        ContactAddress,
+      </if>
+      <if test="company != null" >
+        Company
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -95,6 +120,24 @@
       <if test="updatetime != null" >
         #{updatetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="photo != null" >
+         #{photo,jdbcType=VARCHAR},
+      </if>
+       <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+       <if test="birthDay != null" >
+         #{birthDay,jdbcType=TIMESTAMP},
+      </if>
+       <if test="homeAddress != null" >
+        #{homeAddress,jdbcType=VARCHAR},
+      </if>
+       <if test="contactAddress != null" >
+        #{contactAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR}
+      </if>
     </trim>
   </insert>
   <update id="updateByIdentityTokenSelective" parameterType="com.lhcx.model.PassengerInfo" >
@@ -103,11 +146,8 @@
       <if test="companyid != null" >
         CompanyId = #{companyid,jdbcType=VARCHAR},
       </if>
-      <if test="registerdate != null" >
-        RegisterDate = #{registerdate,jdbcType=TIMESTAMP},
-      </if>
       <if test="passengerphone != null" >
-        #{Passengerphone,jdbcType=VARCHAR},
+        Passengerphone = #{passengerphone,jdbcType=VARCHAR},
       </if>
       <if test="passengername != null" >
         PassengerName = #{passengername,jdbcType=VARCHAR},
@@ -121,11 +161,26 @@
       <if test="flag != null" >
         Flag = #{flag,jdbcType=INTEGER},
       </if>
-      <if test="createtime != null" >
-        CreateTime = #{createtime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updatetime != null" >
         UpdateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="photo != null" >
+         Photo = #{photo,jdbcType=VARCHAR},
+      </if>
+       <if test="description != null" >
+        Description = #{description,jdbcType=VARCHAR},
+      </if>
+       <if test="birthDay != null" >
+         BirthDay = #{birthDay,jdbcType=TIMESTAMP},
+      </if>
+       <if test="homeAddress != null" >
+        HomeAddress = #{homeAddress,jdbcType=VARCHAR},
+      </if>
+       <if test="contactAddress != null" >
+        ContactAddress = #{contactAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        Company = #{company,jdbcType=VARCHAR}
       </if>
     </set>
     where IdentityToken = #{identityToken,jdbcType=VARCHAR}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhcx.dao.SuggestsMapper" >
+  <resultMap id="BaseResultMap" type="com.lhcx.model.Suggests" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="IdentityToken" property="identitytoken" jdbcType="VARCHAR" />
+    <result column="ContactInformation" property="contactinformation" jdbcType="VARCHAR" />
+    <result column="Suggest" property="suggest" jdbcType="VARCHAR" />
+    <result column="Photo" property="photo" jdbcType="VARCHAR" />
+    <result column="Source" property="source" jdbcType="INTEGER" />
+    <result column="IsDel" property="isdel" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="com.lhcx.model.Suggests" >
+    insert into suggests
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="identitytoken != null" >
+        IdentityToken,
+      </if>
+      <if test="contactinformation != null" >
+        ContactInformation,
+      </if>
+      <if test="suggest != null" >
+        Suggest,
+      </if>
+      <if test="photo != null" >
+        Photo,
+      </if>
+      <if test="source != null" >
+        Source,
+      </if>
+      <if test="isdel != null" >
+        IsDel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="identitytoken != null" >
+        #{identitytoken,jdbcType=VARCHAR},
+      </if>
+      <if test="contactinformation != null" >
+        #{contactinformation,jdbcType=VARCHAR},
+      </if>
+      <if test="suggest != null" >
+        #{suggest,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
