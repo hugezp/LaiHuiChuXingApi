@@ -2,6 +2,7 @@ package com.lhcx.service.impl;
 
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +67,10 @@ public class UserSeriveImpl implements IUserService{
 	
 	public int updateByPrimaryKeySelective(User record){
 		return userMapper.updateByPrimaryKeySelective(record);
+	}
+	
+	public int updatePhoneByIdToken(User record){
+		return userMapper.updatePhoneByIdToken(record);
 	}
 	
 	public ResultBean<?> login(HttpServletRequest request,JSONObject jsonRequest) {	
@@ -168,5 +173,9 @@ public class UserSeriveImpl implements IUserService{
 		}
 		
 		return user;
+	}
+
+	public List<User> selectByPhone(User user) {
+		return userMapper.selectByPhone(user);
 	}
 }

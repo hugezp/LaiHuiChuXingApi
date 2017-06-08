@@ -1,8 +1,10 @@
 package com.lhcx.service;
 
 import java.text.ParseException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
@@ -19,6 +21,8 @@ public interface IUserService {
 	User selectByToken(String token);
 	
 	int updateByPrimaryKeySelective(User record);
+	
+	int updatePhoneByIdToken(User record);
 	
 	int insertSelective(User record);
 	
@@ -39,4 +43,6 @@ public interface IUserService {
      * code:验证码
 	*/
 	User registerForDriver(HttpServletRequest request,JSONObject jsonRequest) throws ParseException; 
+	
+	List<User> selectByPhone(User user);
 }

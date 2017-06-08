@@ -23,4 +23,5 @@ public interface OrderMapper {
     List<Order> selectOrderByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize,@Param("status") Integer status);
 
     int selectTotalCountByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("status") Integer status);
+    
 }

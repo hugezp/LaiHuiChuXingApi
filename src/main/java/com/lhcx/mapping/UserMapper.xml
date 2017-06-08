@@ -28,6 +28,13 @@
     from users
     where UserPhone = #{phone} and UserType = #{userType}
   </select>
+  
+  <select id="selectByPhone" resultMap="BaseResultMap" parameterType="com.lhcx.model.User">
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where UserPhone = #{userphone,jdbcType=INTEGER} and UserType = #{usertype,jdbcType=VARCHAR}
+  </select>
   <select id="selectUserByIdentityToken" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
@@ -121,5 +128,10 @@
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updatePhoneByIdToken" parameterType="com.lhcx.model.User" >
+    update users set UserPhone = #{userphone,jdbcType=INTEGER}
+    where IdentityToken = #{identityToken,jdbcType=VARCHAR}
   </update>
 </mapper>

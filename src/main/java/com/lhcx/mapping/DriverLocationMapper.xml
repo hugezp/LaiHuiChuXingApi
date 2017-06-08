@@ -23,7 +23,7 @@
 	<sql id="Base_Column_List">
 		id, PositionTime, Longitude, Latitude,
 		Phone, Encrypt, Direction, Elevation, Speed, BizStatus, OrderId,
-		isDel,LoginTime,LogoutTime,IdentityToken
+		isDel,LoginTime,LogoutTime,IdentityToken,Preference,Scope
 	</sql>
 
 	<select id="selectByIdentityToken" resultMap="BaseResultMap">

@@ -75,7 +75,7 @@
   	select 
   	<include refid="Base_Column_List" />
   	 from orders 
-  	 where PassengerIdentityToken = #{passengerIdentityToken} 
+  	 where PassengerIdentityToken = #{passengerIdentityToken} and Status not in(-1,0) 
   	 order by OrderTime desc
   	 limit #{startPro},#{pageSize}
   </select>

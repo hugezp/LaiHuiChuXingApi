@@ -211,12 +211,12 @@ public class DriverController {
 			String driverIdentityToken = user.getIdentityToken();
 			//当日流水
 			BigDecimal cashToday = payCashLogService.selectCashByDriverIdentityTokenToday(driverIdentityToken);
-			result.put("cashToday", cashToday);
+			result.put("cashToday", String.valueOf(cashToday));
 			//总接单数
 			int totalCount = orderService.selectTotalCountByDriverIdentityToken(driverIdentityToken, null);
 			int cancelCount = orderService.selectTotalCountByDriverIdentityToken(driverIdentityToken, OrderStatus.CANCEL.value());
-			result.put("orderTotalCount", totalCount);
-			result.put("orderSuccessCount", totalCount - cancelCount);
+			result.put("orderTotalCount", String.valueOf(totalCount));
+			result.put("orderSuccessCount", String.valueOf(totalCount - cancelCount));
 			//听单
 			long onTime = 0;//毫秒
 			DriverLocation driverLocation = driverLocationService.selectByIdentityToken(driverIdentityToken);
@@ -233,7 +233,10 @@ public class DriverController {
 				}
 			}
 			
-			result.put("onTime", onTime);
+			result.put("onTime", String.valueOf(onTime));
+			result.put("pushStatus", String.valueOf(driverLocation.getIsdel()));
+			result.put("preference", String.valueOf(driverLocation.getPreference()));
+			result.put("scope", String.valueOf(driverLocation.getScope()));
 			
 			//支付列表
 			List<PayCashLog> cashLogs = payCashLogService.selectByDriverIdentityToken(driverIdentityToken, 1, 5);

@@ -1,6 +1,7 @@
 package com.lhcx.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -159,7 +160,6 @@ public class UserController {
 			String oldPhone = jsonRequest.getString("oldPhone");
 			String newCode = jsonRequest.getString("newCode");
 			User user = (User)session.getAttribute("CURRENT_USER");
-
 			if(user.getUserphone().equals(oldPhone)){
 				String userType = user.getUsertype();
 				String checkOldSession = (String) session
@@ -176,7 +176,13 @@ public class UserController {
 						return Utils.resultResponseJson(resultBean, null);
 				}
 				user.setUserphone(newPhone);
-				userSerive.updateByPrimaryKeySelective(user);
+				List<User> userList = userSerive.selectByPhone(user);
+				if (userList.size()>0) {
+					resultBean = new ResultBean<Object>(
+							ResponseCode.PHONE_EXIST.value(), ResponseCode.PHONE_EXIST.message());
+					return Utils.resultResponseJson(resultBean, null);
+				}
+				userSerive.updatePhoneByIdToken(user);
 				resultBean = new ResultBean<Object>(
 						ResponseCode.SUCCESS.value(), "更新手机号码成功！");
 			}else {
