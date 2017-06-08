@@ -20,7 +20,7 @@ public class PayConfigUtils {
      //来回微信支付回调地址
     private final static String wx_pay_laihui_notify_url = "http://apitest.laihuichuxing.com/wxpay/notify";
     //支付宝支付回调地址
-    private final static String alipay_notify_url = "http://apitest.laihuichuxing.com/alipay/notify";
+    private final static String alipay_notify_url = "https://api.laihuichuxing.com/alipay/notify";
 
 
     public static String getAlipay_public_key() {
