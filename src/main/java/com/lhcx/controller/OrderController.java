@@ -454,6 +454,7 @@ public class OrderController {
 					result.put("money","86.86");
 					result.put("userName",driverInfo.getDrivername());
 					result.put("userPhoto",driverInfo.getPhoto());
+					result.put("status",String.valueOf(user.getFlag()));
 					List<Order> orderList = orderService.selectOrderByDriverIdentityToken(driverToken,page,ConfigUtils.PAGE_SIZE,status);
 					for (Order order : orderList) {
 						OrderDetail orderDetail = new OrderDetail();
