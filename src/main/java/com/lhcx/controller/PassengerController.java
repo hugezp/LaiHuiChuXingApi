@@ -98,7 +98,7 @@ public class PassengerController {
 				Date birthDay = info.getBirthDay();
 				String birthDayFormat = "";
 				if (birthDay != null) {
-					birthDayFormat = DateUtils.dateFormat(birthDay);
+					birthDayFormat = DateUtils.dateFormat1(birthDay);
 				}
 				result.put("birthDay", birthDayFormat);
 				result.put("homeAddress", info.getHomeAddress());

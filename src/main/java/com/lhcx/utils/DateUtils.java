@@ -27,6 +27,12 @@ public class DateUtils {
 	   return dateFormat.format(date);
 	}
     
+    public static String dateFormat1(Date date) {
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+    	
+    	return dateFormat.format(date);
+    }
+    
     public static String dateFormat2(Date date) {
  	   SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
