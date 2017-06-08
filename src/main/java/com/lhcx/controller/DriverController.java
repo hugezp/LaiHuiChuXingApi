@@ -231,12 +231,24 @@ public class DriverController {
 					}
 					onTime = endTimeMil - startTimeMil;
 				}
+				result.put("onTime", String.valueOf(onTime));
+				result.put("pushStatus", String.valueOf(driverLocation.getIsdel()));
+				result.put("preference", String.valueOf(driverLocation.getPreference()));
+				result.put("scope", String.valueOf(driverLocation.getScope()));
+			}else{
+				DriverLocation d = new DriverLocation();
+				d.setPositiontime(new Date());
+				d.setLongitude("0");
+				d.setLatitude("0");
+				d.setPhone(user.getUserphone());
+				d.setIdentityToken(driverIdentityToken);
+				d.setLoginTime(new Date());
+				driverLocationService.insertSelective(d);
+				result.put("onTime", "");
+				result.put("pushStatus", "0");
+				result.put("preference", "-1");
+				result.put("scope", "5000");
 			}
-			
-			result.put("onTime", String.valueOf(onTime));
-			result.put("pushStatus", String.valueOf(driverLocation.getIsdel()));
-			result.put("preference", String.valueOf(driverLocation.getPreference()));
-			result.put("scope", String.valueOf(driverLocation.getScope()));
 			
 			//支付列表
 			List<PayCashLog> cashLogs = payCashLogService.selectByDriverIdentityToken(driverIdentityToken, 1, 5);

@@ -42,7 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         try {
         	User user = userService.selectByToken(token);
-        	if(user != null && user.getFlag() != 1){
+        	if(user != null ){
         		session.setAttribute("CURRENT_USER", user);
         		return true;
         	}
