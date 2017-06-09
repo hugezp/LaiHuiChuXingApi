@@ -33,6 +33,7 @@ import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
 import com.lhcx.service.IPayCashLogService;
+import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationLogsService;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.Utils;
@@ -59,6 +60,9 @@ public class DriverController {
 	private IPayCashLogService payCashLogService;
 	@Autowired
 	private IDriverLocationService driverLocationService;
+	
+	@Autowired
+	private IUserService userService;
 
 	/**
 	 * 获取乘客未完成的订单
@@ -176,6 +180,9 @@ public class DriverController {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
+			if (user.getFlag() == 1) {
+				userService.updateStatus(user);
+			}
 			DriverInfo driverInfo = new DriverInfo(jsonRequest);
 			driverInfo.setDriverphone(user.getUserphone());
 			driverInfo.setIdentityToken(user.getIdentityToken());

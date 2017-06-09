@@ -22,6 +22,8 @@ public interface IUserService {
 	
 	int updateByPrimaryKeySelective(User record);
 	
+	int updateStatus(User record);
+	
 	int updatePhoneByIdToken(User record);
 	
 	int insertSelective(User record);
