@@ -289,6 +289,7 @@ public class OrderServiceImpl implements IOrderService {
 		extrasParam.put("OrderId", orderId);
 		extrasParam.put("passengerPhone", passenegerPhone);
 		extrasParam.put("DriverPhone", driverPhone);				
+		extrasParam.put("orderStatus", String.valueOf(order.getStatus()));				
 		
 		String userType = user.getUsertype();
 		int flag = 0;

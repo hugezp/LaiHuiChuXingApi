@@ -519,6 +519,7 @@ public class OrderController {
 					OrderDetail orderDetail = new OrderDetail();
 					orderDetail.setOrderId(order.getOrderid());
 					orderDetail.setOrderType(order.getOrderType());
+					orderDetail.setCarType(order.getCarType());
 					orderDetail.setDeparture(order.getDeparture());
 					orderDetail.setDestination(order.getDestination());
 					orderDetail.setFee(order.getFee().toString());

@@ -146,6 +146,7 @@ public class PayController {
 
 			Map<String, String> extrasParam = new HashMap<String, String>();
 			extrasParam.put("OrderId", orderId);
+			extrasParam.put("orderStatus", "6");
 
 			int count = JpushClientUtil.getInstance(
 					ConfigUtils.JPUSH_APP_KEY,

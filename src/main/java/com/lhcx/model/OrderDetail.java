@@ -9,7 +9,16 @@ public class OrderDetail {
 	private String fee;
 	private int status;
 	private int orderType;
+	private int carType;
 	
+	public int getCarType() {
+		return carType;
+	}
+
+	public void setCarType(int carType) {
+		this.carType = carType;
+	}
+
 	public int getStatus() {
 		return status;
 	}

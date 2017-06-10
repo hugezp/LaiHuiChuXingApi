@@ -11,7 +11,7 @@ public class ConfigUtils {
 	public static final long TIME_TO_LIVE = 1800;
 	
 	//极光环境 false测试 true正式
-	public static final boolean JPUSH_PROD = true;
+	public static final boolean JPUSH_PROD = false;
 	
 	//极光AppKey 
 	public static final String JPUSH_APP_KEY = "a1835850adc6bff63a9bf7c6";
