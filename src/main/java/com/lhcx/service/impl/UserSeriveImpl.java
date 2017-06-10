@@ -26,6 +26,7 @@ import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.MD5Kit;
 import com.lhcx.utils.Utils;
+import com.lhcx.utils.SMSUtils.SmsWebApiKit;
 
 @Transactional(rollbackFor=Exception.class)
 @Service
@@ -80,8 +81,9 @@ public class UserSeriveImpl implements IUserService{
 		String phone = jsonRequest.getString("phone");
         String userType = jsonRequest.getString("userType");
         String code = jsonRequest.getString("code");
+        String source = jsonRequest.getString("source");
         String token = MD5Kit.encode(userType+"@"+phone + System.currentTimeMillis());
-        
+        String status = "";
         //1、司机端校验用户是否存在
         //2、如果用户存在，校验验证码        
 		User user = selectUserByPhone(phone, userType);
@@ -91,7 +93,13 @@ public class UserSeriveImpl implements IUserService{
 		boolean passengerBoolean = userType.equals(UserType.PASSENGER.value());
 		
 		if( driverBoolean || passengerBoolean){
-			if(verificationCodeService.checkPhoneCode(phone, userType, code,null)){
+			try {
+				status = SmsWebApiKit.getInstance().checkcode(phone, "86",
+						code,userType,source);
+			} catch (Exception e) {
+				
+			}
+			if(status.equals("200")){
 				//验证成功后保存登录信息
 				if (passengerBoolean && user == null) {
 					String identityToken = token;

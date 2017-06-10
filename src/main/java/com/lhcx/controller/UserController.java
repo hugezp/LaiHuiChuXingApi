@@ -27,6 +27,7 @@ import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
+import com.lhcx.utils.SMSUtils.SmsWebApiKit;
 
 /**
  * 用户登录与注册
@@ -159,6 +160,7 @@ public class UserController {
 			String newPhone = jsonRequest.getString("newPhone");
 			String oldPhone = jsonRequest.getString("oldPhone");
 			String newCode = jsonRequest.getString("newCode");
+			String source = jsonRequest.getString("source");
 			User user = (User)session.getAttribute("CURRENT_USER");
 			if(user.getUserphone().equals(oldPhone)){
 				String userType = user.getUsertype();
@@ -170,7 +172,9 @@ public class UserController {
 							ResponseCode.ERROR.value(), "旧手机号验证失败！");
 					return Utils.resultResponseJson(resultBean, null);
 				}
-				if (!verificationCodeService.checkPhoneCode(newPhone, userType, newCode,null)) {
+				String status = SmsWebApiKit.getInstance().checkcode(newPhone, "86",
+						newCode,userType,source);
+				if (!status.equals("200")) {
 						resultBean = new ResultBean<Object>(
 								ResponseCode.ERROR.value(), "新手机号验证失败！");
 						return Utils.resultResponseJson(resultBean, null);
