@@ -70,6 +70,10 @@ public class UserSeriveImpl implements IUserService{
 		return userMapper.updateByPrimaryKeySelective(record);
 	}
 	
+	public int updateStatus(User record){
+		return userMapper.updateStatus(record);
+	}
+	
 	public int updatePhoneByIdToken(User record){
 		return userMapper.updatePhoneByIdToken(record);
 	}

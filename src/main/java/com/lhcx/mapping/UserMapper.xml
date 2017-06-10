@@ -130,6 +130,11 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
+  <update id="updateStatus" parameterType="com.lhcx.model.User" >
+    update users set Flag = 0
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
   <update id="updatePhoneByIdToken" parameterType="com.lhcx.model.User" >
     update users set UserPhone = #{userphone,jdbcType=INTEGER}
     where IdentityToken = #{identityToken,jdbcType=VARCHAR}

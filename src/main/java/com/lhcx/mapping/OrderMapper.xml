@@ -58,7 +58,7 @@
   
   <select id="selectNewOrderByPassengerIdentityToken" resultType="com.lhcx.model.Order">
   	select OrderId,status from orders 
-  	where PassengerIdentityToken = #{passengerIdentityToken} and (Status > 0 and Status &lt; 5)
+  	where PassengerIdentityToken = #{passengerIdentityToken} and (Status > 0 and Status &lt; 6)
   	order by OrderTime desc limit 1
   </select>
    
@@ -84,7 +84,7 @@
   	select 
   	<include refid="Base_Column_List" />
   	 from orders 
-  	 where DriverIdentityToken = #{driverIdentityToken} 
+  	 where DriverIdentityToken = #{driverIdentityToken} and Status not in(-1,0)
   	 <if test="status != null" >
        and Status = #{status}
      </if>
@@ -94,7 +94,7 @@
   
    <select id="selectNewOrderByDriverIdentityToken" resultType="com.lhcx.model.Order">
   	select OrderId,status from orders 
-  	where DriverIdentityToken = #{driverIdentityToken}  and (Status > 1 and Status &lt; 5)
+  	where DriverIdentityToken = #{driverIdentityToken}  and (Status > 1 and Status &lt; 6)
   	order by OrderTime desc limit 1
   </select>
   
