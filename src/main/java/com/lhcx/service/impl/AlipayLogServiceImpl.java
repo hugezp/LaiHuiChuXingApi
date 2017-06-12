@@ -81,16 +81,14 @@ public class AlipayLogServiceImpl implements IAlipayLogService{
 			//2.3：创建账户流水线日志：乘客支出，司机收入
 			PayCashLog cashLog = new PayCashLog();
 			cashLog.setOrderid(out_trade_no);
-			cashLog.setPassengerphone(order.getPassengerphone());
-			cashLog.setDriverphone(order.getDriverphone());
-			cashLog.setPassengerIdentityToken(order.getPassengerIdentityToken());
-			cashLog.setDriverIdentityToken(order.getDriverIdentityToken());
+			cashLog.setIdentityToken(order.getDriverIdentityToken());
 			cashLog.setCash(price);
 			cashLog.setPaytype(1);//微信支付
 			cashLog.setStatus(2);//支付完成
-			
+			String passengerPhone = order.getPassengerphone();
+			String description = "收到车费" + price + "元，来自手机尾号" + passengerPhone.substring(7);
 			cashLog.setActiontype(PayActionType.spending.value());//乘客支出
-			cashLog.setDescription("乘客微信支付记录");
+			cashLog.setDescription(description);
 			payCashLogService.insertSelective(cashLog);
 			
 			cashLog.setActiontype(PayActionType.income.value());//司机收入

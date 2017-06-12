@@ -25,6 +25,7 @@ import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
 import com.lhcx.utils.DateUtils;
 import com.lhcx.utils.MD5Kit;
+import com.lhcx.utils.TestConfig;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.SMSUtils.SmsWebApiKit;
 
@@ -100,6 +101,9 @@ public class UserSeriveImpl implements IUserService{
 			try {
 				status = SmsWebApiKit.getInstance().checkcode(phone, "86",
 						code,userType,source);
+				if (TestConfig.testMobile(phone)) {
+					status = "200";
+				}
 			} catch (Exception e) {
 				
 			}

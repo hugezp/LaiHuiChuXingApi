@@ -25,6 +25,7 @@ import com.lhcx.model.UserType;
 import com.lhcx.service.ISuggestsService;
 import com.lhcx.service.IUserService;
 import com.lhcx.service.IVerificationCodeService;
+import com.lhcx.utils.TestConfig;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
 import com.lhcx.utils.SMSUtils.SmsWebApiKit;
@@ -174,6 +175,9 @@ public class UserController {
 				}
 				String status = SmsWebApiKit.getInstance().checkcode(newPhone, "86",
 						newCode,userType,source);
+				if (TestConfig.testMobile(newPhone)) {
+					status = "200";
+				}
 				if (!status.equals("200")) {
 						resultBean = new ResultBean<Object>(
 								ResponseCode.ERROR.value(), "新手机号验证失败！");

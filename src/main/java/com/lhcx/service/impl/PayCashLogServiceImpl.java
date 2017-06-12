@@ -23,13 +23,13 @@ public class PayCashLogServiceImpl implements IPayCashLogService{
 	}
 
 	@Override
-	public BigDecimal selectCashByDriverIdentityTokenToday(String driverIdentityToken) {
-		return payCashLogMapper.selectCashByDriverIdentityTokenToday(driverIdentityToken);
+	public BigDecimal selectCashByIdentityTokenToday(String driverIdentityToken) {
+		return payCashLogMapper.selectCashByIdentityTokenToday(driverIdentityToken);
 	}
 
 	@Override
-	public List<PayCashLog> selectByDriverIdentityToken(String driverIdentityToken,int page,int pageSize) {
-		return payCashLogMapper.selectByDriverIdentityToken(driverIdentityToken, (page-1)*pageSize, pageSize);
+	public List<PayCashLog> selectByIdentityToken(String driverIdentityToken,int page,int pageSize) {
+		return payCashLogMapper.selectByIdentityToken(driverIdentityToken, (page-1)*pageSize, pageSize);
 	}
 
 }

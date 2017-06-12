@@ -344,17 +344,16 @@ public class AlipayNotifyController {
 					orderLog.setOperatordescription(OrderStatus.PAY.message());
 					orderLogService.insertSelective(orderLog);
 					//2.3：创建账户流水线日志：乘客支出，司机收入
+					String passengerPhone = order.getPassengerphone();
+					String description = "收到车费" + new BigDecimal(price) + "元，来自手机尾号" + passengerPhone.substring(7);
 					PayCashLog cashLog = new PayCashLog();
 					cashLog.setOrderid(out_trade_no);
-					cashLog.setPassengerphone(order.getPassengerphone());
-					cashLog.setDriverphone(order.getDriverphone());
-					cashLog.setPassengerIdentityToken(order.getPassengerIdentityToken());
-					cashLog.setDriverIdentityToken(order.getDriverIdentityToken());
+					cashLog.setIdentityToken(order.getDriverIdentityToken());
 					cashLog.setCash(new BigDecimal(price));
 					cashLog.setPaytype(0);//支付宝支付
 					cashLog.setStatus(2);//支付完成
 					cashLog.setActiontype(PayActionType.spending.value());//乘客支出
-					cashLog.setDescription("乘客支付宝支付记录");
+					cashLog.setDescription(description);
 					payCashLogService.insertSelective(cashLog);
 					
 					cashLog.setActiontype(PayActionType.income.value());//司机收入
@@ -362,9 +361,8 @@ public class AlipayNotifyController {
 					payCashLogService.insertSelective(cashLog);
 					
 					// 3：推送给司机
-					String orderId = order.getOrderid();
 					String driverPhone = order.getDriverphone();
-					String passengerPhone = order.getPassengerphone();
+					String orderId = order.getOrderid();
 					String driverIdentityToken = order.getDriverIdentityToken();
 					String passengerIdentityToken = order.getPassengerIdentityToken();
 					String content = "【来回出行】手机号为"

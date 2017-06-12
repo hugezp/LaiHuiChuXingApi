@@ -4,8 +4,6 @@
   <resultMap id="BaseResultMap" type="com.lhcx.model.PayCashLog" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="OrderId" property="orderid" jdbcType="VARCHAR" />
-    <result column="PassengerPhone" property="passengerphone" jdbcType="VARCHAR" />
-    <result column="DriverPhone" property="driverphone" jdbcType="VARCHAR" />
     <result column="Cash" property="cash" jdbcType="DECIMAL" />
     <result column="ActionType" property="actiontype" jdbcType="INTEGER" />
     <result column="PayAccount" property="payaccount" jdbcType="VARCHAR" />
@@ -15,26 +13,25 @@
     <result column="ErrorDesc" property="errordesc" jdbcType="VARCHAR" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
-    <result column="PassengerIdentityToken" property="passengerIdentityToken" jdbcType="VARCHAR" />
-    <result column="DriverIdentityToken" property="driverIdentityToken" jdbcType="VARCHAR" />
+    <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, OrderId, PassengerPhone, DriverPhone, Cash, ActionType, PayAccount, PayType, 
-    Status, Description, ErrorDesc, CreateTime, UpdateTime,PassengerIdentityToken,DriverIdentityToken
+    Status, Description, ErrorDesc, CreateTime, UpdateTime,IdentityToken
   </sql>
-  <select id="selectByDriverIdentityToken" resultMap="BaseResultMap"  >
+  <select id="selectByIdentityToken" resultMap="BaseResultMap"  >
     select 
     <include refid="Base_Column_List" />
     from pay_cash_logs
-    where DriverIdentityToken = #{driverIdentityToken} and Status = 2
+    where IdentityToken = #{identityToken} and Status = 2
     order by UpdateTime desc
  	 limit #{startPro},#{pageSize}
   </select>
-  <select id="selectCashByDriverIdentityTokenToday" resultType="java.math.BigDecimal">
+  <select id="selectCashByIdentityTokenToday" resultType="java.math.BigDecimal">
     select
     case when sum(Cash) is null then 0.00 else sum(Cash) end as totalCash
     from pay_cash_logs
-    where DriverIdentityToken = #{driverIdentityToken,jdbcType=VARCHAR} and Status = 2 and UpdateTime > CURDATE()
+    where IdentityToken = #{identityToken,jdbcType=VARCHAR} and Status = 2 and UpdateTime > CURDATE()
   </select>
   <insert id="insertSelective" parameterType="com.lhcx.model.PayCashLog" >
     insert into pay_cash_logs
@@ -42,17 +39,8 @@
       <if test="orderid != null" >
         OrderId,
       </if>
-      <if test="passengerIdentityToken != null" >
-        PassengerIdentityToken,
-      </if>
-      <if test="driverIdentityToken != null" >
-        DriverIdentityToken,
-      </if>
-      <if test="passengerphone != null" >
-        PassengerPhone,
-      </if>
-      <if test="driverphone != null" >
-        DriverPhone,
+      <if test="identityToken != null" >
+        IdentityToken,
       </if>
       <if test="cash != null" >
         Cash,
@@ -86,17 +74,8 @@
       <if test="orderid != null" >
         #{orderid,jdbcType=VARCHAR},
       </if>
-      <if test="passengerIdentityToken != null" >
-        #{passengerIdentityToken,jdbcType=VARCHAR},
-      </if>
-      <if test="driverIdentityToken != null" >
-        #{driverIdentityToken,jdbcType=VARCHAR},
-      </if>
-      <if test="passengerphone != null" >
-        #{passengerphone,jdbcType=VARCHAR},
-      </if>
-      <if test="driverphone != null" >
-        #{driverphone,jdbcType=VARCHAR},
+      <if test="identityToken != null" >
+        #{identityToken,jdbcType=VARCHAR},
       </if>
       <if test="cash != null" >
         #{cash,jdbcType=DECIMAL},
