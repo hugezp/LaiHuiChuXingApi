@@ -10,12 +10,11 @@ package com.lhcx.utils.SMSUtils;
  */
 public class SmsWebApiKit {
 	
-
 	//AndroidiOS_driver  1e93451c36962
 	private static String ios_driver_appkey ="1e93451c36962" ;
 	private static String ios_passenger_appkey ="1e933f780f224" ;
-	private static String android_driver_appkey ="1e93504c893b8" ;
-	private static String android_passenger_appkey ="1e9355ec941b8" ;
+	private static String android_driver_appkey ="1e9355ec941b8" ;
+	private static String android_passenger_appkey ="1e93504c893b8";
 	
 //	public SmsWebApiKit(String appkey) {
 //		super();
