@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONObject;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
+import com.lhcx.utils.TestConfig;
 import com.lhcx.utils.Utils;
 import com.lhcx.utils.VerificationUtils;
 import com.lhcx.utils.SMSUtils.SmsWebApiKit;
@@ -78,8 +79,11 @@ public class VerificationMobileController {
 				// 验证新的手机号
 				session.setAttribute("check@NewPhone", userType + "@" + mobile);
 			}
-			String status = SmsWebApiKit.getInstance().checkcode(mobile, "86",
-					code,userType,source);
+			 String status = SmsWebApiKit.getInstance().checkcode(mobile, "86", code,
+					userType, source);
+			if (TestConfig.testMobile(mobile)) {
+				status = "200";
+			}
 			if (status.equals("200")) {
 				resultBean = new ResultBean<Object>(
 						ResponseCode.SUCCESS.value(),

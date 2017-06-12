@@ -32,7 +32,6 @@ public class SmsWebApiKit {
 	}
 	
 	public String checkcode(String phone,String zone,String code,String userType,String source) throws Exception{
-	
 	String address = "https://webapi.sms.mob.com/sms/verify";
 	MobClient client = null;
 	try {
@@ -54,7 +53,6 @@ public class SmsWebApiKit {
 			client.addParam("appkey", android_driver_appkey).addParam("phone", phone)
 			.addParam("zone", zone).addParam("code", code);
 		}
-		
 		//client.addRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		client.addRequestProperty("Accept", "application/json");
 		String result = client.post().substring(10,13);

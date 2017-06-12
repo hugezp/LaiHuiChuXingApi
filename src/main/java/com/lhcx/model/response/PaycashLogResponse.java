@@ -133,8 +133,6 @@ public class PaycashLogResponse {
 	public PaycashLogResponse(PayCashLog cashLog){
 		if (cashLog != null) {
 			this.orderId = cashLog.getOrderid();
-			this.passengerPhone = cashLog.getPassengerphone();
-			this.driverPhone = cashLog.getDriverphone();
 			this.cash = cashLog.getCash();
 			this.actionType = cashLog.getActiontype();
 			this.payAccount = cashLog.getPayaccount();
