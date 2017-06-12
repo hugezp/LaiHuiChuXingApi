@@ -7,14 +7,8 @@ public class PayCashLog {
     private Integer id;
 
     private String orderid;
-
-    private String passengerphone;
-
-    private String driverphone;
     
-    private String driverIdentityToken;
-    
-    private String passengerIdentityToken;
+    private String identityToken;
 
     private BigDecimal cash;
 
@@ -50,21 +44,6 @@ public class PayCashLog {
         this.orderid = orderid == null ? null : orderid.trim();
     }
 
-    public String getPassengerphone() {
-        return passengerphone;
-    }
-
-    public void setPassengerphone(String passengerphone) {
-        this.passengerphone = passengerphone == null ? null : passengerphone.trim();
-    }
-
-    public String getDriverphone() {
-        return driverphone;
-    }
-
-    public void setDriverphone(String driverphone) {
-        this.driverphone = driverphone == null ? null : driverphone.trim();
-    }
 
     public BigDecimal getCash() {
         return cash;
@@ -138,19 +117,11 @@ public class PayCashLog {
         this.updatetime = updatetime;
     }
 
-	public String getDriverIdentityToken() {
-		return driverIdentityToken;
+	public String getIdentityToken() {
+		return identityToken;
 	}
 
-	public void setDriverIdentityToken(String driverIdentityToken) {
-		this.driverIdentityToken = driverIdentityToken;
-	}
-
-	public String getPassengerIdentityToken() {
-		return passengerIdentityToken;
-	}
-
-	public void setPassengerIdentityToken(String passengerIdentityToken) {
-		this.passengerIdentityToken = passengerIdentityToken;
+	public void setIdentityToken(String identityToken) {
+		this.identityToken = identityToken;
 	}
 }

@@ -18,8 +18,8 @@ public interface PayCashLogMapper {
      * @param driverphone
      * @return
      */
-    BigDecimal selectCashByDriverIdentityTokenToday(String driverIdentityToken);
+    BigDecimal selectCashByIdentityTokenToday(String driverIdentityToken);
     
-    List<PayCashLog> selectByDriverIdentityToken(@Param("driverIdentityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);;
+    List<PayCashLog> selectByIdentityToken(@Param("identityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);;
 
 }

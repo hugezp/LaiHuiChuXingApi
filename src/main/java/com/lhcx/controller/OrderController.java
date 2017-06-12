@@ -449,7 +449,8 @@ public class OrderController {
 						ResponseCode.PARAMETER_WRONG.value(),
 						ResponseCode.PARAMETER_WRONG.message(),result);
 			}else {
-				DriverInfo driverInfo = driverInfoService.selectByIdentityToken(driverToken);
+				DriverInfo driverInfo = driverInfoService.selectByIdentityToken
+						(driverToken);
 				if (driverInfo != null) {
 					result.put("money","86.86");
 					result.put("userName",driverInfo.getDrivername());

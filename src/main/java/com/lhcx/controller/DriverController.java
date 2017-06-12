@@ -1,6 +1,5 @@
 package com.lhcx.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,12 +22,10 @@ import com.lhcx.model.DriverInfo;
 import com.lhcx.model.DriverLocation;
 import com.lhcx.model.Order;
 import com.lhcx.model.OrderStatus;
-import com.lhcx.model.PayCashLog;
 import com.lhcx.model.ResponseCode;
 import com.lhcx.model.ResultBean;
 import com.lhcx.model.User;
 import com.lhcx.model.VerificationLogs;
-import com.lhcx.model.response.PaycashLogResponse;
 import com.lhcx.service.IDriverInfoService;
 import com.lhcx.service.IDriverLocationService;
 import com.lhcx.service.IOrderService;
@@ -40,6 +37,7 @@ import com.lhcx.utils.Utils;
 
 /**
  * 司机端controller
+ * 
  * @author YangGuang
  *
  */
@@ -53,14 +51,14 @@ public class DriverController {
 	private HttpSession session;
 	@Autowired
 	private IDriverInfoService driverInfoService;
-	
+
 	@Autowired
 	private IVerificationLogsService verificationLogsService;
 	@Autowired
 	private IPayCashLogService payCashLogService;
 	@Autowired
 	private IDriverLocationService driverLocationService;
-	
+
 	@Autowired
 	private IUserService userService;
 
@@ -79,8 +77,9 @@ public class DriverController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			Order newOrder = orderService.selectNewOrderByDriverIdentityToken(user
-					.getIdentityToken());
+			Order newOrder = orderService
+					.selectNewOrderByDriverIdentityToken(user
+							.getIdentityToken());
 			if (newOrder != null) {
 				result.put("OrderId", newOrder.getOrderid());
 				result.put("Status", newOrder.getStatus());
@@ -115,7 +114,8 @@ public class DriverController {
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			User user = (User) session.getAttribute("CURRENT_USER");
-			DriverInfo driverInfo = driverInfoService.selectByIdentityToken(user.getIdentityToken());
+			DriverInfo driverInfo = driverInfoService
+					.selectByIdentityToken(user.getIdentityToken());
 			info.put("phone", user.getUserphone());
 			info.put("photo", driverInfo.getPhoto());
 			info.put("addressName", driverInfo.getAddressname());
@@ -135,27 +135,30 @@ public class DriverController {
 					DateUtils.dateFormat2(driverInfo.getDriverlicenseoff()));
 			info.put("fullTimeDriver", driverInfo.getFulltimedriver());
 			info.put("VehicleNo", driverInfo.getVehicleNo());
-			
-			data.put("status", user.getFlag());	
+
+			data.put("status", user.getFlag());
 			data.put("info", info);
 			// 认证信息
-			List<VerificationLogs> verLogsList = verificationLogsService.selectByDriverIdentityToken(user.getIdentityToken());
-			if (verLogsList.size() == 0) {				
-				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-						"认证中！", data);
-			}else {
+			List<VerificationLogs> verLogsList = verificationLogsService
+					.selectByDriverIdentityToken(user.getIdentityToken());
+			if (verLogsList.size() == 0) {
+				resultBean = new ResultBean<Object>(
+						ResponseCode.SUCCESS.value(), "认证中！", data);
+			} else {
 				if (verLogsList.get(0).getVerificationStatus() == 1) {
 					for (VerificationLogs verificationLogs : verLogsList) {
 						Map<String, Object> error = new HashMap<String, Object>();
-						error.put("codeName", verificationLogs.getVerificationName());
-						error.put("message", verificationLogs.getVerificationContent());
+						error.put("codeName",
+								verificationLogs.getVerificationName());
+						error.put("message",
+								verificationLogs.getVerificationContent());
 						error.put("codeIndex", verificationLogs.getErrorCode());
 						verification.add(error);
 					}
 				}
 				data.put("error", verification);
-				resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-						"获取成功！", data);
+				resultBean = new ResultBean<Object>(
+						ResponseCode.SUCCESS.value(), "获取成功！", data);
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -200,7 +203,7 @@ public class DriverController {
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
+
 	/**
 	 * 司机端流水线
 	 * 
@@ -214,35 +217,43 @@ public class DriverController {
 		String jsonpCallback = null;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			User user = (User)session.getAttribute("CURRENT_USER");
+			User user = (User) session.getAttribute("CURRENT_USER");
 			String driverIdentityToken = user.getIdentityToken();
-			//当日流水
-			BigDecimal cashToday = payCashLogService.selectCashByDriverIdentityTokenToday(driverIdentityToken);
-			result.put("cashToday", String.valueOf(cashToday));
-			//总接单数
-			int totalCount = orderService.selectTotalCountByDriverIdentityToken(driverIdentityToken, null);
-			int cancelCount = orderService.selectTotalCountByDriverIdentityToken(driverIdentityToken, OrderStatus.CANCEL.value());
+			// 当日流水
+			result.put("cashToday", "0.00");
+			// 总接单数
+			int totalCount = orderService
+					.selectTotalCountByDriverIdentityToken(driverIdentityToken,
+							null);
+			int cancelCount = orderService
+					.selectTotalCountByDriverIdentityToken(driverIdentityToken,
+							OrderStatus.CANCEL.value());
 			result.put("orderTotalCount", String.valueOf(totalCount));
-			result.put("orderSuccessCount", String.valueOf(totalCount - cancelCount));
-			//听单
-			long onTime = 0;//毫秒
-			DriverLocation driverLocation = driverLocationService.selectByIdentityToken(driverIdentityToken);
+			result.put("orderSuccessCount",
+					String.valueOf(totalCount - cancelCount));
+			// 听单
+			long onTime = 0;// 毫秒
+			DriverLocation driverLocation = driverLocationService
+					.selectByIdentityToken(driverIdentityToken);
 			if (driverLocation != null) {
 				Date startTime = driverLocation.getLoginTime();
 				Date endTime = driverLocation.getLogoutTime();
-				if ( startTime != null) {
-					long startTimeMil =  startTime.getTime();
-					long endTimeMil = endTime != null ? endTime.getTime():System.currentTimeMillis();				
+				if (startTime != null) {
+					long startTimeMil = startTime.getTime();
+					long endTimeMil = endTime != null ? endTime.getTime()
+							: System.currentTimeMillis();
 					if (startTimeMil > endTimeMil) {
 						endTimeMil = System.currentTimeMillis();
 					}
 					onTime = endTimeMil - startTimeMil;
 				}
 				result.put("onTime", String.valueOf(onTime));
-				result.put("pushStatus", String.valueOf(driverLocation.getIsdel()));
-				result.put("preference", String.valueOf(driverLocation.getPreference()));
+				result.put("pushStatus",
+						String.valueOf(driverLocation.getIsdel()));
+				result.put("preference",
+						String.valueOf(driverLocation.getPreference()));
 				result.put("scope", String.valueOf(driverLocation.getScope()));
-			}else{
+			} else {
 				DriverLocation d = new DriverLocation();
 				d.setPositiontime(new Date());
 				d.setLongitude("0");
@@ -256,31 +267,16 @@ public class DriverController {
 				result.put("preference", "-1");
 				result.put("scope", "5000");
 			}
-			
-			//支付列表
-			List<PayCashLog> cashLogs = payCashLogService.selectByDriverIdentityToken(driverIdentityToken, 1, 5);
-			if (cashLogs.size() > 0) {
-				List<PaycashLogResponse> cashResponseList = new ArrayList<PaycashLogResponse>();
-				for (PayCashLog payCashLog : cashLogs) {
-					PaycashLogResponse cashResponse = new PaycashLogResponse(payCashLog);
-					if (cashResponse != null) {
-						cashResponseList.add(cashResponse);
-					}
-				}
-				result.put("payCashLog", cashLogs);
-			}
-			
 			resultBean = new ResultBean<Object>(ResponseCode.SUCCESS.value(),
-					ResponseCode.SUCCESS.message(),result);
-			
+					ResponseCode.SUCCESS.message(), result);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultBean = new ResultBean<Object>(ResponseCode.ERROR.value(),
 					ResponseCode.ERROR.message());
 		}
-		
+
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
-	
 
 }
