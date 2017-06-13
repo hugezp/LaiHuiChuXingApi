@@ -66,7 +66,7 @@ public class WalletController {
 								ResponseCode.NO_DATA.value(), "暂无数据！", map);
 					} else {
 						map.put("data", list);
-						map.put("overage", "10245424");
+						map.put("overage", user.getWallet());
 						resultBean = new ResultBean<Object>(
 								ResponseCode.SUCCESS.value(), "数据获取成功！", map);
 					}
