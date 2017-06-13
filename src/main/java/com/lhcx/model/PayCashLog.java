@@ -32,9 +32,6 @@ public class PayCashLog {
     
     private String utime;//修改时间
     
-    private double overage;
-    
-
     public String getCtime() {
 		return ctime;
 	}
@@ -49,14 +46,6 @@ public class PayCashLog {
 
 	public void setUtime(String utime) {
 		this.utime = utime;
-	}
-
-	public double getOverage() {
-		return overage;
-	}
-
-	public void setOverage(double overage) {
-		this.overage = overage;
 	}
 
 	public Integer getId() {

@@ -96,7 +96,7 @@ public class WalletController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/ithdrawals/record", method = RequestMethod.POST)
+	@RequestMapping(value = "/withdrawals/record", method = RequestMethod.POST)
 	public ResponseEntity<String> ithdrawalsRecord(HttpServletRequest request,
 			@RequestBody JSONObject jsonRequest) {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
