@@ -24,6 +24,8 @@ public interface IUserService {
 	
 	int updateStatus(User record);
 	
+	int updateWalletByIdToken(User record);
+	
 	int updatePhoneByIdToken(User record);
 	
 	int insertSelective(User record);

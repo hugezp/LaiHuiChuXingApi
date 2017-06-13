@@ -12,9 +12,10 @@
     <result column="UpateTime" property="upatetime" jdbcType="TIMESTAMP" />
     <result column="Flag" property="flag" jdbcType="INTEGER" />
     <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
+    <result column="Wallet" property="wallet" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime,Flag,IdentityToken
+    id, UserPhone, UserType, Token, LoginIp, LoginTime, CreateTime, UpateTime,Flag,IdentityToken,Wallet
   </sql>
   <select id="selectByToken" resultMap="BaseResultMap" >
     select 
@@ -132,7 +133,12 @@
   
   <update id="updateStatus" parameterType="com.lhcx.model.User" >
     update users set Flag = 0
-    where id = #{id,jdbcType=INTEGER}
+    where IdentityToken = #{identityToken,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateWalletByIdToken" parameterType="com.lhcx.model.User" >
+    update users set Wallet = #{wallet,jdbcType=DOUBLE}
+    where IdentityToken = #{identityToken,jdbcType=VARCHAR}
   </update>
   
   <update id="updatePhoneByIdToken" parameterType="com.lhcx.model.User" >

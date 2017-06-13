@@ -14,6 +14,8 @@ public interface UserMapper {
     
     int updatePhoneByIdToken(User record);
     
+    int updateWalletByIdToken(User record);
+    
     int updateStatus(User record);
     
     User selectUserByIdentityToken(String identityToken);

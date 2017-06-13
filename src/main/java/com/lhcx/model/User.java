@@ -26,8 +26,18 @@ public class User {
     private DriverInfo driverInfo;
     
     private PassengerInfo passengerInfo;
+    
+    private double wallet;
+    
+    public double getWallet() {
+		return wallet;
+	}
 
-    public Integer getId() {
+	public void setWallet(double wallet) {
+		this.wallet = wallet;
+	}
+
+	public Integer getId() {
         return id;
     }
 

@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,10 +36,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.lhcx.model.AlipayLog;
 import com.lhcx.model.Order;
-import com.lhcx.model.OrderLog;
-import com.lhcx.model.OrderStatus;
-import com.lhcx.model.PayActionType;
-import com.lhcx.model.PayCashLog;
 import com.lhcx.model.PushNotification;
 import com.lhcx.service.IAlipayLogService;
 import com.lhcx.service.IOrderLogService;
@@ -132,7 +127,7 @@ public class AlipayNotifyController {
 						// 1：查询是否已经收到异步通知,如果已收到则停止执行
 						// 2：未收到通知开始创建支付log
 						Order order = alipayLogService
-								.alipayNotify(parameterMap);
+								.wxNotify(parameterMap);
 						response.reset();
 						out = response.getWriter();
 						response_content = "<xml> \n"
@@ -330,36 +325,8 @@ public class AlipayNotifyController {
 				}
 				if (flag == 1 && is_pay_success) {
 					//更新订单状态
-					Order order = orderService.selectByOrderId(out_trade_no);
-					order.setOldstatus(order.getStatus());
-					order.setStatus(OrderStatus.PAY.value());
-					orderService.updateByOrderIdSelective(order);
-					
-					OrderLog orderLog = new OrderLog();
-					orderLog.setOrderid(out_trade_no);
-					orderLog.setOperatorphone(order.getPassengerphone());
-					orderLog.setIdentityToken(order.getPassengerIdentityToken());
-					orderLog.setOperatortime(new Date());
-					orderLog.setOperatorstatus(OrderStatus.PAY.value());
-					orderLog.setOperatordescription(OrderStatus.PAY.message());
-					orderLogService.insertSelective(orderLog);
-					//2.3：创建账户流水线日志：乘客支出，司机收入
+					Order order = alipayLogService.alipayNotify(request);
 					String passengerPhone = order.getPassengerphone();
-					String description = "收到车费" + new BigDecimal(price) + "元，来自手机尾号" + passengerPhone.substring(7);
-					PayCashLog cashLog = new PayCashLog();
-					cashLog.setOrderid(out_trade_no);
-					cashLog.setIdentityToken(order.getDriverIdentityToken());
-					cashLog.setCash(new BigDecimal(price));
-					cashLog.setPaytype(0);//支付宝支付
-					cashLog.setStatus(2);//支付完成
-					cashLog.setActiontype(PayActionType.spending.value());//乘客支出
-					cashLog.setDescription(description);
-					payCashLogService.insertSelective(cashLog);
-					
-					cashLog.setActiontype(PayActionType.income.value());//司机收入
-					cashLog.setDescription("司机支付宝收入记录");
-					payCashLogService.insertSelective(cashLog);
-					
 					// 3：推送给司机
 					String driverPhone = order.getDriverphone();
 					String orderId = order.getOrderid();

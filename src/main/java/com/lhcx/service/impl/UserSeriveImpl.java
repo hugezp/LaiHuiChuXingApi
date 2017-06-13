@@ -194,4 +194,8 @@ public class UserSeriveImpl implements IUserService{
 	public List<User> selectByPhone(User user) {
 		return userMapper.selectByPhone(user);
 	}
+
+	public int updateWalletByIdToken(User record) {
+		return userMapper.updateWalletByIdToken(record);
+	}
 }
