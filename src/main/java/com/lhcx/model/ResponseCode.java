@@ -25,7 +25,8 @@ public enum ResponseCode {
 	PHONE_EXIST(3018,"该手机号已存在！"),
 	PARAMETER_WRONG(4000,"参数不完整"),
 	NO_DATA(4004,"暂无数据"),
-	NO_USER(4005,"用户不存在");
+	NO_USER(4005,"用户不存在"),
+	SYSTEM_SELECT_FAILED(5001,"系统查询失败");
 	
 	private Integer value;
 	private String message;
