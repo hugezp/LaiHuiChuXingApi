@@ -298,4 +298,17 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
+	
+	public static boolean withdrawalsValidation(JSONObject jsonRequest) {
+		boolean flag = false;
+		String cash = jsonRequest.getString("cash");
+		String payAccount = jsonRequest.getString("payAccount");
+		String payType = jsonRequest.getString("payType");
+		if (StringUtils.isOrNotEmpty(cash)
+				&& StringUtils.isOrNotEmpty(payAccount)
+				&& StringUtils.isOrNotEmpty(payType)) {
+			flag = true;
+		}
+		return flag;
+	}
 }

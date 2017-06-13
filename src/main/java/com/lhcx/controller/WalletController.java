@@ -66,10 +66,9 @@ public class WalletController {
 								ResponseCode.NO_DATA.value(), "暂无数据！", map);
 					} else {
 						map.put("data", list);
-						map.put("overage", user.getWallet());
 						resultBean = new ResultBean<Object>(
 								ResponseCode.SUCCESS.value(), "数据获取成功！", map);
-					}
+					} 
 
 				} catch (Exception e) {
 					e.getMessage();
@@ -102,7 +101,7 @@ public class WalletController {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
 		List<PayCashLog> list = new ArrayList<PayCashLog>();
-		if (!VerificationUtils.ithdrawalsValidation(jsonRequest)) {
+		if (!VerificationUtils.withdrawalsValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
 					ResponseCode.PARAMETER_WRONG.message());
@@ -143,5 +142,26 @@ public class WalletController {
 		}
 		return Utils.resultResponseJson(resultBean, jsonpCallback);
 
+	}
+	
+	/**
+	 * 提现接口
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/withdrawals", method = RequestMethod.POST)
+	public ResponseEntity<String> withdrawals(HttpServletRequest request,
+			@RequestBody JSONObject jsonRequest) {
+		String jsonpCallback = jsonRequest.getString("jsonpCallback");
+		ResultBean<?> resultBean = null;
+		if(!VerificationUtils.withdrawalsValidation(jsonRequest)){
+			resultBean = new ResultBean<Object>(
+					ResponseCode.PARAMETER_WRONG.value(),
+					ResponseCode.PARAMETER_WRONG.message());
+		} else {
+			resultBean = new ResultBean<Object>(
+					ResponseCode.SUCCESS.value(),
+					ResponseCode.SUCCESS.message());
+		}
+		return Utils.resultResponseJson(resultBean, jsonpCallback);
 	}
 }

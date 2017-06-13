@@ -37,8 +37,8 @@ public class PayCashLogServiceImpl implements IPayCashLogService{
 			int page, int size, String startTime,String endTime) {
 		List<PayCashLog> list = payCashLogMapper.selectByIdentityTokenAndTime(identityToken, page, size, startTime,endTime);
 		for (PayCashLog payCashLog : list) {
-			payCashLog.setCtime(DateUtils.dateFormat(payCashLog.getCreatetime()));
-			payCashLog.setUtime(DateUtils.dateFormat(payCashLog.getUpdatetime()));
+			payCashLog.setCtime(DateUtils.dateFormat3(payCashLog.getCreatetime()));
+			payCashLog.setUtime(DateUtils.dateFormat3(payCashLog.getUpdatetime()));
 		}
 		return list;
 		
@@ -49,8 +49,8 @@ public class PayCashLogServiceImpl implements IPayCashLogService{
 			int page, int size, int actiontype) {
 		List<PayCashLog> list = payCashLogMapper.selectByIdentityTokenAndActiontype(identityToken, page, size, actiontype);
 		for (PayCashLog payCashLog : list) {
-			payCashLog.setCtime(DateUtils.dateFormat(payCashLog.getCreatetime()));
-			payCashLog.setUtime(DateUtils.dateFormat(payCashLog.getUpdatetime()));
+			payCashLog.setCtime(DateUtils.dateFormat3(payCashLog.getCreatetime()));
+			payCashLog.setUtime(DateUtils.dateFormat3(payCashLog.getUpdatetime()));
 		}
 		return list;
 	}
