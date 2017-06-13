@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
     <style>
         *{
             font-family: Tahoma;
@@ -63,9 +62,8 @@
             color: #b7b7b7;
         }
     </style>
-    
 <div class="title"> 关于出行</div>
-<div class="logo"><img src="/resource/images/lhcx_logo.png" alt=""><br> <span class="chuxing">来回出行</span><br><span class="version">V  1.0.0</span></div>
+<div class="logo"><img src="${pageContext.request.contextPath}/resource/images/lhcx_logo.jpg" alt=""><br> <span class="chuxing">来回出行</span><br><span class="version">V  1.0.0</span></div>
 <div class="content">
     <div class="wechat">官方微信公众号 <span style="float: right;font-size: 0.8rem">laihuiApp</span> </div>
     <div class="email">商务合作邮箱 <span style="float: right;font-size: 0.8rem">lixiaochuan@laihuipinche.com</span></div>

@@ -17,8 +17,10 @@
     <!-- ②：启动Spring MVC的注解功能 -->
     <mvc:annotation-driven />
 
+	<mvc:default-servlet-handler />
+
     <!--开启对静态资源文件的访问 -->
-    <mvc:resources mapping="/resouce/**" location="/resouce/" />
+    <mvc:resources location="/resource/" mapping="/resource/**"/>
     <!--文件下载位置 -->
     <mvc:resources mapping="/upload/**" location="/upload/" />
 
@@ -62,8 +64,8 @@
     <bean id="ossConfigure" class="com.lhcx.utils.OssConfigure">
         <property name="accessKeyId" value="LTAIBylxOP12jqp2"/>
         <property name="accessKeySecret" value="mkjn9cKyGx8mxG0tvMUyO7ceRTIw61"/>
-        <property name="accessUrl" value="http://wgc.oss-cn-qingdao.aliyuncs.com/"/>
-        <property name="bucketName" value="wgc"/>
+        <property name="accessUrl" value="https://laihuichuxingoss.oss-cn-qingdao.aliyuncs.com/"/>
+        <property name="bucketName" value="laihuichuxingoss"/>
         <property name="endpoint" value="http://oss-cn-qingdao.aliyuncs.com"/>
     </bean>
     <bean id="ossUtil" class="com.lhcx.utils.OssUtil">
@@ -75,6 +77,7 @@
         <mvc:interceptor>
         	<mvc:mapping path="/**"/> 
             <mvc:exclude-mapping path="/api/**"/>
+            <mvc:exclude-mapping path="/resource/**"/>
             <bean class="com.lhcx.controller.LoginInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
