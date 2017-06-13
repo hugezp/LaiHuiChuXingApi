@@ -16,7 +16,7 @@
     <result column="IdentityToken" property="identityToken" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, OrderId, PassengerPhone, DriverPhone, Cash, ActionType, PayAccount, PayType, 
+    id, OrderId, Cash, ActionType, PayAccount, PayType, 
     Status, Description, ErrorDesc, CreateTime, UpdateTime,IdentityToken
   </sql>
   <select id="selectByIdentityToken" resultMap="BaseResultMap"  >
@@ -24,8 +24,24 @@
     <include refid="Base_Column_List" />
     from pay_cash_logs
     where IdentityToken = #{identityToken} and Status = 2
-    order by UpdateTime desc
+   	order by UpdateTime desc
  	 limit #{startPro},#{pageSize}
+  </select>
+   <select id="selectByIdentityTokenAndActiontype" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_cash_logs
+    where IdentityToken = #{identityToken} and ActionType = #{actiontype}
+   	order by UpdateTime desc
+ 	 limit #{page},#{size}
+  </select>
+  <select id="selectByIdentityTokenAndTime" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_cash_logs
+    where IdentityToken = #{identityToken} and Status = 2 and CreateTime &gt; #{startTime} and CreateTime &lt;= #{endTime}
+    order by UpdateTime desc
+ 	 limit #{page},#{size}
   </select>
   <select id="selectCashByIdentityTokenToday" resultType="java.math.BigDecimal">
     select

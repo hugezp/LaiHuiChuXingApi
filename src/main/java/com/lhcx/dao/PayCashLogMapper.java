@@ -20,6 +20,7 @@ public interface PayCashLogMapper {
      */
     BigDecimal selectCashByIdentityTokenToday(String driverIdentityToken);
     
-    List<PayCashLog> selectByIdentityToken(@Param("identityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);;
-
+    List<PayCashLog> selectByIdentityToken(@Param("identityToken") String driverIdentityToken,@Param("startPro") int startPro,@Param("pageSize") int pageSize);
+    List<PayCashLog> selectByIdentityTokenAndTime(@Param("identityToken") String driverIdentityToken,@Param("page") int startPro,@Param("size") int pageSize,@Param("startTime") String strtTime,@Param("endTime") String endTime);;
+    List<PayCashLog> selectByIdentityTokenAndActiontype(@Param("identityToken") String driverIdentityToken,@Param("page") int startPro,@Param("size") int pageSize,@Param("actiontype") int actiontype);
 }

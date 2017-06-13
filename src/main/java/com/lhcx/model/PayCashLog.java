@@ -27,8 +27,39 @@ public class PayCashLog {
     private Date createtime;
 
     private Date updatetime;
+    
+    private String ctime;//创建时间
+    
+    private String utime;//修改时间
+    
+    private double overage;
+    
 
-    public Integer getId() {
+    public String getCtime() {
+		return ctime;
+	}
+
+	public void setCtime(String ctime) {
+		this.ctime = ctime;
+	}
+
+	public String getUtime() {
+		return utime;
+	}
+
+	public void setUtime(String utime) {
+		this.utime = utime;
+	}
+
+	public double getOverage() {
+		return overage;
+	}
+
+	public void setOverage(double overage) {
+		this.overage = overage;
+	}
+
+	public Integer getId() {
         return id;
     }
 

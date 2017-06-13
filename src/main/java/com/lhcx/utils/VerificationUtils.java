@@ -230,9 +230,10 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 听单设置
+	 * 
 	 * @param jsonRequest
 	 * @return
 	 */
@@ -246,9 +247,10 @@ public class VerificationUtils {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 投诉与建议
+	 * 
 	 * @param jsonRequest
 	 * @return
 	 */
@@ -260,6 +262,38 @@ public class VerificationUtils {
 		if (StringUtils.isOrNotEmpty(contactinformation)
 				&& StringUtils.isOrNotEmpty(suggest)
 				&& StringUtils.isOrNotEmpty(source)) {
+			flag = true;
+		}
+		return flag;
+	}
+
+	/**
+	 * 钱包参数验证
+	 * 
+	 * @param jsonRequest
+	 * @return
+	 */
+	public static boolean walletValidation(JSONObject jsonRequest) {
+		boolean flag = false;
+		String time = jsonRequest.getString("time");
+		String startPro = jsonRequest.getString("page");
+		String pageSize = jsonRequest.getString("size");
+		if (StringUtils.isOrNotEmpty(time)
+				&& StringUtils.isOrNotEmpty(startPro)
+				&& StringUtils.isOrNotEmpty(pageSize)) {
+			flag = true;
+		}
+		return flag;
+	}
+
+	public static boolean ithdrawalsValidation(JSONObject jsonRequest) {
+		boolean flag = false;
+		String actiontype = jsonRequest.getString("actiontype");
+		String startPro = jsonRequest.getString("page");
+		String pageSize = jsonRequest.getString("size");
+		if (StringUtils.isOrNotEmpty(actiontype)
+				&& StringUtils.isOrNotEmpty(startPro)
+				&& StringUtils.isOrNotEmpty(pageSize)) {
 			flag = true;
 		}
 		return flag;

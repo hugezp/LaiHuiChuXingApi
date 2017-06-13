@@ -9,4 +9,8 @@ public interface IPayCashLogService {
 	int insertSelective(PayCashLog record);
 	BigDecimal selectCashByIdentityTokenToday(String driverIdentityToken);
 	List<PayCashLog> selectByIdentityToken(String driverIdentityToken,int page,int pageSize);
+	List<PayCashLog> selectByIdentityTokenAndTime(String identityToken, int page,
+			int size, String startTime,String endTime);
+	List<PayCashLog> selectByIdentityTokenAndActiontype(String identityToken,
+			int page, int size, int actiontype);
 }
