@@ -452,7 +452,7 @@ public class OrderController {
 				DriverInfo driverInfo = driverInfoService.selectByIdentityToken
 						(driverToken);
 				if (driverInfo != null) {
-					result.put("money","86.86");
+					result.put("money",user.getWallet());
 					result.put("userName",driverInfo.getDrivername());
 					result.put("userPhoto",driverInfo.getPhoto());
 					result.put("status",String.valueOf(user.getFlag()));
@@ -511,7 +511,7 @@ public class OrderController {
 			}else {
 				PassengerInfo passenger = passengerInfoService.selectByIdentityToken(passengerToken);
 				if (passenger != null) {
-					result.put("money","86.86");
+					result.put("money",user.getWallet());
 					result.put("userName",passenger.getPassengername());
 					result.put("userPhoto",passenger.getPassengername());
 				}

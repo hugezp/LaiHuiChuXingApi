@@ -39,6 +39,12 @@ public class DateUtils {
  	   return dateFormat.format(date);
  	}
     
+    public static String dateFormat3(Date date) {
+ 	   SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm");
+
+ 	   return dateFormat.format(date);
+ 	}
+    
     public static Date toDate(Long longDate) throws ParseException {
  	  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
  	  if (longDate == null) {
