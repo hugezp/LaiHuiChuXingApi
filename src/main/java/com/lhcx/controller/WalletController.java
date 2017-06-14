@@ -43,7 +43,6 @@ public class WalletController {
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		ResultBean<?> resultBean = null;
 		List<PayCashLog> list = new ArrayList<PayCashLog>();
-		Map<String, Object> map = new HashMap<String, Object>();
 		if (!VerificationUtils.walletValidation(jsonRequest)) {
 			resultBean = new ResultBean<Object>(
 					ResponseCode.PARAMETER_WRONG.value(),
@@ -63,18 +62,17 @@ public class WalletController {
 							page, size,startTime,endTime);
 					if (list.size()==0) {
 						resultBean = new ResultBean<Object>(
-								ResponseCode.NO_DATA.value(), "暂无数据！", map);
+								ResponseCode.NO_DATA.value(), "暂无数据！", list);
 					} else {
-						map.put("data", list);
 						resultBean = new ResultBean<Object>(
-								ResponseCode.SUCCESS.value(), "数据获取成功！", map);
+								ResponseCode.SUCCESS.value(), "数据获取成功！", list);
 					} 
 
 				} catch (Exception e) {
 					e.getMessage();
 					resultBean = new ResultBean<Object>(
 							ResponseCode.SYSTEM_SELECT_FAILED.value(),
-							"数据查询失败！", map);
+							"数据查询失败！", list);
 				}
 
 			} catch (Exception e) {

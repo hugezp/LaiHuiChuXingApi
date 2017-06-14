@@ -236,7 +236,7 @@ public class DriverController {
 			DriverLocation driverLocation = driverLocationService
 					.selectByIdentityToken(driverIdentityToken);
 			if (driverLocation != null) {
-				Date startTime = driverLocation.getLoginTime();
+				Date startTime = user.getLogintime();
 				Date endTime = driverLocation.getLogoutTime();
 				if (startTime != null) {
 					long startTimeMil = startTime.getTime();
