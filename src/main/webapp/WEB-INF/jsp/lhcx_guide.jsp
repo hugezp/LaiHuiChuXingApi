@@ -1,4 +1,4 @@
- <%@ page language="java" import="java.util.*" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+ <%@ page language="java" import="java.util.*" contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
     <style>
         *{
             font-family: Aharoni;
@@ -74,16 +74,16 @@
                 <img src="/resource/images/driver_hear.jpg" alt="">
             </li>
             <li>
-                <span>&#x3000;&#x3000;第三步，联系乘客，询问乘客所在位置。</span>
+                <span>&#x3000;&#x3000;第三步，联系乘客，询问乘客所在位置,到达乘客位置，点击“发车”去向乘客要到达的目的地。</span>
+                <img src="/resource/images/driver_setout.jpg" alt="">
+            </li>
+            <li>
+                <span>&#x3000;&#x3000;第四步，行驶到达乘客的目的地后，点击“已到达”。</span>
                 <img src="/resource/images/driver_arrive.jpg" alt="">
             </li>
             <li>
-                <span>&#x3000;&#x3000;第四步，到达乘客所在位置，点击“已到达地点”，表示乘客已上车即可出发。</span>
-                <img src="/resource/images/driver_conduct.jpg" alt="">
-            </li>
-            <li>
-                <span>&#x3000;&#x3000;第五步，到达目的地，乘客支付成功后，车主会有一条推送的消息显示，乘客支付成功。</span>
-                <img src="/resource/images/driver_complepe.jpg" alt="">
+                <span>&#x3000;&#x3000;第五步，乘客选择自己的支付方式，支付后车主会有一条推送的消息，显示乘客支付成功。</span>
+                <img src="/resource/images/driver_complete.jpg" alt="">
             </li>
         </ul>
     </div>
@@ -92,24 +92,21 @@
         <ul>
             <li>
                 <span>&#x3000;&#x3000;第一步，选择您想要出发路线。</span>
-                <img src="/resource/images/passenger_setout.jpg" alt="">
-                <img src="/resource/images/passenger_release.jpg" alt="">
+                <img src="/resource/images/passenger_setout.png" alt="">
+
             </li>
             <li>
-                <span>&#x3000;&#x3000;第二步，点击“呼叫出租车”后等待抢单。</span>
-                <img src="/resource/images/passenger_waiting.jpg" alt="">
+                <span>&#x3000;&#x3000;第二步，点击“预约转车”后等待车主抢单。</span>
+                <img src="/resource/images/passenger_release.png" alt="">
+                <img src="/resource/images/passenger_waiting.png" alt="">
             </li>
             <li>
-                <span>&#x3000;&#x3000;第三步，当车主抢单之后显示“你的车单已被接单”</span>
-                <img src="/resource/images/passenger_remind.jpg" alt="">
-            </li>
-            <li>
-                <span>&#x3000;&#x3000;第四步，点击“去查看”，等待车主到来。</span>
+                <span>&#x3000;&#x3000;第三步，车主抢单之后，告诉车主所在位置，等待车主到来。</span>
                 <img src="/resource/images/passenger_orders.png" alt="">
             </li>
             <li>
-                <span>&#x3000;&#x3000;第五步，上车后等到达目的地选择两种支付方式去支付</span>
-                <img src="/resource/images/passenger_aboard.jpg" alt="">
+                <span>&#x3000;&#x3000;第四步，上车后，等到达目的地选择任意一种方式去支付</span>
+                <img src="/resource/images/passenger_aboard.png" alt="">
             </li>
         </ul>
     </div>
