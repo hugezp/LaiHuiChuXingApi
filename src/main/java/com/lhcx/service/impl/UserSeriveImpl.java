@@ -99,11 +99,11 @@ public class UserSeriveImpl implements IUserService{
 		
 		if( driverBoolean || passengerBoolean){
 			try {
+				if (TestConfig.testMobile(phone)) 
+					status = "200";
+				else 
 				status = SmsWebApiKit.getInstance().checkcode(phone, "86",
 						code,userType,source);
-				if (TestConfig.testMobile(phone)) {
-					status = "200";
-				}
 			} catch (Exception e) {
 				
 			}

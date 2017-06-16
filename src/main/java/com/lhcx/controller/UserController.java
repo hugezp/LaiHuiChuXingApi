@@ -157,6 +157,7 @@ public class UserController {
 	@RequestMapping(value = "/user/changePhone", method = RequestMethod.POST)
 	public ResponseEntity<String> changePhone(@RequestBody JSONObject jsonRequest) {
 		ResultBean<?> resultBean = null;
+		String status = "";
 		try {
 			String newPhone = jsonRequest.getString("newPhone");
 			String oldPhone = jsonRequest.getString("oldPhone");
@@ -173,11 +174,12 @@ public class UserController {
 							ResponseCode.ERROR.value(), "旧手机号验证失败！");
 					return Utils.resultResponseJson(resultBean, null);
 				}
-				String status = SmsWebApiKit.getInstance().checkcode(newPhone, "86",
-						newCode,userType,source);
-				if (TestConfig.testMobile(newPhone)) {
+				
+				if (TestConfig.testMobile(newPhone)) 
 					status = "200";
-				}
+				else 
+					status = SmsWebApiKit.getInstance().checkcode(newPhone, "86",
+							newCode,userType,source);
 				if (!status.equals("200")) {
 						resultBean = new ResultBean<Object>(
 								ResponseCode.ERROR.value(), "新手机号验证失败！");

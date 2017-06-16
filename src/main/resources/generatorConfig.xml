@@ -35,7 +35,7 @@
                              targetProject="src/main/java"> <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator> <!-- 指定数据库表 -->
-        <table tableName="suggests" domainObjectName="Suggests" enableCountByExample="false" enableUpdateByExample="false"
+        <table tableName="pay_cash_logs" domainObjectName="PayCashLogs" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
     </context>
 </generatorConfiguration>

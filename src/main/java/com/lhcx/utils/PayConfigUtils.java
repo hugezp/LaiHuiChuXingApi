@@ -18,7 +18,7 @@ public class PayConfigUtils {
    
     //测试通知地址
      //来回微信支付回调地址
-    private final static String wx_pay_laihui_notify_url = "http://apitest.laihuichuxing.com/wxpay/notify";
+    private final static String wx_pay_laihui_notify_url = "http://192.168.1.18:8080/wxpay/notify";
     //支付宝支付回调地址
     private final static String alipay_notify_url = "https://api.laihuichuxing.com/alipay/notify";
 
