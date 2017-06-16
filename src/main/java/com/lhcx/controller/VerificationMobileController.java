@@ -54,6 +54,7 @@ public class VerificationMobileController {
 		String actionType = jsonRequest.getString("actionType");
 		String jsonpCallback = jsonRequest.getString("jsonpCallback");
 		String source = jsonRequest.getString("source");
+		String status = "";
 		ResultBean<?> resultBean = null;
 		int count = VerificationUtils.checkPhoneCodeValidation(jsonRequest);
 		if (count == -1) {
@@ -79,10 +80,12 @@ public class VerificationMobileController {
 				// 验证新的手机号
 				session.setAttribute("check@NewPhone", userType + "@" + mobile);
 			}
-			 String status = SmsWebApiKit.getInstance().checkcode(mobile, "86", code,
-					userType, source);
+			 
 			if (TestConfig.testMobile(mobile)) {
 				status = "200";
+			}else {
+				status = SmsWebApiKit.getInstance().checkcode(mobile, "86", code,
+						userType, source);
 			}
 			if (status.equals("200")) {
 				resultBean = new ResultBean<Object>(
